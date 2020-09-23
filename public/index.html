@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+    <link href="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+#loginid__BV_toggle_
+{
+  background-color: transparent !Important;
+}
+
+.dropdown-menu-right.show li:nth-child(2)
+{
+  border-bottom: 1px solid #dbdbdb;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .claseintereses
+  {
+    color: #fff;
+    background-color: #0062cc00;
+    border-color: #b2b5b900;
+    margin-left: -13px;
+  }
+
+  .claseintereses .btn-primary:hover {
+    color: #fff;
+    background-color: #0069d900;
+    border-color: #0062cc00;
+ }
+
+ .claseintereses .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle
+  {
+    color: #fff;
+    background-color: #0069d900;
+    border-color: #0062cc00;
+}
+
+
+  #imgmenu
+{
+  height: 40px;
+    border: 3px solid #ffffff;
+    position: relative;
+    width: 40px;
+    top: 0px;
+    right: 30px;
+    border-radius: 20px;
+    border-color: #ffffff;
+}
+
+
+
+}
+
+@media only screen and (min-width: 768px) {
+  #imgmenu
+{
+  height: 40px;
+    border: 3px solid #ffffff;
+    position: absolute;
+    width: 40px;
+    top: 0px;
+    right: 0px;
+    border-radius: 20px;
+    border-color: #ffffff;
+}
+}
+
+
+html, body {
+  min-height:100% !important;
+  height:100% !important;
+}
+
+.ancho_publicaciones
+{
+  max-width: 50px !important;
+}
+
+.likepulsado
+{
+color:#007bff !important;
+background-color: #ffffff !important;
+}
+
+
+.topmenu
+{
+  box-shadow: none;
+    padding-bottom: 2px;
+}
+
+.topmenu .navbar
+{
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+.large-header {
+   position: relative;
+   width: 100%;
+   background: #111;
+   overflow: hidden;
+   background-size: cover;
+   background-position: center center;
+   z-index: 1;
+}
+
+.demo .large-header {
+   background-image: url("./img/icons/wall2.jpg");
+}
+
+.main-title {
+   position: absolute;
+   margin: 0;
+   padding: 0;
+   color: #F9F1E9;
+   text-align: center;
+   top: 50%;
+   left: 50%;
+   -webkit-transform: translate3d(-50%, -50%, 0);
+   transform: translate3d(-50%, -50%, 0);
+}
+
+.demo .main-title {
+   text-transform: uppercase;
+   font-size: 4.2em;
+   letter-spacing: 0.1em;
+}
+
+.main-title .thin {
+   font-weight: 200;
+}
+
+@media only screen and (max-width: 768px) {
+   .demo .main-title {
+      font-size: 3em;
+   }
+}
+
+
+  a.nav-link.router-link-exact-active.router-link-active
+  {
+    color:white !Important;
+  }
+
+  #loginid__BV_toggle_::after {
+    display: none;
+
+  }
+
+  #loginid__BV_toggle_ {
+    margin-left:1em;
+    background-color: #55a1ff;
+    border-radius: 20px;
+    padding-left: 14.5px;
+    padding-right: 14.4px;
+  }
+
+
+  @media (max-width: 800px) {
+
+    .main-title2
+{
+  position: absolute;
+    margin: 0;
+    padding: 0;
+    color: #F9F1E9;
+    top: 40%;
+    left: 47%;
+    width: 80%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+}
+ 
+
+    .area{
+   padding-top:1em;
+   
+}
+    .imagenlogin
+{
+    width: 70% !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+ 
+}
+
+.loginpc
+{
+  max-width: 90% !important;
+  margin-left:1em;
+  margin-right:1em;
+}
+  }
+  @media (min-width: 800px) {
+
+.fondopc
+{
+  width:100vw;
+}
+    .main-title2
+{
+  position: absolute;
+    margin: 0;
+    padding: 0;
+    color: #F9F1E9;
+    top: 40%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.area{
+  padding-top:10em;
+}
+.imagenlogin
+{
+    width: 30% !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+ 
+}
+    .loginpc
+    {
+      width:40%;
+      margin-left:auto;
+      margin-right:auto;
+      position:relative;
+      display:block;
+    }
+  .pagina_actual
+  {
+     margin-left: 1em;
+  }
+  .ul_noticias
+  {
+    max-width:40%;
+    margin-left:auto;
+    margin-right: auto;
+  }
+  }
+
+
+  @media (min-width: 576px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 5;
+    }
+}
+
+.bg-info {
+    background-color: #007bff!important;
+}
+.colorblanco span
+{
+ color:#fff!important;
+}
+
+.btn-group
+{
+  display: block;
+}
+</style>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
