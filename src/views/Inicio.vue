@@ -21,9 +21,11 @@
             :id="'translate_'+index"
             style="position: absolute;z-index: 999;top: 2px;right: 1px;background-color: rgba(255, 255, 255, 0);border: none;box-shadow: none;background-color:white;"
             @click="toggleTranslate(item,index)"
+            aria-disabled="true"
             variant="primary"
-            :class="translate_lan"
-          >
+            
+            :disabled="checkTranslateButton(item)"
+          ><!-- :class="translate_lan" -->
             <i
               style="color: #007bff;font-size: 35px;"
               class="fa fa-language"
@@ -197,7 +199,7 @@
             variant="primary"
             @click="setProfileImage()"
           >
-            <span>{{item.comentarios?item.comentarios.length:0}}</span>
+            <span>{{item.comentarios?item.comentarios.length:0}} </span>
             <svg
               style="bottom:2px;position:relative"
               width="1em"
@@ -693,9 +695,16 @@ export default {
     resetModalll() {
       this.addComent = null;
     },
+    checkTranslateButton(item){
+      if(item.idioma == 'en'){
+        return true
+      }else if(item.idioma !== 'en'){
+        return false
+      }
+    },
     async toggleTranslate(item, index) {
       let target = "";
-      if ($("#translate_" + index).hasClass("es")) {
+/*       if ($("#translate_" + index).hasClass("es")) {
         target = "es";
         $("#translate_" + index).removeClass("es");
         $("#translate_" + index).addClass("en");
@@ -703,6 +712,13 @@ export default {
         target = "en";
         $("#translate_" + index).removeClass("en");
         $("#translate_" + index).addClass("es");
+      } */
+      if($("#translate_" + index).hasClass("en")){
+        $("#translate_" + index).removeClass("en");
+        target = item.idioma;
+      }else if($("#translate_" + index).not("en")){
+        $("#translate_" + index).addClass("en");
+        target = 'en';
       }
       let tlt = item.titulo;
       let dsr = item.cuerpo;
