@@ -537,14 +537,14 @@ export default new Vuex.Store({
               commit('setTags_array', tags)
 
 
-              var ayer = Math.round(new Date(new Date().setDate(new Date().getDate() - 2)).getTime() / 1000);
-              var hace1mes = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
+              var yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000);
+              var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
 
 
 
 
 
-              db.collection('noticias').where("fecha", ">", ayer).get()
+              db.collection('noticias').where("fecha", ">", yesterday).get()
                 .then(res => {
                   res.forEach(doc => {
                     //console.log(doc.id)
