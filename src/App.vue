@@ -18,7 +18,7 @@
       <b-navbar-nav>
         <b-nav-item   v-if="this.$route.name!='Mi Mundo'" :to="{name: 'Mi Mundo'}">Mi Mundo</b-nav-item>
         <b-nav-item   v-if="this.$route.name!='Nosotros'" :to="{name: 'Nosotros'}">Nosotros</b-nav-item>
-        <b-nav-item  :to="{name: 'Nosotros'}">v 1.30</b-nav-item>
+        <b-nav-item  :to="{name: 'Nosotros'}">v 1.31</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

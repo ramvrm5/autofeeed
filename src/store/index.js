@@ -544,7 +544,7 @@ export default new Vuex.Store({
 
 
 
-              db.collection('noticias').where("fecha", ">", yesterday).get()
+              db.collection('noticias').where("fecha", ">", yesterday).where("idioma", "==", "es").get()
                 .then(res => {
                   res.forEach(doc => {
                     //console.log(doc.id)
