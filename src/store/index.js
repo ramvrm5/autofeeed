@@ -536,7 +536,7 @@ export default new Vuex.Store({
 
               commit('setTags_array', tags)
 
-
+              var today = Math.round(new Date(new Date().setDate(new Date().getDate())).getTime() / 1000);
               var yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000);
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
 
@@ -544,7 +544,7 @@ export default new Vuex.Store({
 
 
 
-              db.collection('noticias').where("fecha", ">", yesterday).where("idioma", "==", "es").get()
+              db.collection('noticias').where("idioma", "==", "es").where("fecha", ">", yesterday).get()
                 .then(res => {
                   res.forEach(doc => {
                     //console.log(doc.id)
@@ -587,7 +587,7 @@ export default new Vuex.Store({
 
 
                   /*ponemos solo en español de base aunque leemos todas*/
-                  let noticias_compuestas2 = noticias_compuestas
+                  let noticias_compuestas2 = noticias_compuestas.slice(0, 100);
                   const ordered = {}
                   const b = ['es']
                   const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
