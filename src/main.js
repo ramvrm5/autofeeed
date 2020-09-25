@@ -1,5 +1,7 @@
 import Vue from 'vue'
-import * as VeeValidate from 'vee-validate';
+import VeeValidate from 'vee-validate';
+import { ValidationProvider } from 'vee-validate';
+ 
 import VueSweetalert2 from 'vue-sweetalert2';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -16,6 +18,9 @@ Vue.use(VeeValidate, {
   fieldsBagName: "veeFields",
   errorBagName: "veeErrors"
 });
+
+Vue.component('ValidationProvider', ValidationProvider);
+
 Vue.use(VueSweetalert2);
 // Install BootstrapVue
 Vue.use(BootstrapVue)

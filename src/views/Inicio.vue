@@ -168,14 +168,15 @@
                   </b-row>
                   <b-row style="position: absolute;bottom: 0px;width: 308px;">
                     <b-col cols="12">
-                      <b-form-textarea
-                        id="addComments-input"
+                      <textarea
+                        id="addComment"
                         v-model="addComent"
-                        name="addComent"
+                        class="form-control"
                         placeholder="Añadir comentarios"
-                      ></b-form-textarea>
+                      ></textarea><!-- v-model.lazy="addComent" ||:value="addComent" 
+                        @change="v => addComent = v"   || @keyup="addComent = $event.target.value"-->
                       <b-button
-                        @click="postCommets(item,index,noticias,commentsArray)"
+                        @click="postCommets(item,index,noticias)"
                         :disabled="!addComent"
                         class="post-Button"
                         variant="primary"
@@ -297,53 +298,6 @@
           >{{ veeErrors.first('description-input') }}</b-form-invalid-feedback>
         </b-form-group>
         <!-- Description End -->
-
-        <!-- Source Start -->
-        <!--         <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="email-input"
-          label="Fuente * :"
-          label-for="email-input"
-        >
-          <b-form-input
-            id="email-input"
-            v-model="form.source"
-            name="email-input"
-            v-validate="'required|email'"
-            :state="validateState('email-input')"
-            aria-describedby="email-input-live-feedback-2"
-            data-vv-as="Fuente"
-            placeholder="Entrar Fuente"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            id="email-input-live-feedback-2"
-          >{{ veeErrors.first('email-input') }}</b-form-invalid-feedback>
-        </b-form-group>
-
-
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="emailId-input"
-          label="FuenteId * :"
-          label-for="emailId-input"
-        >
-          <b-form-input
-            id="emailId-input"
-            v-model="form.sourceId"
-            name="emailId-input"
-            v-validate="'required|email'"
-            :state="validateState('emailId-input')"
-            aria-describedby="emailId-input-live-feedback-2"
-            data-vv-as="FuenteId"
-            placeholder="Entrar FuenteId"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            id="emailId-input-live-feedback-2"
-          >{{ veeErrors.first('emailId-input') }}</b-form-invalid-feedback>
-        </b-form-group>-->
-        <!-- SourceId End -->
 
         <!-- Language Start -->
         <b-form-group
