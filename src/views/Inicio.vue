@@ -255,7 +255,7 @@
         <b-form-group
           label-cols-sm="3"
           label-cols-lg="3"
-          id="title-group-1-input-"
+          id="title-input"
           label="Titulo * :"
           label-for="title-input"
         >
@@ -263,7 +263,8 @@
             id="title-input"
             v-model="form.title"
             name="title-input"
-            v-validate="{ required: true }"
+            v-validate="'required'"
+            data-vv-delay="600"
             :state="validateState('title-input')"
             aria-describedby="title-input-live-feedback-1"
             data-vv-as="titulo"
@@ -286,8 +287,9 @@
           <b-form-textarea
             id="description-input"
             v-model="form.description"
+            data-vv-delay="600"
             name="description-input"
-            v-validate="{ required: true }"
+            v-validate="'required'"
             :state="validateState('description-input')"
             aria-describedby="description-input-live-feedback-2"
             data-vv-as="Cuerpo"
