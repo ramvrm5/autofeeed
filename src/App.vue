@@ -35,7 +35,8 @@
                   variant="primary"
                   class="claseintereses" >
                   <!--v-on:change="changeItem"-->
-      <b-dropdown-item value="0"  @click="filtrarporKeyword('Crear noticias')">Crear noticias </b-dropdown-item>
+      <!-- <b-dropdown-item value="0"  @click="filtrarporKeyword('Crear noticias')">Crear noticias </b-dropdown-item> -->
+      <b-dropdown-item> <router-link to="/createNews" style="text-decoration: none;color: unset;">Crear noticias</router-link></b-dropdown-item>
       <b-dropdown-item value="0"  @click="filtrarporKeyword('todos')">Ver todos </b-dropdown-item>
    <b-dropdown-item  v-for="(item, index) in tags"  :key="index"
                     :value="item"

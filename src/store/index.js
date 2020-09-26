@@ -379,9 +379,9 @@ export default new Vuex.Store({
         let noticias_compuestas = this.state.noticias_backupES
         commit('setNoticias', noticias_compuestas)
       }
-      else if (keyword == "Crear noticias") {
+     /*  else if (keyword == "Crear noticias") {
         document.getElementById("modal-create-news").click()
-      }
+      } */
       else {
         let noticias_compuestas = this.state.noticias_backup
 

@@ -19,7 +19,7 @@
         >
           <b-button
             :id="'translate_'+index"
-            style="position: absolute;z-index: 999;top: 2px;right: 1px;background-color: rgba(255, 255, 255, 0);border: none;box-shadow: none;background-color:white;"
+            style="position: absolute;z-index: 999;top: 2px;right: 1px;background-color: rgba(255, 255, 255, 0);border: none;box-shadow: none;background-color:#ffffff00;"
             @click="toggleTranslate(item,index)"
             aria-disabled="true"
             variant="primary"
@@ -168,13 +168,12 @@
                   </b-row>
                   <b-row style="position: absolute;bottom: 0px;width: 308px;">
                     <b-col cols="12">
-                      <textarea
+                      <b-form-textarea
                         id="addComment"
                         v-model="addComent"
                         class="form-control"
                         placeholder="Añadir comentarios"
-                      ></textarea><!-- v-model.lazy="addComent" ||:value="addComent" 
-                        @change="v => addComent = v"   || @keyup="addComent = $event.target.value"-->
+                      ></b-form-textarea>
                       <b-button
                         @click="postCommets(item,index,noticias)"
                         :disabled="!addComent"
@@ -194,12 +193,13 @@
           <!-- Comments Modal Start -->
 
           <b-button
+            :id="'comment-'+index"
             v-b-modal="'modal-comment-' + index"
             style="float:right;margin-right:3%"
             target="_blank"
             variant="primary"
             @click="setProfileImage()"
-          >
+          > <router-link :to="{ name: 'Comment', params: { id: item.id}}" style="text-decoration: none;color: unset;">
             <span>{{item.comentarios?item.comentarios.length:0}} </span>
             <svg
               style="bottom:2px;position:relative"
@@ -219,6 +219,7 @@
                 d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
               />
             </svg>
+          </router-link>
           </b-button>
           <template v-slot:footer>
             <div v-if="item.fecha">
@@ -239,161 +240,6 @@
         </b-card>
       </b-card-group>
     </div>
-
-    <!-- Create News Modal START-->
-    <span id="modal-create-news" style="display:none" v-b-modal.modal-create-news>Open Modal</span>
-    <b-modal
-      id="modal-create-news"
-      ref="modal"
-      title="Crea tus noticias"
-      @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk"
-    >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <!-- Title Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="title-input"
-          label="Titulo * :"
-          label-for="title-input"
-        >
-          <b-form-input
-            id="title-input"
-            v-model="form.title"
-            name="title-input"
-            v-validate="'required'"
-            data-vv-delay="600"
-            :state="validateState('title-input')"
-            aria-describedby="title-input-live-feedback-1"
-            data-vv-as="titulo"
-            placeholder="Entrar titulo"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            id="title-input-live-feedback-1"
-          >{{ veeErrors.first('title-input') }}</b-form-invalid-feedback>
-        </b-form-group>
-        <!-- Title End -->
-
-        <!-- Description Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="description-input"
-          label="Cuerpo * :"
-          label-for="description-input"
-        >
-          <b-form-textarea
-            id="description-input"
-            v-model="form.description"
-            data-vv-delay="600"
-            name="description-input"
-            v-validate="'required'"
-            :state="validateState('description-input')"
-            aria-describedby="description-input-live-feedback-2"
-            data-vv-as="Cuerpo"
-            placeholder="Entrar cuerpo"
-          ></b-form-textarea>
-          <b-form-invalid-feedback
-            id="description-input-live-feedback-2"
-          >{{ veeErrors.first('description-input') }}</b-form-invalid-feedback>
-        </b-form-group>
-        <!-- Description End -->
-
-        <!-- Language Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="Language-input"
-          label="Idioma * :"
-          label-for="Language-input"
-        >
-          <b-form-input id="Language-input" v-model="language" name="Language-input" disabled></b-form-input>
-        </b-form-group>
-        <!-- Language End -->
-
-        <!-- Tags Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="Tags-input"
-          label="Tags * :"
-          label-for="Tags-input"
-        >
-          <b-form-tags
-            id="Tags-input"
-            v-model="form.tags"
-            name="Tags-input"
-            v-validate="'required'"
-            :state="validateState('Tags-input')"
-            aria-describedby="Tags-input-live-feedback-2"
-            data-vv-as="Tags"
-            remove-on-delete
-            add-on-enter
-            placeholder="Añadir tag"
-          ></b-form-tags>
-          <b-form-text id="tags-remove-on-delete-help" class="mt-2">
-            Prensa
-            <kbd>Icono de retroceso / Cruz</kbd> para borrar la última etiqueta ingresada / Presione
-            <kbd>Botón Entrar / Agregar</kbd> para agregar la etiqueta ingresada
-          </b-form-text>
-          <b-form-invalid-feedback
-            id="Tags-input-live-feedback-2"
-          >{{ veeErrors.first('Tags-input') }}</b-form-invalid-feedback>
-        </b-form-group>
-        <!-- Tags End -->
-
-        <!-- Image Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="img-input"
-          label="Image"
-          label-for="img-input"
-        >
-          <b-form-file
-            id="img-input-Image"
-            v-model="form.img"
-            name="img-input-Image"
-            v-validate="'image'"
-            :state="validateState('img-input-Image')"
-            aria-describedby="img-input-live-feedback-2"
-            data-vv-as="Image"
-            accept=".jpg"
-            placeholder="Elija un archivo o suéltelo aquí"
-            drop-placeholder="Suelta el archivo aquí"
-          ></b-form-file>
-          <b-form-invalid-feedback
-            id="img-input-live-feedback-2"
-          >{{ veeErrors.first('img-input-Image') }}</b-form-invalid-feedback>
-        </b-form-group>
-        <!-- Image End -->
-
-        <!-- URL Start -->
-        <b-form-group
-          label-cols-sm="3"
-          label-cols-lg="3"
-          id="url-input"
-          label="URL"
-          label-for="url-input"
-        >
-          <b-form-input
-            id="url-input"
-            v-model="form.url"
-            name="url-input"
-            v-validate="{url: {require_protocol: true }}"
-            :state="validateState('url-input')"
-            aria-describedby="url-input-live-feedback-2"
-            data-vv-as="URL"
-            placeholder="Agregar URL de noticias"
-          ></b-form-input>
-          <b-form-invalid-feedback id="url-input-live-feedback-2">{{ veeErrors.first('url-input') }}</b-form-invalid-feedback>
-        </b-form-group>
-        <!-- Image End -->
-      </form>
-    </b-modal>
-    <!-- Create News Modal END-->
 
     <b-button id="botonmodal" style="display:none" v-b-modal.modal-1>Launch demo modal</b-button>
     <b-modal id="modal-1" title="Tomo nota!" hide-footer>
@@ -594,15 +440,6 @@ export default {
           });
         });
     },
-    validateState(ref) {
-      if (
-        this.veeFields[ref] &&
-        (this.veeFields[ref].dirty || this.veeFields[ref].validated)
-      ) {
-        return !this.veeErrors.has(ref);
-      }
-      return null;
-    },
     async postCommets(object, index, comentArray) {
       let doc_id = null;
       let user_name = this.username.split("@")[0];
@@ -660,15 +497,6 @@ export default {
     },
     async toggleTranslate(item, index) {
       let target = "";
-/*       if ($("#translate_" + index).hasClass("es")) {
-        target = "es";
-        $("#translate_" + index).removeClass("es");
-        $("#translate_" + index).addClass("en");
-      } else if ($("#translate_" + index).hasClass("en")) {
-        target = "en";
-        $("#translate_" + index).removeClass("en");
-        $("#translate_" + index).addClass("es");
-      } */
       if($("#translate_" + index).hasClass("en")){
         $("#translate_" + index).removeClass("en");
         target = item.idioma;
@@ -703,78 +531,10 @@ export default {
     hideComentsmodal(id) {
       this.$bvModal.hide(id);
     },
-    resetModal() {
-      (this.imageURL = null),
-        (this.form = {
-          title: null,
-          description: null,
-          tags: [],
-          img: null,
-          url: null,
-        });
-      this.$nextTick(() => {
-        this.$validator.reset();
-        this.$bvModal.hide("modal-create-news");
-      });
-    },
-
-    handleOk(bvModalEvt) {
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-
-    handleSubmit() {
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          return;
-        }
-        let uniquieId = uuidv4();
-        let photo = document.getElementById("img-input-Image");
-        if (photo.files.length > 0) {
-          let file = photo.files[0];
-          let fileName = photo.files[0].name;
-          let name = "create-news-image-" + fileName;
-          let storageRef = firebase.storage().ref();
-          let image = new FormData();
-          image.append("file", file);
-          let fecha2 = new Date();
-          let mountainsRef = storageRef.child("avatares/" + name + ".jpg");
-          this.imageURL =
-            "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
-            encodeURIComponent(name) +
-            ".jpg?alt=media&time=" +
-            fecha2.getTime();
-          mountainsRef.put(file).then(function (snapshot) {});
-        }
-        let user = firebase.auth().currentUser;
-        let email = user.email;
-        this.submittedNews.push({
-          id: uniquieId,
-          title: this.form.title,
-          description: this.form.description,
-          date: parseInt(moment(new Date()).format("x") / 1000),
-          classicDate: new Date().toISOString(),
-          source: email,
-          sourceId: email,
-          language: this.language,
-          tags: this.form.tags,
-          img: this.form.img ? this.imageURL : null,
-          url: this.form.url ? this.form.url : null,
-        });
-        this.saveCreatedNews(this.submittedNews);
-        this.resetModal();
-        Swal.fire("News!", "News created successfully!", "success");
-      });
-    },
   },
   computed: {
     ...mapState(["tareas", "noticias"]),
     ...mapState(["usuario", "keywordactual"]),
-    translated: {
-      get() {
-        return this.$store.state.translated;
-      },
-    },
   },
   // components: {
   //   HelloWorld

@@ -53,6 +53,18 @@ Vue.use(VueRouter)
     path: '/about',
     name: 'Nosotros',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/comment/:id',
+    name: 'Comment',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Comment.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/createNews',
+    name: 'CreateNews',
+    component: () => import(/* webpackChunkName: "about" */ '../views/CreateNews.vue'),
+    meta: {requiresAuth: true}
   }
 ]
 
