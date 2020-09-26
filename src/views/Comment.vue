@@ -6,12 +6,14 @@
           style="height: 90vh !important;width:100%"
           class="bg-light align-items-center"
         >
-          <b-col cols="8 mx-auto" style="height: 85vh !important;border: 1px solid #cac5c5;">
+        <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
+            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</router-link>
+        </div>
+          <b-col class="col-lg-8 mx-auto" style="height:90%;border: 1px solid #cac5c5;">
             <b-row class="h-100">
               <b-col
-                cols="8 h-100" 
-                class="comments-scrollBar"
-                style="max-height: 564px; overflow-y: scroll; padding: 0px"
+                class="col-12 col-sm-12 col-md-6 col-lg-8  comments-scrollBar h-100"
+                style="overflow-y: scroll; padding: 0px"
               >
                 <b-card
                   :title="item.titulo"
@@ -48,14 +50,13 @@
                     </div>
                   </template>
                 </b-card>
-                <!-- <b-form-select v-model="headerBgVariant" :options="variants"></b-form-select> -->
               </b-col>
-              <b-col cols="4" style="padding: 0px">
+              <b-col class="col-12 col-sm-12 col-md-6 col-lg-4" style="padding: 0px">
                 <b-row
                   class="m-0 w-100"
                   style="border-bottom: 2px solid rgb(223 223 223)"
                 >
-                  <b-col cols="4 pr-0">
+                  <b-col cols="4 d-none d-sm-none d-md-block d-lg-block  pr-0">
                     <img
                       id="profilepic"
                       class="rounded-circle"
@@ -69,7 +70,7 @@
                       "
                     />
                   </b-col>
-                  <b-col cols="8 pl-0 mt-3">
+                  <b-col cols="8 d-none d-sm-none d-md-block d-lg-block  pl-0 mt-3">
                     <b>{{ username }}</b>
                   </b-col>
                 </b-row>
@@ -86,7 +87,7 @@
                     class="m-0 mt-2 w-100"
                     style="border-bottom: 1px solid #dfdfdf"
                   >
-                    <b-col cols="3">
+                    <b-col cols="3 d-none d-sm-none d-md-block d-lg-block ">
                       <img
                         id="avtarPic"
                         class="rounded-circle"
@@ -100,7 +101,7 @@
                         "
                       />
                     </b-col>
-                    <b-col cols="9 pl-0">
+                    <b-col cols="9 d-none d-sm-none d-md-block d-lg-block pl-0">
                       <b-row>
                         <b-col
                           cols="4 pl-3"
@@ -331,4 +332,7 @@ export default {
   background-color: unset;
   border-color: unset;
 }
+/* article.card{
+    height:100%;
+} */
 </style>

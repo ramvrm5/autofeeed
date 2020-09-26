@@ -1,6 +1,10 @@
 <template>
   <b-container fluid>
-    <b-row style="height: 90vh!important;" class="bg-light align-items-center">
+    <b-row style="height: 90vh !important" class="bg-light align-items-center">
+      
+        <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
+            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</router-link>
+        </div>
       <b-col cols="8 mx-auto h-75">
         <form @submit.stop.prevent="handleSubmit">
           <!-- Title Start -->
@@ -151,7 +155,9 @@
           </b-form-group>
           <!-- Image End -->
           <div class="text-center">
-          <b-button type="submit" size="lg" variant="primary">Submit</b-button>
+            <b-button type="submit" size="lg" variant="primary"
+              >Submit</b-button
+            >
           </div>
         </form>
       </b-col>
@@ -274,7 +280,16 @@ export default {
           })
           .then((doc) => {
             this.resetModal();
-            Swal.fire("News!", "News created successfully!", "success");
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "News Created Successfully!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setTimeout(() => {
+              this.$router.push('/');
+            }, 1600);
           })
           .catch((error) =>
             Swal.fire("News!", "Something went wrong!", "error")
