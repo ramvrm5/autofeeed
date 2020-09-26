@@ -584,7 +584,7 @@ export default new Vuex.Store({
 
 
                   /*ponemos solo en español de base aunque leemos todas*/
-				  //.slice(0, 100)
+                  //.slice(0, 100)
                   let noticias_compuestas2 = noticias_compuestas;
                   const ordered = {}
                   const b = ['es']
