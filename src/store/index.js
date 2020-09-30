@@ -15,6 +15,7 @@ export default new Vuex.Store({
     nombre: null,
     apellidos: null,
     alerta: null,
+    alertaObject: [],
     tags: [],
     tags_array: [],
     tags_array_completo: [],
@@ -71,6 +72,9 @@ export default new Vuex.Store({
     setAlerta(state, payload) {
       state.alerta = payload
     },
+    setAlertaObject(state, payload) {
+      state.alertaObject = payload
+    },
     setTags(state, payload) {
       state.tags = payload
     },
@@ -79,7 +83,6 @@ export default new Vuex.Store({
     },
     setTags_array_completo(state, payload) {
       state.tags_array_completo = payload
-      console.log("este es el payload de ags completos", payload)
     },
     setTag(state, payload) {
       state.tag = payload
@@ -94,7 +97,6 @@ export default new Vuex.Store({
   actions: {
 
     crearUsuario({ commit }, usuario) {
-      console.log("CREAR USUARIO 3?")
       var tagsoriginal = ["noticias", "news"]
       var idiomas_defecto = ["es", "en", "zh", "pt", "de", "ru", "fr"]
       auth.createUserWithEmailAndPassword(usuario.email, usuario.password)
@@ -109,7 +111,6 @@ export default new Vuex.Store({
             tags: tagsoriginal,
             languages: idiomas_defecto
           }).then(doc => {
-            console.log("CREAR USUARIO 4")
             alert("usuario creado")
             commit('setUsuario', usuarioCreado)
             router.push('/miperfil')
@@ -150,17 +151,9 @@ export default new Vuex.Store({
 
     detectarUsuario({ commit }, usuario) {
 
-      console.log("DECTAR USUARIO DOS")
-
-
-
-
-      //alert(usuario)
-
       if (usuario != null) {
         commit('setUsuario', usuario)
 
-        console.log("DECTAR USUARIO DOS diferente de null")
 
         let tags = []
         /* Descomentar por si queremos coger todos los datos desde main.js
@@ -170,17 +163,14 @@ export default new Vuex.Store({
           .then(doc => {
 
 
-            console.log("data leida:", doc.data())
             let datos = doc.data()
 
             if (typeof datos !== "undefined") {
 
-
-              console.log("nombre:", datos.nombre)
               commit('setNombre', datos.nombre)
               commit('setApellido', datos.apellidos)
-              commit('setAlerta', datos.alerta)
-              console.log("ponemos la alerta " + datos.alerta)
+              commit('setAlerta', datos.alerta?datos.alerta:"")
+              commit('setAlertaObject', datos.alertaObject?datos.alertaObject:[])
             }
             else {
               commit('setNombre', "Escribe tu nombre")
@@ -206,7 +196,7 @@ export default new Vuex.Store({
 
 
                 let alarmaponer = ""
-                console.log("cada tag por separado:", entry);
+                let typeOfTag = ""
                 tags.push(entry)
 
 
@@ -214,16 +204,17 @@ export default new Vuex.Store({
                   alarmas_lista2.forEach(element => {
                     let alarmas_lista3 = element.split(";");
 
-                    if (alarmas_lista3[1] == entry)
+                    if (alarmas_lista3[1] == entry) {
                       alarmaponer = alarmas_lista3[0]
+                      typeOfTag = alarmas_lista3[2] ? alarmas_lista3[2] : "Leisure";
+                    }
                   });
                 }
-
-
 
                 let obj = {
                   alarmas: "0",
                   name: entry,
+                  typeOfTag: typeOfTag,
                   alarma: alarmaponer,
                   Publicaciones: "25"
                 };
@@ -234,7 +225,6 @@ export default new Vuex.Store({
 
 
               commit('set_items2', items2)
-              console.log("tags todos", datos.tags)
 
 
               commit('setTags_array_completo', datos.tags)
@@ -269,18 +259,15 @@ export default new Vuex.Store({
 
 
     cambiarcontraseña({ commit }, correo) {
-      console.log(correo)
       alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña')
       auth().sendPasswordResetEmail(correo.email)
     },
 
-     getTareas({ commit }) {
+    getTareas({ commit }) {
       const tareas = []
       db.collection('datos').get()
         .then(res => {
           res.forEach(doc => {
-            //console.log(doc.id)
-            //console.log(doc.data())
             let tarea = doc.data()
             tarea.id = doc.id
             tareas.push(tarea)
@@ -305,12 +292,10 @@ export default new Vuex.Store({
       const c = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
         .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
 
-      console.log(c);
 
 
 
       commit('setNoticias', c)
-      console.log(c)
       router.push('/') //volver a inicio
 
 
@@ -338,7 +323,6 @@ export default new Vuex.Store({
 
 
       commit('setNoticias', noticias_compuestas2)
-      console.log(noticias_compuestas2)
       router.push('/') //volver a inicio
 
 
@@ -350,7 +334,6 @@ export default new Vuex.Store({
 
       let noticias_compuestas3 = this.state.noticias_alerta;
 
-      console.log(noticias_compuestas3);
       /*
             const ordered = {}
             
@@ -362,7 +345,6 @@ export default new Vuex.Store({
             console.log(c);*/
 
       commit('setNoticias', noticias_compuestas3)
-      console.log(noticias_compuestas3)
       router.push('/') //volver a inicio
 
       document.getElementById("noticiasid").style.display = "none";
@@ -379,13 +361,12 @@ export default new Vuex.Store({
         let noticias_compuestas = this.state.noticias_backupES
         commit('setNoticias', noticias_compuestas)
       }
-     /*  else if (keyword == "Crear noticias") {
-        document.getElementById("modal-create-news").click()
-      } */
+      /*  else if (keyword == "Crear noticias") {
+         document.getElementById("modal-create-news").click()
+       } */
       else {
         let noticias_compuestas = this.state.noticias_backup
 
-        //console.log(JSON.stringify(noticias_compuestas));
         // → '{"b":"foo","c":"bar","a":"baz"}'
 
         const ordered = {}
@@ -394,7 +375,6 @@ export default new Vuex.Store({
 
           let c = noticias_compuestas.filter(({ tags }) => b.includes(tags[0]))
             .sort(({ tags: r }, { tags: t }) => b.indexOf(r) - b.indexOf(t));
-          //console.log(JSON.stringify(c))
 
 
 
@@ -408,7 +388,6 @@ export default new Vuex.Store({
 
           else { commit('setNoticias', c) }
           console.log(noticias_compuestas)
-          //console.log(noticias_compuestas)
         }
 
 
@@ -417,10 +396,8 @@ export default new Vuex.Store({
           let b = keywords[0]
           let b2 = keywords[1]
           let c = [];
-          console.log("keywords: " + b + "  " + b2)
 
           noticias_compuestas.forEach(function (valor, indice, array) {
-            console.log("En el índice " + indice + " hay este valor: " + valor.tags);
             if ((JSON.stringify(valor.tags).includes(b)) || (JSON.stringify(valor.tags).includes(b2))) {
               c.push(valor);
             }
@@ -438,8 +415,6 @@ export default new Vuex.Store({
              */
 
           // let c = c1.push(...c2)
-          console.log("aqui estamos")
-          console.log(JSON.stringify(c))
           commit('setNoticias', c)
 
           if (c.length < 1) {
@@ -451,7 +426,6 @@ export default new Vuex.Store({
           }
           else { commit('setNoticias', c) }
           router.push('/') //volver a inicio
-          console.log(noticias_compuestas)
 
         }
 
@@ -476,7 +450,7 @@ export default new Vuex.Store({
       let temparray = array
       let unique_id = db.collection('noticias').doc().id;
       db.collection('noticias').doc(unique_id).set({
-        id:temparray[0].id,
+        id: temparray[0].id,
         titulo: temparray[0].title,
         cuerpo: temparray[0].description,
         description: temparray[0].description,
@@ -504,7 +478,6 @@ export default new Vuex.Store({
       let alerta_usuario = this.state.alerta;
 
 
-      //console.log("tag_array_noticias", this.tags_array)
 
       let tags = []
 
@@ -528,7 +501,6 @@ export default new Vuex.Store({
 
               let taglist = (datos.tags[0]).split(";");
               taglist.forEach(function (entry) {
-                console.log("cada tag por separado:", entry);
                 tags.push(entry)
               });
 
@@ -544,8 +516,6 @@ export default new Vuex.Store({
               db.collection('noticias').where("fecha", ">", yesterday).get()
                 .then(res => {
                   res.forEach(doc => {
-                    //console.log(doc.id)
-                    //console.log(doc.data())
                     let noticia_leida = doc.data()
                     let titulo = noticia_leida.titulo;
                     let correos_like = noticia_leida.correos_like3;
@@ -591,14 +561,10 @@ export default new Vuex.Store({
                   const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
                     .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
 
-                  //console.log(c2);
 
 
 
                   let tags_filtrar = this.state.tags
-                  console.log("tags filtrarrrr", tags_filtrar)
-
-                  console.log("tags filtrarrrr", c2)
 
                   let c_filtradas = [];
 
@@ -628,9 +594,6 @@ export default new Vuex.Store({
                   //para poner todos los idiomas a la vez commit('setNoticias', noticias_compuestas)
                   commit('setNoticiasBackup', noticias_compuestas)
 
-                  //console.log(noticias_compuestas)
-                  console.log("entramos en getnoticias3")
-                  console.log("alerta del usuario: " + this.state.alerta);
 
                   document.getElementById("cargandoid").style.display = "none";
                   if (c_filtradas.length < 1) {
@@ -639,11 +602,8 @@ export default new Vuex.Store({
                   else {
 
                     var alerta_usuario = this.state.alerta;
-                    console.log(alerta_usuario)
                     var aviso_alarma = (c_filtradas.indexOf(alerta_usuario));
                     var aviso_alarma2 = c_filtradas.find(element => (element.cuerpo).includes(alerta_usuario))
-                    console.log(aviso_alarma2)
-                    //console.log(aviso_alarma2.length)
                     if (aviso_alarma2 != null) {
                       noticias_alerta_2.push(aviso_alarma2)
                       document.getElementById("alarmatexto").textContent = "¡Hay alarmas!"
@@ -665,9 +625,8 @@ export default new Vuex.Store({
 
             })
         }
-        else {
-          console.log("no hay usuario logueado");
-        }
+        /* else {
+        } */
 
       })
 
@@ -683,25 +642,17 @@ export default new Vuex.Store({
       const tareas = []
       db.collection('datos').doc(idTarea).get()
         .then(doc => {
-
-          console.log(doc.id)
-          console.log(doc.data())
           let tarea = doc.data()
           tarea.id = doc.id
-          console.log("Tarea enviada a setTarea", tarea)
           commit('setTarea', tarea)
         })
     },
 
     getDatos({ commit }, email) {
-      console.log("aqui llegamos")
-      console.log(email)
       let tags = []
       db.collection('usuarios').doc(email).get()
         .then(doc => {
 
-
-          console.log(doc.data())
           let datos = doc.data()
           commit('setNombre', datos.nombre)
           commit('setApellido', datos.apellidos)
@@ -728,11 +679,7 @@ export default new Vuex.Store({
         .then(res => {
           res.forEach(doc => {
 
-
-            //console.log(doc.id)
-            //console.log(doc.data())
             let tarea = doc.data()
-            console.log(tarea.es)
             tags_db.push(tarea.es)
             //tarea.id = doc.id
 
@@ -745,11 +692,6 @@ export default new Vuex.Store({
 
           let tags3 = []
           let tags_enviar = []
-          //console.log(this.tags)
-          //console.log(this.state.tags)
-          //console.log(objeto_tags.tags[0].text)
-          //console.log(objeto_tags.tags)
-          //console.log((objeto_tags.tags).length)
 
 
           const acentos = { 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U' }
@@ -771,14 +713,6 @@ export default new Vuex.Store({
                 guardartag = guardartag.replace("acciones ", "")
               }
 
-
-
-
-
-
-
-
-              //console.log(guardartag)
               if (!(tags_db.indexOf(guardartag) > -1)) {
                 tags_get.push(guardartag)
               }
@@ -793,20 +727,15 @@ export default new Vuex.Store({
 
           //no estaba funcionado porqeu esta comparando 
           //los idiomas como 3 tags compuestos de tags
-          console.log("tags enviar1", tags3)
           let uniqueSet = new Set(tags3)
 
           tags3 = [...uniqueSet]
-          console.log("tags enviar2", uniqueSet)
-          console.log("tags enviar3", tags3)
           //hasta aquí quitar duplicados
 
 
           const tags2 = (tags3).join(";")
 
           let contador = 0;
-
-          //console.log("LEEMOS LOS TAGS",this.state.tags_array_completo)
 
           this.state.tags_array_completo.forEach(function (entry) {
             if (contador == 0) tags_enviar.push(tags2)
@@ -824,9 +753,7 @@ export default new Vuex.Store({
             //Funciona tags:[tags2, this.tags_array_completo[1], this.tags_array_completo[2]]
 
           }).then(() => {
-            //console.log('tags editados', tags2)
             let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
-            console.log(url2)
             let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(tags_get_preparados)
             let urlbaidu = 'https://bit4block.es/autofeed/autofeed_baidu_factory.php?lang=zh&tags=' + encodeURIComponent(tags_get_preparados)
             let urlec = 'https://bit4block.es/autofeed/autofeed_eleconomista_factory.php?tags=' + encodeURIComponent(tags_get_preparados)
@@ -840,7 +767,6 @@ export default new Vuex.Store({
 
             fetch(url2, { mode: 'no-cors' })
               .then(response => {
-                console.log("bien1", response.text())
 
                 pcg = 50;
                 document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
@@ -848,11 +774,8 @@ export default new Vuex.Store({
 
                 if (tags_get.length > 0) {
 
-
-                  console.log(url3)
                   fetch(url3, { mode: 'no-cors' })
                     .then(response => {
-                      console.log("bien1", response.text())
                     })
                     .then((data) => {
                       pcg = 75;
@@ -860,25 +783,18 @@ export default new Vuex.Store({
                       document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
 
                       //aqui llama al economista
-                      console.log(urlec)
                       fetch(urlec, { mode: 'no-cors' })
                         .then(response => {
-                          console.log("bien1", response.text())
                         })
                         .then((data) => {
-                          console.log("bien", data)
 
 
                           //y aqui llama a baidu
 
-
-                          console.log(urlbaidu)
                           fetch(urlbaidu, { mode: 'no-cors' })
                             .then(response => {
-                              console.log("bien1", response.text())
                             })
                             .then((data) => {
-                              console.log("bien", data)
 
                               pcg = 100;
                               document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
@@ -887,7 +803,6 @@ export default new Vuex.Store({
 
                               //document.getElementById("cargandoid").style.display = "none";
                               document.getElementById("barraid").style.display = "none";
-                              console.log("recargar")
                               location.reload();
 
 
@@ -922,7 +837,6 @@ export default new Vuex.Store({
 
               })
               .then((data) => {
-                console.log("bien", data)
               })
               .catch((error) => {
                 console.log(error)
@@ -933,13 +847,10 @@ export default new Vuex.Store({
             /*fecth bien
                 fetch(url2, { mode: 'no-cors'})
             .then(response => {
-              console.log("bien1",response.text())
             })
             .then((data) => {
-              console.log("bien", data)
             })
             .catch((error) => {
-              console.log(error)
             })
   
             */
@@ -980,7 +891,6 @@ export default new Vuex.Store({
         nombre: tarea.nombre
 
       }).then(() => {
-        console.log('tarea editada')
         router.push('/') //volver a la ruta raiz
       })
 
@@ -988,15 +898,12 @@ export default new Vuex.Store({
 
 
     editarTarea2({ commit }, objeto_recibido) {
-      console.log(objeto_recibido.nombre)
-      console.log(objeto_recibido.apellidos)
       db.collection('usuarios').doc(this.state.usuario.email).update({
         nombre: objeto_recibido.nombre,
         apellidos: objeto_recibido.apellidos
 
       }).then(() => {
         alert("Nombre y apellidos actualizados")
-        console.log('Nombre y apellidos editados')
         router.push('/miperfil') //volver a la ruta raiz
       })
 
@@ -1004,7 +911,6 @@ export default new Vuex.Store({
 
 
     editarAlertas({ commit }, objeto_recibido) {
-      console.log(objeto_recibido.alerta)
       commit('setAlerta', objeto_recibido.alerta)
 
       db.collection('usuarios').doc(this.state.usuario.email).update({
@@ -1012,7 +918,6 @@ export default new Vuex.Store({
 
       }).then(() => {
         alert("Alerta actualizada correctamente " + objeto_recibido.alerta)
-        console.log('Alerta editada correctamente')
         //router.push('/miperfil') //volver a la ruta raiz
       })
 
@@ -1028,9 +933,7 @@ export default new Vuex.Store({
           nombre: nombreTarea
         })
         .then(doc => {
-          console.log(doc.id)
           router.push('/')
-          //console.log(doc.data())
         })
 
     },
@@ -1042,8 +945,6 @@ export default new Vuex.Store({
 
   getters: {
     existeUsuario(state) {
-      console.log("estado", state)
-      console.log(state.usuario === null)
       if (state.usuario === null) {
         return false
       }

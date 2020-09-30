@@ -42,18 +42,13 @@ auth.onAuthStateChanged(user => {
 
 
   if (user) {
-    console.log(user)
     const detectorUsuario = {
       email: user.email,
       uid: user.uid
     }
-    console.log("UUUUUUUUUUUNOOOOOOOOOOOOOO SI")
     store.dispatch('detectarUsuario', detectorUsuario)
   }
   else {
-    console.log("aqui")
-    console.log(user)
-    console.log("UUUUUUUUUUUNOOOOOOOOOOOOOO NO")
     store.dispatch('detectarUsuario', user)
   }
 
