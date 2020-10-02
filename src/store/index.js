@@ -11,9 +11,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     usuario: null,
-    nombre_y_apellidos: { nombre: '', apellidos: '' },
+    nombre_y_apellidos: { nombre: '', apellidos: '',selectedLan:'' },
     nombre: null,
     apellidos: null,
+    selectedLan: null,
     alerta: null,
     alertaObject: [],
     tags: [],
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     },
     setApellido(state, payload) {
       state.apellidos = payload
+    },
+    setSelectedLan(state, payload) {
+      state.selectedLan = payload
     },
     setAlerta(state, payload) {
       state.alerta = payload
@@ -169,6 +173,7 @@ export default new Vuex.Store({
 
               commit('setNombre', datos.nombre)
               commit('setApellido', datos.apellidos)
+              commit('setSelectedLan', datos.default_language)
               commit('setAlerta', datos.alerta?datos.alerta:"")
               commit('setAlertaObject', datos.alertaObject?datos.alertaObject:[])
             }
@@ -288,6 +293,7 @@ export default new Vuex.Store({
       const ordered = {}
 
       const b = [language];
+      debugger
 
       const c = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
         .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
@@ -296,7 +302,7 @@ export default new Vuex.Store({
 
 
       commit('setNoticias', c)
-      router.push('/') //volver a inicio
+      //router.push('/') //volver a inicio
 
 
     },
@@ -656,6 +662,7 @@ export default new Vuex.Store({
           let datos = doc.data()
           commit('setNombre', datos.nombre)
           commit('setApellido', datos.apellidos)
+          commit('setSelectedLan', datos.default_language)
           let taglist = (datos.tags[0]).split(";");
           taglist.forEach(function (entry) {
             tags.push(entry)
@@ -898,13 +905,15 @@ export default new Vuex.Store({
 
 
     editarTarea2({ commit }, objeto_recibido) {
+      debugger
       db.collection('usuarios').doc(this.state.usuario.email).update({
         nombre: objeto_recibido.nombre,
-        apellidos: objeto_recibido.apellidos
+        apellidos: objeto_recibido.apellidos,
+        default_language: objeto_recibido.selectedLan,
 
       }).then(() => {
-        alert("Nombre y apellidos actualizados")
-        router.push('/miperfil') //volver a la ruta raiz
+       // alert("Nombre y apellidos actualizados")
+       // router.push('/miperfil') //volver a la ruta raiz
       })
 
     },

@@ -87,7 +87,7 @@
                     class="m-0 mt-2 w-100"
                     style="border-bottom: 1px solid #dfdfdf"
                   >
-                    <b-col cols="3 d-none d-sm-none d-md-block d-lg-block ">
+                    <b-col cols="3 d-block d-sm-block d-md-block d-lg-block ">
                       <img
                         id="avtarPic"
                         class="rounded-circle"
@@ -101,7 +101,7 @@
                         "
                       />
                     </b-col>
-                    <b-col cols="9 d-none d-sm-none d-md-block d-lg-block pl-0">
+                    <b-col cols="9 d-block d-sm-block d-md-block d-lg-block pl-0">
                       <b-row>
                         <b-col
                           cols="4 pl-3"

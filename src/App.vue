@@ -27,6 +27,7 @@
         <b-nav-item @click="mostrarAlarmas()"  id="alarmaid1" > <font-awesome-icon id="alarmaid" icon="bell" /></b-nav-item>
 
         <b-nav-item @click="mostrarAlarmas()" > <span id="alarmatexto">No hay alarmas</span></b-nav-item>
+        <b-nav-item v-if="existeUsuario"> <router-link to="/createNews" style="text-decoration: none;color: unset;color: white;">Crear noticias</router-link></b-nav-item>
 
 
 <b-dropdown  v-if="existeUsuario" id="ddCommodity"
@@ -36,7 +37,7 @@
                   class="claseintereses" >
                   <!--v-on:change="changeItem"-->
       <!-- <b-dropdown-item value="0"  @click="filtrarporKeyword('Crear noticias')">Crear noticias </b-dropdown-item> -->
-      <b-dropdown-item> <router-link to="/createNews" style="text-decoration: none;color: unset;">Crear noticias</router-link></b-dropdown-item>
+      <!-- <b-dropdown-item> <router-link to="/createNews" style="text-decoration: none;color: unset;">Crear noticias</router-link></b-dropdown-item> -->
       <b-dropdown-item value="0"  @click="filtrarporKeyword('todos')">Ver todos </b-dropdown-item>
    <b-dropdown-item  v-for="(item, index) in tags"  :key="index"
                     :value="item"
@@ -51,11 +52,11 @@
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Buscar</b-button>
         </b-nav-form>-->
 
-        <b-nav-item-dropdown  v-if="existeUsuario" class="colorblanco" text="Idioma" right>
+        <!-- <b-nav-item-dropdown  v-if="existeUsuario" class="colorblanco" text="Idioma" right>
           <b-dropdown-item  @click="cambiarIdioma('es')">Español</b-dropdown-item>
           <b-dropdown-item @click="cambiarIdioma('en')" >Inglés</b-dropdown-item>
           <b-dropdown-item @click="cambiarIdioma('zh')" >Chino</b-dropdown-item>
-        </b-nav-item-dropdown>
+        </b-nav-item-dropdown> -->
 
 <b-nav-item > <router-link style="color:white" to="/registro" v-if="!existeUsuario">Crear cuenta</router-link></b-nav-item>
         <b-nav-item-dropdown id="loginid" right>

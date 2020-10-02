@@ -170,17 +170,21 @@ export default {
       imageProfile: "../assets/avatar-01.png",
       avtarPic: "img/avatar-01.6b36b5f2.png",
       name: "Inicio",
-      classA: "likepulsado",
-      classB: "likepulsado",
+      classA: null,
+      classB: null,
       translate_lan: "es",
       imageURL: null,
-      username: "",
+      username: ""
     };
   },
   created() {
     //this.getTareas()
     //this.getAlertas()
     this.getNoticias();
+  },
+  mounted: function () {
+    this.classA = "likepulsado",
+    this.classB = "likepulsado"
   },
   methods: {
     ...mapActions([
@@ -288,12 +292,13 @@ export default {
     },
     async toggleTranslate(item, index) {
       let target = "";
-      if($("#translate_" + index).hasClass("en")){
-        $("#translate_" + index).removeClass("en");
+      let languageTemp = this.selectedLan;
+      if($("#translate_" + index).hasClass(languageTemp)){
+        $("#translate_" + index).removeClass(languageTemp);
         target = item.idioma;
-      }else if($("#translate_" + index).not("en")){
-        $("#translate_" + index).addClass("en");
-        target = 'en';
+      }else if($("#translate_" + index).not(languageTemp)){
+        $("#translate_" + index).addClass(languageTemp);
+        target = languageTemp;
       }
       let tlt = item.titulo;
       let dsr = item.cuerpo;
@@ -321,7 +326,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["tareas", "noticias"]),
+    ...mapState(["tareas", "noticias","selectedLan"]),
     ...mapState(["usuario", "keywordactual"]),
   },
 };
