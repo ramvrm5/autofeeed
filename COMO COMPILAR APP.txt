@@ -1,0 +1,20 @@
+Generate key:
+
+keytool -genkey -v -keystore cuenta.keystore -alias cuenta -keyalg RSA -keysize 2048 -validity 1000000
+
+If necessary:
+
+set PATH=%PATH%;C:\Program Files\Java\jdk1.8.0_181\bin
+
+Sign in:
+
+./jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore cuenta.keystore app-release-unsigned.apk cuenta
+
+Create apk:
+
+npm run cordova-build-android
+
+Importante usar esto desde cd autofeed (no hace falta entrar en src-cordova)
+contraseña cuenta
+
+https://stackoverflow.com/questions/26449512/how-to-create-a-signed-apk-file-using-cordova-command-line-interface
