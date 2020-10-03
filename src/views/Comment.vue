@@ -51,12 +51,12 @@
                   </template>
                 </b-card>
               </b-col>
-              <b-col class="col-12 col-sm-12 col-md-6 col-lg-4" style="padding: 0px">
+              <b-col class="col-12 col-sm-12 col-md-6 col-lg-4 h-100" style="padding: 0px">
                 <b-row
                   class="m-0 w-100"
-                  style="border-bottom: 2px solid rgb(223 223 223)"
+                  style="height:17%;border-bottom: 2px solid rgb(223 223 223)"
                 >
-                  <b-col cols="4 d-none d-sm-none d-md-block d-lg-block  pr-0">
+                  <b-col cols="4 d-block d-sm-block d-md-block d-lg-block">
                     <img
                       id="profilepic"
                       class="rounded-circle"
@@ -70,13 +70,13 @@
                       "
                     />
                   </b-col>
-                  <b-col cols="8 d-none d-sm-none d-md-block d-lg-block  pl-0 mt-3">
+                  <b-col cols="8 d-block d-sm-block d-md-block d-lg-block mt-3">
                     <b>{{ username }}</b>
                   </b-col>
                 </b-row>
                 <b-row
                   v-if="item.comentarios && item.comentarios.length > 0"
-                  style="max-height: 420px; overflow-y: scroll"
+                  style="height:71%; overflow-y: scroll"
                   class="comments-scrollBar m-0 w-100"
                   id="commentSection"
                 >
@@ -126,13 +126,13 @@
                 </b-row>
                 <b-row
                   v-if="!item.comentarios || item.comentarios.length == 0"
-                  style="max-height: 420px; overflow-y: scroll; color: #afaeae"
+                  style="height:71%; overflow-y: scroll; color: #afaeae"
                   class="comments-scrollBar ml-0 mr-1 mt-5 text-center"
                   id="commentSection"
                 >
                   <b-col cols="12">No comments yet</b-col>
                 </b-row>
-                <b-row class="w-100 m-0" style="position: absolute; bottom: 0px;">
+                <b-row class="w-100 m-0" style="height:12%;">
                   <b-col cols="12 p-0">
                     <b-form-textarea
                       id="addComment"
