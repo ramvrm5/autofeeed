@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     usuario: null,
-    nombre_y_apellidos: { nombre: '', apellidos: '',selectedLan:'' },
+    nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
     apellidos: null,
     selectedLan: null,
@@ -174,8 +174,8 @@ export default new Vuex.Store({
               commit('setNombre', datos.nombre)
               commit('setApellido', datos.apellidos)
               commit('setSelectedLan', datos.default_language)
-              commit('setAlerta', datos.alerta?datos.alerta:"")
-              commit('setAlertaObject', datos.alertaObject?datos.alertaObject:[])
+              commit('setAlerta', datos.alerta ? datos.alerta : "")
+              commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
             }
             else {
               commit('setNombre', "Escribe tu nombre")
@@ -533,8 +533,10 @@ export default new Vuex.Store({
                     let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
                     noticias_compuestas.push(noticia_leida)
 
-                    if (texto_noticia.includes(alerta_usuario)) {
-                      noticias_alerta.push(noticia_leida)
+                    if (alerta_usuario) {
+                      if (texto_noticia.includes(alerta_usuario)) {
+                        noticias_alerta.push(noticia_leida)
+                      }
                     }
 
 
@@ -607,7 +609,7 @@ export default new Vuex.Store({
                   }
                   else {
 
-                    var alerta_usuario = this.state.alerta;
+                    alerta_usuario = this.state.alerta;
                     var aviso_alarma = (c_filtradas.indexOf(alerta_usuario));
                     var aviso_alarma2 = c_filtradas.find(element => (element.cuerpo).includes(alerta_usuario))
                     if (aviso_alarma2 != null) {
@@ -912,8 +914,8 @@ export default new Vuex.Store({
         default_language: objeto_recibido.selectedLan,
 
       }).then(() => {
-       // alert("Nombre y apellidos actualizados")
-       // router.push('/miperfil') //volver a la ruta raiz
+        // alert("Nombre y apellidos actualizados")
+        // router.push('/miperfil') //volver a la ruta raiz
       })
 
     },
