@@ -97,7 +97,7 @@
                 setAlertalocal2(data.value, data.item.name, data.item.typeOfTag,data.index)
               "
             >
-              Activar
+              Actualizar
             </button>
           </div>
         </template>

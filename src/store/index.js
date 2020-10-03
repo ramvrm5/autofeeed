@@ -518,8 +518,8 @@ export default new Vuex.Store({
               var yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000);
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
 
-
-              db.collection('noticias').where("fecha", ">", yesterday).get()
+//db.collection('noticias').where("fecha", ">", yesterday).get()
+db.collection("noticias").where("tags", "array-contains-any", ["baidu", "amazon", "microsoft"]).where("fecha", ">", yesterday).get()
                 .then(res => {
                   res.forEach(doc => {
                     let noticia_leida = doc.data()
