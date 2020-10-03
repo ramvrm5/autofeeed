@@ -127,7 +127,7 @@
                 <b-row
                   v-if="!item.comentarios || item.comentarios.length == 0"
                   style="height:71%; overflow-y: scroll; color: #afaeae"
-                  class="comments-scrollBar ml-0 mr-1 mt-5 text-center"
+                  class="comments-scrollBar ml-0 mr-1 pt-5 text-center"
                   id="commentSection"
                 >
                   <b-col cols="12">No comments yet</b-col>
