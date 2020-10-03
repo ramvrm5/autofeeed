@@ -517,9 +517,10 @@ export default new Vuex.Store({
               var today = Math.round(new Date(new Date().setDate(new Date().getDate())).getTime() / 1000);
               var yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000);
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
-
-//db.collection('noticias').where("fecha", ">", yesterday).get()
-db.collection("noticias").where("tags", "array-contains-any", ["baidu", "amazon", "microsoft"]).where("fecha", ">", yesterday).get()
+              let tags_filtrar = this.state.tags
+              let firts10tags = tags.slice(0, 9);
+              //db.collection('noticias').where("fecha", ">", yesterday).get()
+              db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get()
                 .then(res => {
                   res.forEach(doc => {
                     let noticia_leida = doc.data()
@@ -563,6 +564,7 @@ db.collection("noticias").where("tags", "array-contains-any", ["baidu", "amazon"
 
                   /*ponemos solo en español de base aunque leemos todas*/
                   //.slice(0, 100)
+				  /*antiguos filtros
                   let noticias_compuestas2 = noticias_compuestas;
                   const ordered = {}
                   const b = ['es']
@@ -570,8 +572,7 @@ db.collection("noticias").where("tags", "array-contains-any", ["baidu", "amazon"
                     .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
 
 
-
-
+				  
                   let tags_filtrar = this.state.tags
 
                   let c_filtradas = [];
@@ -588,8 +589,10 @@ db.collection("noticias").where("tags", "array-contains-any", ["baidu", "amazon"
                     }
 
                   });
+					*/
 
-
+                  let c2 = noticias_compuestas
+				  let c_filtradas = noticias_compuestas
 
                   //este era el commit en español commit('setNoticias', c2)
                   c_filtradas = c_filtradas.reverse()
