@@ -264,8 +264,8 @@ export default new Vuex.Store({
 
 
     cambiarcontraseña({ commit }, correo) {
-      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña')
-      auth().sendPasswordResetEmail(correo.email)
+      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña2')
+      auth.sendPasswordResetEmail(correo.email)
     },
 
     getTareas({ commit }) {
@@ -553,46 +553,9 @@ export default new Vuex.Store({
                   })
 
 
-                  //console.log(JSON.stringify(noticias_compuestas));
-
-
-
-
-
-
-
-
-                  /*ponemos solo en español de base aunque leemos todas*/
-                  //.slice(0, 100)
-				  /*antiguos filtros
-                  let noticias_compuestas2 = noticias_compuestas;
-                  const ordered = {}
-                  const b = ['es']
-                  const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
-                    .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
-
-
-				  
-                  let tags_filtrar = this.state.tags
-
-                  let c_filtradas = [];
-
-                  c2.forEach(function (valor1, indice1, array1) {
-
-                    for (let index = 0; index < tags_filtrar.length; ++index) {
-                      if (typeof valor1.tags != "undefined") {
-                        if (JSON.stringify(valor1.tags).includes(tags_filtrar[index])) {
-                          c_filtradas.push(valor1);
-                        }
-                      }
-
-                    }
-
-                  });
-					*/
 
                   let c2 = noticias_compuestas
-				  let c_filtradas = noticias_compuestas
+                  let c_filtradas = noticias_compuestas
 
                   //este era el commit en español commit('setNoticias', c2)
                   c_filtradas = c_filtradas.reverse()
