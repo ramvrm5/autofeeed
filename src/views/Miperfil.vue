@@ -35,19 +35,19 @@
               onerror="this.onerror=null;this.src='https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2Favatar-01.png?alt=media&token=296aa880-816b-429a-bc08-b88197e6934f';"
             />
           </div>
-          <span class="border border-dark rounded mb-2">
-            <h4 class="ml-3 mt-3 mb-3">My account</h4>
+          <span class="border border-dark rounded mb-2 clasecentro">
+            <h4 class="ml-3 mt-3 mb-3">Mi cuenta</h4>
             <div style="background-color: #f7fafc">
               <hr class="w-100 text-light" />
               <h6 class="heading-small text-muted mb-4 ml-3">
-                USER INFORMATION
+                DATOS DE USUARIO
               </h6>
               <div class="row mx-auto">
                 <div
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text">Nick</div>
+                    <div class="input-group-text" style="min-width: 4em;">Nick</div>
                   </div>
                   <input
                     @change="setNombrelocal"
@@ -108,7 +108,7 @@
                 >
                   <div class="input-group-prepend">
                     <div class="input-group-text" 
-                    onclick="document.getElementById('subimtcardId').click()">Upload Card ID</div>
+                    onclick="document.getElementById('subimtcardId').click()">Prueba de residencia</div>
                   </div>
                   <input
                     accept="image/*;"
@@ -125,14 +125,14 @@
 
               <hr class="w-100 text-light" />
               <h6 class="heading-small text-muted mb-4 ml-3">
-                CONTACT INFORMATION
+                INFORMACIÓN DE CONTACTO
               </h6>
               <div class="row mx-auto">
                 <div
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-12 col-lg-12"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text">Address</div>
+                    <div class="input-group-text">Dirección</div>
                   </div>
                   <input
                     @change="setAddresslocal"
@@ -147,7 +147,7 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-4 col-lg-4"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text">City</div>
+                    <div class="input-group-text">Ciudad</div>
                   </div>
                   <input
                     @change="setCitylocal"
@@ -162,7 +162,7 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-4 col-lg-4"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text">País</div>
+                    <div class="input-group-text" style="min-width: 4em;">País</div>
                   </div>
                   <input
                     @change="setApellidoslocal"
@@ -177,7 +177,7 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-4 col-lg-4"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text">Postal code</div>
+                    <div class="input-group-text">Código Postal</div>
                   </div>
                   <input
                     @change="setPsCodelocal;"
@@ -240,6 +240,7 @@ import "firebase/storage";
 
 export default {
   components: {},
+  email: "",
   name: "Miperfil",
   imgurl3: "",
   data() {
@@ -312,6 +313,8 @@ export default {
     };
   },
   created() {
+  
+  this.email = this.usuario.email;
     //console.log("path" ,(window.location.href ));
     //funciona console.log(this.$route.name);
     console.log("entramos", this.usuario.email);
@@ -441,6 +444,8 @@ export default {
   },
   mounted: function () {
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
+	document.getElementById("emailid").value = this.usuario.email;
+	document.getElementById("emailid").placeholder = this.usuario.email;
   },
   computed: {
     filteredItems() {
