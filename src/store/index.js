@@ -14,6 +14,11 @@ export default new Vuex.Store({
     nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
     apellidos: null,
+    teléfono: null,
+    address: null,
+    city: null,
+    email: null,
+    psCode: null,
     selectedLan: null,
     alerta: null,
     alertaObject: [],
@@ -69,6 +74,21 @@ export default new Vuex.Store({
     },
     setApellido(state, payload) {
       state.apellidos = payload
+    },
+    setTeléfono(state, payload) {
+      state.teléfono = payload
+    },
+    setAddress(state, payload) {
+      state.address = payload
+    },
+    setPsCode(state, payload) {
+      state.psCode = payload
+    },
+    setEmail(state, payload) {
+      state.email = payload
+    },
+    setCity(state, payload) {
+      state.city = payload
     },
     setSelectedLan(state, payload) {
       state.selectedLan = payload
@@ -173,6 +193,11 @@ export default new Vuex.Store({
 
               commit('setNombre', datos.nombre)
               commit('setApellido', datos.apellidos)
+              commit('setCity', datos.city)
+              commit('setAddress', datos.address)
+              commit('setTeléfono', datos.teléfono)
+              commit('setPsCode', datos.psCode)
+              commit('setEmail', datos.email)
               commit('setSelectedLan', datos.default_language)
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
@@ -202,6 +227,7 @@ export default new Vuex.Store({
 
                 let alarmaponer = ""
                 let typeOfTag = ""
+                let typeOfTrend = ""
                 tags.push(entry)
 
 
@@ -212,6 +238,7 @@ export default new Vuex.Store({
                     if (alarmas_lista3[1] == entry) {
                       alarmaponer = alarmas_lista3[0]
                       typeOfTag = alarmas_lista3[2] ? alarmas_lista3[2] : "Leisure";
+                      typeOfTrend = alarmas_lista3[3] ? alarmas_lista3[3] : "Neutral";
                     }
                   });
                 }
@@ -220,6 +247,7 @@ export default new Vuex.Store({
                   alarmas: "0",
                   name: entry,
                   typeOfTag: typeOfTag,
+                  typeOfTrend: typeOfTrend,
                   alarma: alarmaponer,
                   Publicaciones: "25"
                 };
@@ -564,35 +592,35 @@ export default new Vuex.Store({
 
                   /*ponemos solo en español de base aunque leemos todas*/
                   //.slice(0, 100)
-				  /*antiguos filtros
-                  let noticias_compuestas2 = noticias_compuestas;
-                  const ordered = {}
-                  const b = ['es']
-                  const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
-                    .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
-
-
-				  
-                  let tags_filtrar = this.state.tags
-
-                  let c_filtradas = [];
-
-                  c2.forEach(function (valor1, indice1, array1) {
-
-                    for (let index = 0; index < tags_filtrar.length; ++index) {
-                      if (typeof valor1.tags != "undefined") {
-                        if (JSON.stringify(valor1.tags).includes(tags_filtrar[index])) {
-                          c_filtradas.push(valor1);
-                        }
-                      }
-
-                    }
-
-                  });
-					*/
+                  /*antiguos filtros
+                          let noticias_compuestas2 = noticias_compuestas;
+                          const ordered = {}
+                          const b = ['es']
+                          const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
+                            .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
+        
+        
+                  
+                          let tags_filtrar = this.state.tags
+        
+                          let c_filtradas = [];
+        
+                          c2.forEach(function (valor1, indice1, array1) {
+        
+                            for (let index = 0; index < tags_filtrar.length; ++index) {
+                              if (typeof valor1.tags != "undefined") {
+                                if (JSON.stringify(valor1.tags).includes(tags_filtrar[index])) {
+                                  c_filtradas.push(valor1);
+                                }
+                              }
+        
+                            }
+        
+                          });
+                  */
 
                   let c2 = noticias_compuestas
-				  let c_filtradas = noticias_compuestas
+                  let c_filtradas = noticias_compuestas
 
                   //este era el commit en español commit('setNoticias', c2)
                   c_filtradas = c_filtradas.reverse()
@@ -667,6 +695,11 @@ export default new Vuex.Store({
           let datos = doc.data()
           commit('setNombre', datos.nombre)
           commit('setApellido', datos.apellidos)
+          commit('setCity', datos.city)
+          commit('setAddress', datos.address)
+          commit('setTeléfono', datos.teléfono)
+          commit('setPsCode', datos.psCode)
+          commit('setEmail', datos.email)
           commit('setSelectedLan', datos.default_language)
           let taglist = (datos.tags[0]).split(";");
           taglist.forEach(function (entry) {
@@ -914,6 +947,11 @@ export default new Vuex.Store({
       db.collection('usuarios').doc(this.state.usuario.email).update({
         nombre: objeto_recibido.nombre,
         apellidos: objeto_recibido.apellidos,
+        address: objeto_recibido.address,
+        city: objeto_recibido.city,
+        teléfono: objeto_recibido.teléfono,
+        psCode: objeto_recibido.psCode,
+        email: objeto_recibido.email,
         default_language: objeto_recibido.selectedLan,
 
       }).then(() => {

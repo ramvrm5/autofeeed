@@ -75,6 +75,15 @@
             {{data.value?data.value : "Leisure"}}
           </button>
         </template>
+        <template v-slot:cell(typeOfTrend)="data">
+          <button :id="'button_Trend_'+data.index" class="btn btn-primary w-50" @click="onToggleTrend(data.value,data.index)">
+            {{data.value?data.value : "Neutral"}} 
+            <span v-if="data.value =='Up'"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+            <span v-if="data.value =='Down'"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
+            <!-- <span v-if="data.value =='Neutral'"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
+            <span v-if="!data.value"><i class="fa fa-arrows-h" aria-hidden="true"></i></span> -->
+          </button>
+        </template>
         <!-- descomentar A virtual composite column 
       <template  v-slot:cell(nameage)="data" class="ancho">
         {{ data.item.alarmas }} 
@@ -94,7 +103,7 @@
               class="btn btn-primary mb-2"
               style="width: 48%"
               @click="
-                setAlertalocal2(data.value, data.item.name, data.item.typeOfTag,data.index)
+                setAlertalocal2(data.value, data.item.name, data.item.typeOfTag,data.item.typeOfTrend,data.index)
               "
             >
               Actualizar
@@ -154,6 +163,7 @@ export default {
         // A column that needs custom formatting
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: "Type of tag" },
+        { key: "typeOfTrend", label: "Trend" },
         // A regular column
         //descomentar { key: 'Publicaciones', label: 'Posts', class: 'ancho_publicaciones2' },
         // A regular column
@@ -279,7 +289,7 @@ export default {
       );
     },
     onToggle(value,index) {
-      let btnvalue = $('#button_'+index).text().trim()//value?value:"Leisure"
+      let btnvalue = $('#button_'+index).text().trim()
       if (btnvalue == "Leisure") {
         btnvalue = "Business";
         value = "Business";
@@ -290,9 +300,29 @@ export default {
         $('#button_'+index).text("Leisure")
       }
     },
-    setAlertalocal2(alarma, elemento, typeOfTag,index) {
-      //typeOfTag = typeOfTag ? typeOfTag : "Leisure";
+    onToggleTrend(value,index) {
+      let btnvalue = $('#button_Trend_'+index).text().trim()
+      $( "#button_Trend_down_"+index+" i" ).detach();
+      if (btnvalue == "Neutral") {
+        btnvalue = "Up";
+        value = "Up";
+         $('#button_Trend_'+index).text("Up")
+        $('#button_Trend_'+index).append(" <i class='fa fa-arrow-up' aria-hidden='true'></i>");
+      } else if (btnvalue == "Up") {
+        btnvalue = "Down";
+        value = "Down";
+        $('#button_Trend_'+index).text("Down")
+        $('#button_Trend_'+index).append(" <i class='fa fa-arrow-down' aria-hidden='true'></i>");
+      }else if(btnvalue == "Down"){
+        btnvalue = "Neutral";
+        value = "Neutral";
+        $('#button_Trend_'+index).text("Neutral")
+        /* $('#button_Trend_'+index).append(" <i class='fa fa-arrows-h' aria-hidden='true'></i>"); */
+      }
+    },
+    setAlertalocal2(alarma, elemento, typeOfTag,typeOfTrend,index) {
       typeOfTag = $('#button_'+index).text().trim();
+      typeOfTrend = $('#button_Trend_'+index).text().trim();
       let repetido = 0;
       let nueva_alerta = "";
       if (this.alerta) {
@@ -304,7 +334,7 @@ export default {
 
           if (alertarecorrer3[1] == elemento) {
             repetido = 1;
-            nueva_alerta += "//" + alarma + ";" + elemento + ";" + typeOfTag;
+            nueva_alerta += "//" + alarma + ";" + elemento + ";" + typeOfTag+ ";" + typeOfTrend;
           } else {
             if (element) {
               nueva_alerta += "//" + element;
@@ -314,9 +344,9 @@ export default {
       }
       if (repetido == 0 && this.alerta) {
         nueva_alerta =
-          this.alerta + "//" + alarma + ";" + elemento + ";" + typeOfTag;
+          this.alerta + "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
       } else if (repetido == 0 && !this.alerta) {
-        nueva_alerta = "//" + alarma + ";" + elemento + ";" + typeOfTag;
+        nueva_alerta = "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
       }
       let found = 0;
       if (this.alertaObject.length > 0) {
@@ -327,6 +357,7 @@ export default {
               this.alertaObject[i].alert = alarma;
               this.alertaObject[i].tag = elemento;
               this.alertaObject[i].typeOfTag = typeOfTag;
+              this.alertaObject[i].typeOfTrend = typeOfTrend;
             }
           }.bind(this)
         );
@@ -335,6 +366,7 @@ export default {
           alert: alarma,
           tag: elemento,
           typeOfTag: typeOfTag,
+          typeOfTrend: typeOfTrend,
         });
         found = 1;
       }
@@ -343,10 +375,9 @@ export default {
           alert: alarma,
           tag: elemento,
           typeOfTag: typeOfTag,
+          typeOfTrend: typeOfTrend,
         });
       }
-      this.alertaObject;
-      nueva_alerta;
       store.commit("setAlerta", nueva_alerta);
 
       db.collection("usuarios")
