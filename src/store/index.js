@@ -581,7 +581,6 @@ export default new Vuex.Store({
                   })
 
 
-<<<<<<< HEAD
                   //console.log(JSON.stringify(noticias_compuestas));
 
 
@@ -619,8 +618,6 @@ export default new Vuex.Store({
         
                           });
                   */
-=======
->>>>>>> 1fbcf55aa725a113c84b663a974a98a067dee91d
 
                   let c2 = noticias_compuestas
                   let c_filtradas = noticias_compuestas

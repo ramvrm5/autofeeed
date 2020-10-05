@@ -103,6 +103,24 @@
                     v-model="teléfono"
                   />
                 </div>
+                <div
+                  class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
+                >
+                  <div class="input-group-prepend">
+                    <div class="input-group-text" 
+                    onclick="document.getElementById('subimtcardId').click()">Upload Card ID</div>
+                  </div>
+                  <input
+                    accept="image/*;"
+                    @change="subimtcardId(this)"
+                    id="subimtcardId"
+                    name="uploaded_file"
+                    type="file"
+                    class="validate"
+                    style="display:none;"
+                  />
+                  <small class="mt-2 ml-3">{{name_card_id}}</small>
+                </div>
               </div>
 
               <hr class="w-100 text-light" />
@@ -226,6 +244,7 @@ export default {
   imgurl3: "",
   data() {
     return {
+      name_card_id:null,
       fields: [
         // A column that needs custom formatting
         { key: "name", label: "Intereses" },
@@ -300,7 +319,7 @@ export default {
 
     let fecha2 = new Date();
     var imgurl2 =
-      "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/dnis%2F" +
+      "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
       encodeURIComponent(this.usuario.email) +
       ".jpg?alt=media&time=" +
       fecha2.getTime();
@@ -326,6 +345,33 @@ export default {
     cambiarimagen(imagen) {
       document.getElementById("imguser").src = imagen;
     },
+    subimtcardId(file1) {
+      var photo = document.getElementById("subimtcardId");
+      var file = photo.files[0]; 
+      this.name_card_id = file.name
+      let user = firebase.auth().currentUser;
+      var email3 = user.email;
+      console.log(email3);
+      var storageRef = firebase.storage().ref();
+      console.log("aqui estamos");
+      console.log(storageRef);
+
+      var image = new FormData();
+      image.append("file", file);
+      let fecha2 = new Date();
+      var mountainsRef = storageRef.child("dnis/" + email3 + ".jpg");
+      var imgurl2 =
+        "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/dnis%2F" +
+        encodeURIComponent(email3) +
+        ".jpg?alt=media&time=" +
+        fecha2.getTime();
+      mountainsRef.put(file).then(function (snapshot) {
+        console.log("Uploaded a blob or file!" + imgurl2);
+       /*  setTimeout(function () {
+          document.getElementById("imguser").src = imgurl2;
+        }, 200); */
+      });
+    },
     subiravatar(file1) {
       console.log(file1);
       //var file = $('#inputavatar').prop('files')[0];
@@ -344,9 +390,9 @@ export default {
       var image = new FormData();
       image.append("file", file);
       let fecha2 = new Date();
-      var mountainsRef = storageRef.child("dnis/" + email3 + ".jpg");
+      var mountainsRef = storageRef.child("avatares/" + email3 + ".jpg");
       var imgurl2 =
-        "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/dnis%2F" +
+        "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
         encodeURIComponent(email3) +
         ".jpg?alt=media&time=" +
         fecha2.getTime();
