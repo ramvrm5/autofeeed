@@ -292,8 +292,8 @@ export default new Vuex.Store({
 
 
     cambiarcontraseña({ commit }, correo) {
-      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña')
-      auth().sendPasswordResetEmail(correo.email)
+      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña2')
+      auth.sendPasswordResetEmail(correo.email)
     },
 
     getTareas({ commit }) {
@@ -581,6 +581,7 @@ export default new Vuex.Store({
                   })
 
 
+<<<<<<< HEAD
                   //console.log(JSON.stringify(noticias_compuestas));
 
 
@@ -618,6 +619,8 @@ export default new Vuex.Store({
         
                           });
                   */
+=======
+>>>>>>> 1fbcf55aa725a113c84b663a974a98a067dee91d
 
                   let c2 = noticias_compuestas
                   let c_filtradas = noticias_compuestas
