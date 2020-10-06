@@ -1,0 +1,5 @@
+npm install --save bs-vue-timeline
+
+in bs-vue-timeline/src/components/timelineitem.vue
+
+line 20 remove img from src
