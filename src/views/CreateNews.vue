@@ -244,6 +244,8 @@ export default {
             fecha2.getTime();
           mountainsRef.put(file).then(function (snapshot) {});
         }
+        let fuente = this.$store.state.nombre
+        debugger
         let user = firebase.auth().currentUser;
         let email = user.email;
         this.submittedNews.push({
@@ -271,7 +273,7 @@ export default {
             fecha: temparray[0].date,
             fechaClasica: temparray[0].classicDate,
             autor: temparray[0].source,
-            fuente: temparray[0].source,
+            fuente: fuente,
             fuenteId: temparray[0].sourceId,
             idioma: temparray[0].language,
             tags: temparray[0].tags,

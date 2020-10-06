@@ -45,6 +45,12 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/Agregar.vue')
   },
   {
+    path: '/timeline',
+    name: 'Timeline',
+    component: () => import(/* webpackChunkName: "about" */ '../views/timeline.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: '/editar/:id',
     name: 'Editar',
     component: () => import(/* webpackChunkName: "about" */ '../views/Editar.vue')

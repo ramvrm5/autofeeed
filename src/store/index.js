@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import { auth } from '../firebase';
 import router from '../router';
 import $ from "jquery";
+import Swal from 'sweetalert2'
 Vue.use(Vuex)
 
 
@@ -943,7 +944,6 @@ export default new Vuex.Store({
 
 
     editarTarea2({ commit }, objeto_recibido) {
-      debugger
       db.collection('usuarios').doc(this.state.usuario.email).update({
         nombre: objeto_recibido.nombre,
         apellidos: objeto_recibido.apellidos,
@@ -957,6 +957,13 @@ export default new Vuex.Store({
       }).then(() => {
         // alert("Nombre y apellidos actualizados")
         // router.push('/miperfil') //volver a la ruta raiz
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Your data has been updated',
+          showConfirmButton: false,
+          timer: 1500
+        })
       })
 
     },

@@ -35,7 +35,7 @@
               onerror="this.onerror=null;this.src='https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2Favatar-01.png?alt=media&token=296aa880-816b-429a-bc08-b88197e6934f';"
             />
           </div>
-          <span class="border border-dark rounded mb-2 clasecentro">
+          <span class="border rounded mb-2 clasecentro">
             <h4 class="ml-3 mt-3 mb-3">Mi cuenta</h4>
             <div style="background-color: #f7fafc">
               <hr class="w-100 text-light" />
@@ -47,7 +47,9 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text" style="min-width: 4em;">Nick</div>
+                    <div class="input-group-text" style="min-width: 4em">
+                      Nick
+                    </div>
                   </div>
                   <input
                     @change="setNombrelocal"
@@ -107,8 +109,12 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text" 
-                    onclick="document.getElementById('subimtcardId').click()">Prueba de residencia</div>
+                    <div
+                      class="input-group-text"
+                      onclick="document.getElementById('subimtcardId').click()"
+                    >
+                      Prueba de residencia
+                    </div>
                   </div>
                   <input
                     accept="image/*;"
@@ -117,9 +123,9 @@
                     name="uploaded_file"
                     type="file"
                     class="validate"
-                    style="display:none;"
+                    style="display: none"
                   />
-                  <small class="mt-2 ml-3">{{name_card_id}}</small>
+                  <small class="mt-2 ml-3">{{ name_card_id }}</small>
                 </div>
               </div>
 
@@ -162,7 +168,9 @@
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-4 col-lg-4"
                 >
                   <div class="input-group-prepend">
-                    <div class="input-group-text" style="min-width: 4em;">País</div>
+                    <div class="input-group-text" style="min-width: 4em">
+                      País
+                    </div>
                   </div>
                   <input
                     @change="setApellidoslocal"
@@ -245,7 +253,7 @@ export default {
   imgurl3: "",
   data() {
     return {
-      name_card_id:null,
+      name_card_id: null,
       fields: [
         // A column that needs custom formatting
         { key: "name", label: "Intereses" },
@@ -313,11 +321,7 @@ export default {
     };
   },
   created() {
-  
-  this.email = this.usuario.email;
-    //console.log("path" ,(window.location.href ));
-    //funciona console.log(this.$route.name);
-    console.log("entramos", this.usuario.email);
+    this.email = this.usuario.email;
     this.getDatos(this.usuario.email);
 
     let fecha2 = new Date();
@@ -327,7 +331,6 @@ export default {
       ".jpg?alt=media&time=" +
       fecha2.getTime();
     this.imgurl3 = imgurl2;
-    //store.dispatch('getDatos', this.usuario.email)
   },
   methods: {
     ...mapActions([
@@ -338,26 +341,19 @@ export default {
       "editarTarea2",
       "editarAlertas",
     ]),
-    getlanguage() {
-      store.commit(
-        "setSelectedLan",
-        document.getElementById("selectedLanid").value
-      );
-      //this.cambiarIdioma(this.selectedLan)
-    },
     cambiarimagen(imagen) {
-      document.getElementById("imguser").src = imagen;
+      setTimeout(() => {
+        document.getElementById("imguser").src = imagen;
+      }, 100);
     },
     subimtcardId(file1) {
       var photo = document.getElementById("subimtcardId");
-      var file = photo.files[0]; 
-      this.name_card_id = file.name
+      var file = photo.files[0];
+      this.name_card_id = file.name;
       let user = firebase.auth().currentUser;
       var email3 = user.email;
-      console.log(email3);
+    debugger
       var storageRef = firebase.storage().ref();
-      console.log("aqui estamos");
-      console.log(storageRef);
 
       var image = new FormData();
       image.append("file", file);
@@ -370,9 +366,6 @@ export default {
         fecha2.getTime();
       mountainsRef.put(file).then(function (snapshot) {
         console.log("Uploaded a blob or file!" + imgurl2);
-       /*  setTimeout(function () {
-          document.getElementById("imguser").src = imgurl2;
-        }, 200); */
       });
     },
     subiravatar(file1) {
@@ -403,9 +396,14 @@ export default {
         console.log("Uploaded a blob or file!" + imgurl2);
         setTimeout(function () {
           document.getElementById("imguser").src = imgurl2;
-          //document.getElementById('imgusermenu').src=imgurl2;
         }, 200);
       });
+    },
+    getlanguage() {
+      store.commit(
+        "setSelectedLan",
+        document.getElementById("selectedLanid").value
+      );
     },
     setPsCodelocal() {
       store.commit("setPsCode", document.getElementById("psCodeid").value);
@@ -444,8 +442,8 @@ export default {
   },
   mounted: function () {
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
-	document.getElementById("emailid").value = this.usuario.email;
-	document.getElementById("emailid").placeholder = this.usuario.email;
+    document.getElementById("emailid").value = this.usuario.email;
+    document.getElementById("emailid").placeholder = this.usuario.email;
   },
   computed: {
     filteredItems() {

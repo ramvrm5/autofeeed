@@ -100,8 +100,8 @@
             <div v-if="!item.tags">
               <small class="text-muted">Intereses: indefinidos</small>
             </div>
-            <div style="display:none" v-if="item.fuente">
-              <small class="text-muted">Fuente: {{(item.fuente).split("T")[0]}}</small>
+            <div v-if="item.fuente">
+              <small class="text-muted">Fuente: {{item.fuente}}</small>
             </div>
           </template>
         </b-card>

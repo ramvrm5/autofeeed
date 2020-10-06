@@ -183,7 +183,9 @@ export default {
   created() {},
   mounted: function () {
     this.details();
+    setTimeout(() => {
     this.setProfileImage();
+    }, 150);
   },
   methods: {
     details() {

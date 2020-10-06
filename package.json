@@ -33,6 +33,7 @@
     "@johmun/vue-tags-input": "^2.1.0",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.3",
+    "bs-vue-timeline": "^0.1.4",
     "core-js": "^3.6.5",
     "exec-php": "0.0.5",
     "firebase": "^7.21.1",
@@ -40,6 +41,7 @@
     "moment": "^2.29.0",
     "register-service-worker": "^1.7.1",
     "request-promise": "^4.2.6",
+    "sweetalert2": "^10.3.5",
     "uuid": "^8.3.0",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.12",
@@ -49,6 +51,7 @@
     "vue-sweetalert2": "^3.0.8",
     "vue-tags": "^1.0.4",
     "vuelidate": "^0.7.5",
+    "vuetify": "^2.3.12",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

@@ -17,6 +17,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item   v-if="this.$route.name!='Mi Mundo'" :to="{name: 'Mi Mundo'}">Mi Mundo</b-nav-item>
+        <b-nav-item  v-if="existeUsuario && this.$route.name!='Timeline'"><router-link to="/timeline" style="text-decoration: none;color: unset;color: white;">Timeline</router-link></b-nav-item>
         <b-nav-item   v-if="this.$route.name!='Nosotros'" :to="{name: 'Nosotros'}">Nosotros</b-nav-item>
         <b-nav-item  :to="{name: 'Nosotros'}">v 1.39b</b-nav-item>
       </b-navbar-nav>
