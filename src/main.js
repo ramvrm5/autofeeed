@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VeeValidate from 'vee-validate';
 import { ValidationProvider } from 'vee-validate';
- 
+
 import VueSweetalert2 from 'vue-sweetalert2';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -37,6 +37,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
 import { aut, auth } from './firebase'
+import vuetify from './plugins/vuetify';
 
 auth.onAuthStateChanged(user => {
 
@@ -61,6 +62,7 @@ auth.onAuthStateChanged(user => {
   new Vue({
     router,
     store,
+    vuetify,
     render: h => h(App)
   }).$mount('#app')
 

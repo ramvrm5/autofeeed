@@ -1,8 +1,29 @@
 <template>
   <b-container fluid>
-    <b-row style="height: 90vh !important" class="bg-light align-items-center">
-      <b-col style="height: 80vh !important" class="col-10 mx-auto">
-        <VueTimeline :timeline-items="timelineItems" />
+    <b-row class="bg-light align-items-center">
+      <b-col class="col-10 mx-auto p-0">
+        <div id="app">
+          <v-app id="inspire">
+            <v-timeline>
+              <v-timeline-item v-for="(timelineItem, index) in timelineItems"  :key="index" large>
+                <template v-slot:icon>
+                  <v-avatar>
+                    <img
+                      :src="timelineItem.image"
+                    />
+                  </v-avatar>
+                </template>
+                <template v-slot:opposite>
+                  <span>{{timelineItem.from}}</span>
+                </template>
+                <v-card class="elevation-2">
+                  <v-card-title class="headline"> {{timelineItem.title}} </v-card-title>
+                  <v-card-text>{{timelineItem.content}}</v-card-text>
+                </v-card>
+              </v-timeline-item>
+            </v-timeline>
+          </v-app>
+        </div>
       </b-col>
     </b-row>
   </b-container>
@@ -10,7 +31,6 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import VueTimeline from "bs-vue-timeline";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "../firebase";
@@ -21,12 +41,10 @@ import Swal from "sweetalert2";
 import $ from "jquery";
 
 export default {
-  components: {
-    VueTimeline,
-  },
   data() {
     return {
       timelineItems: [],
+      messageWhenNoItems: "There are not items",
     };
   },
   mounted: function () {
@@ -48,24 +66,17 @@ export default {
         let documents = await querySnapshot.docs;
         for (let document of documents) {
           var data = document.data();
-          var date = new Date(data.fechaClasica);
-          var year = date.getFullYear()
-          var day = date.getMonth()
-          var dateToday = new Date();
-          var yearToday = dateToday.getFullYear()
-          var dayToday = dateToday.getMonth()
+          var date = moment(data.fechaClasica).format("LL");
           noticasArray.push({
-            from: new Date(year,day),
-            to: new Date(yearToday,dayToday),
+            from: date,
             title: data.titulo,
             subtitle: data.fuente,
             content: data.description,
-            image: "timeline.png",
+            image: data.img,
           });
         }
       });
       this.timelineItems = noticasArray;
-      console.log(noticasArray);
     },
   },
 };

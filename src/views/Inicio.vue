@@ -6,7 +6,22 @@
 
     <!--columns or deck-->
     <div>
-      <b-card-group columns style="padding-left:1em; padding-right:1em;padding-top:1em">
+      <div class="row mt-4">
+        <div class="col-4 col-sm-4 col-md-8 col-lg-8"></div>
+        <div class="col-8 col-sm-8 col-md-4 col-lg-4">
+          <b-form-select
+            id="input-3"
+            v-model="rangeDate"
+            :options="rangeDateOptions"
+            required
+            @change="rangeTimeSelectChnage"
+          ></b-form-select>
+        </div>
+      </div>
+      <b-card-group
+        columns
+        style="padding-left: 1em; padding-right: 1em; padding-top: 1em"
+      >
         <b-card
           v-for="(item, index) in noticias"
           :key="index"
@@ -18,35 +33,57 @@
           tag="article"
         >
           <b-button
-            :id="'translate_'+index"
-            style="position: absolute;z-index: 999;top: 2px;right: 1px;background-color: rgba(255, 255, 255, 0);border: none;box-shadow: none;background-color:#ffffff00;"
-            @click="toggleTranslate(item,index)"
+            :id="'translate_' + index"
+            style="
+              position: absolute;
+              z-index: 999;
+              top: 2px;
+              right: 1px;
+              background-color: rgba(255, 255, 255, 0);
+              border: none;
+              box-shadow: none;
+              background-color: #ffffff00;
+            "
+            @click="toggleTranslate(item, index)"
             aria-disabled="true"
             variant="primary"
-            
             :disabled="checkTranslateButton(item)"
-          ><!-- :class="translate_lan" -->
+            ><!-- :class="translate_lan" -->
             <i
-              style="color: #007bff;font-size: 35px;"
+              style="color: #007bff; font-size: 35px"
               class="fa fa-language"
               aria-hidden="true"
             ></i>
           </b-button>
-          <b-card-text>{{item.cuerpo}}</b-card-text>
-
-          <b-button style="float:right" target="_blank" :href="item.url" variant="primary">Ver más</b-button>
+          <b-card-text>{{ item.cuerpo }}</b-card-text>
 
           <b-button
-            :class="[classA, !(typeof item.correos_like3 !='undefined' && (item.correos_like3).includes(usuario.email)) ? classB : 'likepulsado']"
+            style="float: right"
+            target="_blank"
+            :href="item.url"
+            variant="primary"
+            >Ver más</b-button
+          >
+
+          <b-button
+            :class="[
+              classA,
+              !(
+                typeof item.correos_like3 != 'undefined' &&
+                item.correos_like3.includes(usuario.email)
+              )
+                ? classB
+                : 'likepulsado',
+            ]"
             :id="item.fecha"
             @click="darlike(item.url, item.fecha)"
             variant="primary"
           >
             <span v-if="!item.likes">0</span>
-            <span v-if="item.likes">{{item.likes}}</span>
+            <span v-if="item.likes">{{ item.likes }}</span>
 
             <svg
-              style="bottom:2px;position:relative"
+              style="bottom: 2px; position: relative"
               width="1em"
               height="1em"
               viewBox="0 0 16 16"
@@ -60,87 +97,138 @@
               />
             </svg>
           </b-button>
-          <b-button
-            :id="'comment-'+index"
-            style="float:right;margin-right:3%"
-            target="_blank"
-            variant="primary"
-            @click="setProfileImage()"
-          > <router-link :to="{ name: 'Comment', params: { id: item.id}}" style="text-decoration: none;color: unset;">
-            <span>{{item.comentarios?item.comentarios.length:0}} </span>
-            <svg
-              style="bottom:2px;position:relative"
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              class="bi bi-chat-left-text"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
+          <router-link
+            :to="{ name: 'Comment', params: { id: item.id } }"
+            style="text-decoration: none; color: unset;color: white;"
+          >
+            <!-- @click="setProfileImage()" --><b-button
+              :id="'comment-' + index"
+              style="float: right; margin-right: 3%"
+              target="_blank"
+              variant="primary"
             >
-              <path
-                fill-rule="evenodd"
-                d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
-              />
-            </svg>
+              <span>{{ item.comentarios ? item.comentarios.length : 0 }} </span>
+              <svg
+                style="bottom: 2px; position: relative"
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
+                class="bi bi-chat-left-text"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+                />
+              </svg>
+            </b-button>
           </router-link>
-          </b-button>
           <template v-slot:footer>
             <div v-if="item.fecha">
-              <small class="text-muted">Fecha: {{(item.fechaClasica).split("T")[0]}}</small>
+              <small class="text-muted"
+                >Fecha: {{ item.fechaClasica.split("T")[0] }}</small
+              >
             </div>
             <div v-if="item.tags">
-              <small
-                class="text-muted"
-              >Intereses: {{item.tags.join(", ").replace('que,','').replace(' ,','')}}</small>
+              <small class="text-muted"
+                >Intereses:
+                {{
+                  item.tags.join(", ").replace("que,", "").replace(" ,", "")
+                }}</small
+              >
             </div>
             <div v-if="!item.tags">
               <small class="text-muted">Intereses: indefinidos</small>
             </div>
             <div v-if="item.fuente">
-              <small class="text-muted">Fuente: {{item.fuente}}</small>
+              <small class="text-muted">Fuente: {{ item.fuente }}</small>
             </div>
           </template>
         </b-card>
       </b-card-group>
     </div>
 
-    <b-button id="botonmodal" style="display:none" v-b-modal.modal-1>Launch demo modal</b-button>
+    <b-button id="botonmodal" style="display: none" v-b-modal.modal-1
+      >Launch demo modal</b-button
+    >
     <b-modal id="modal-1" title="Tomo nota!" hide-footer>
-      <p class="my-4">Actualmente no hay noticias registradas relacionadas con tu interés en:</p>
-      <p id="keywordsid" class="my-4">
-        <b>{{keywordactual}}</b>
+      <p class="my-4">
+        Actualmente no hay noticias registradas relacionadas con tu interés en:
       </p>
-      <p
-        class="my-4"
-      >Pero ya hemos empezado a buscarlas para ti, mañana las tendrás disponibles en tu feed!</p>
+      <p id="keywordsid" class="my-4">
+        <b>{{ keywordactual }}</b>
+      </p>
+      <p class="my-4">
+        Pero ya hemos empezado a buscarlas para ti, mañana las tendrás
+        disponibles en tu feed!
+      </p>
       <b-button
         class="mt-3"
         block
-        style="color: #fff;background-color: #28a745;border-color: #28a745;"
+        style="color: #fff; background-color: #28a745; border-color: #28a745"
         @click="$bvModal.hide('modal-1')"
-      >Genial</b-button>
+        >Genial</b-button
+      >
     </b-modal>
 
     <div class="text-center">
       <center>
         <b-spinner
           id="cargandoid"
-          style="display:none;width: 3rem; height: 3rem;"
+          style="display: none; width: 3rem; height: 3rem"
           variant="primary"
           label="Text Centered"
         ></b-spinner>
       </center>
     </div>
+
     <center>
       <h4
-        style="margin-left: auto; margin-right: auto; width: 80%;"
+        v-if="noticias.length == noticiasLength"
+        style="margin-left: auto; margin-right: auto; width: 80%"
         id="noticiasid"
-      >Preparando tus noticias personalizadas</h4>
+      >
+        Preparando tus noticias personalizadas
+      </h4>
     </center>
+    <div
+      class="row mt-2 pt-1 pb-1"
+      style="
+        border-top: 1px solid #d6d6d6;
+        box-shadow: 2px -4px 19px #ded9d9;
+        background: white;
+        z-index: 9999999;
+        bottom: 0;
+        position: sticky;
+      "
+    >
+      <div class="col-4"></div>
+      <div class="col-2" @click="previous">
+        <b-button
+          :disabled="previousCount == 0"
+          style="width: 100% !important"
+          size="sm"
+          variant="primary"
+          >Previous Page</b-button
+        >
+      </div>
+      <div class="col-2" @click="next">
+        <b-button
+          :disabled="previousCount == noticiasLength"
+          style="width: 100% !important"
+          size="sm"
+          variant="primary"
+          >Next Page</b-button
+        >
+        <!-- <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select> -->
+      </div>
+      <div class="col-4"></div>
+    </div>
   </div>
 </template>
 
@@ -167,24 +255,32 @@ const translate = new Translate({ projectId });
 export default {
   data() {
     return {
+      page: 1,
       imageProfile: "../assets/avatar-01.png",
       avtarPic: "img/avatar-01.6b36b5f2.png",
       name: "Inicio",
       classA: null,
+      previousCount: 0,
+      rangeDate: "today",
+      rangeDateOptions: [
+        { text: "Today", value: "today" },
+        { text: "2 days ago", value: "2 days ago" },
+        { text: "Last week", value: "last week" },
+      ],
       classB: null,
       translate_lan: "es",
       imageURL: null,
-      username: ""
+      username: "",
+      currentPage: 0,
     };
   },
   created() {
     //this.getTareas()
     //this.getAlertas()
-    this.getNoticias();
+    this.getNoticias({ rangedateChoosen:this.rangeDate,yesterdayDate: "", type: "next", limit: 10 });
   },
   mounted: function () {
-    this.classA = "likepulsado",
-    this.classB = "likepulsado"
+    (this.classA = "likepulsado"), (this.classB = "likepulsado");
   },
   methods: {
     ...mapActions([
@@ -193,6 +289,32 @@ export default {
       "translateText",
       "saveCreatedNews",
     ]),
+    rangeTimeSelectChnage() {
+      this.previousCount = 0
+      this.getNoticias({ rangedateChoosen:this.rangeDate,yesterdayDate: "", type: "next", limit: 10 });
+    },
+    previous() {
+      this.previousCount -= 1;
+      var arrayItem;
+      arrayItem = this.noticias[this.noticias.length - this.noticias.length];
+      this.getNoticias({
+        rangedateChoosen:this.rangeDate,
+        yesterdayDate: arrayItem.fecha,
+        type: "previous",
+        limit: 10,
+      });
+    },
+    next() {
+      this.previousCount += 1;
+      var arrayItem;
+      arrayItem = this.noticias[this.noticias.length - 1];
+      this.getNoticias({
+        rangedateChoosen:this.rangeDate,
+        yesterdayDate: arrayItem.fecha,
+        type: "next",
+        limit: 10,
+      });
+    },
     darlike(href, idelemento) {
       let contador_veces = 0;
 
@@ -283,20 +405,20 @@ export default {
           });
         });
     },
-    checkTranslateButton(item){
-      if(item.idioma == 'en'){
-        return true
-      }else if(item.idioma !== 'en'){
-        return false
+    checkTranslateButton(item) {
+      if (item.idioma == "en") {
+        return true;
+      } else if (item.idioma !== "en") {
+        return false;
       }
     },
     async toggleTranslate(item, index) {
       let target = "";
       let languageTemp = this.selectedLan;
-      if($("#translate_" + index).hasClass(languageTemp)){
+      if ($("#translate_" + index).hasClass(languageTemp)) {
         $("#translate_" + index).removeClass(languageTemp);
         target = item.idioma;
-      }else if($("#translate_" + index).not(languageTemp)){
+      } else if ($("#translate_" + index).not(languageTemp)) {
         $("#translate_" + index).addClass(languageTemp);
         target = languageTemp;
       }
@@ -326,7 +448,13 @@ export default {
     },
   },
   computed: {
-    ...mapState(["tareas", "noticias","selectedLan"]),
+    ...mapState([
+      "tareas",
+      "noticias",
+      "noticiasTemp",
+      "noticiasLength",
+      "selectedLan",
+    ]),
     ...mapState(["usuario", "keywordactual"]),
   },
 };

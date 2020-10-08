@@ -16,6 +16,8 @@
               city: city,
               psCode: psCode,
               email: email,
+              firstName: firstName,
+              surname: surname,
             })
           "
         >
@@ -43,6 +45,38 @@
                 DATOS DE USUARIO
               </h6>
               <div class="row mx-auto">
+                <div
+                  class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
+                >
+                  <div class="input-group-prepend">
+                    <div class="input-group-text" style="min-width: 4em">
+                      Name
+                    </div>
+                  </div>
+                  <input
+                    @change="setFirstNamelocal"
+                    id="firstNameid"
+                    class="form-control"
+                    type="text"
+                    v-model="firstName"
+                  />
+                </div>
+                <div
+                  class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
+                >
+                  <div class="input-group-prepend">
+                    <div class="input-group-text" style="min-width: 4em">
+                      Surname
+                    </div>
+                  </div>
+                  <input
+                    @change="setSurnamelocal"
+                    id="surnameid"
+                    class="form-control"
+                    type="text"
+                    v-model="surname"
+                  />
+                </div>
                 <div
                   class="input-group mt-2 mb-2 col-12 col-sm-12 col-md-6 col-lg-6"
                 >
@@ -427,6 +461,12 @@ export default {
     setApellidoslocal() {
       store.commit("setApellido", document.getElementById("apellidosid").value);
     },
+    setFirstNamelocal() {
+      store.commit("setFirstName", document.getElementById("firstNameid").value);
+    },
+    setSurnamelocal() {
+      store.commit("setSurname", document.getElementById("surnameid").value);
+    },
     setTeléfonolocal() {
       store.commit("setTeléfono", document.getElementById("teléfonoid").value);
     },
@@ -454,6 +494,8 @@ export default {
     ...mapState([
       "usuario",
       "nombre",
+      "firstName",
+      "surname",
       "apellidos",
       "teléfono",
       "psCode",
@@ -471,6 +513,22 @@ export default {
       },
       set(value) {
         this.$store.commit("setSelectedLan", value);
+      },
+    },
+    surname: {
+      get() {
+        return this.$store.state.surname;
+      },
+      set(value) {
+        this.$store.commit("setSurname", value);
+      },
+    },
+    firstName: {
+      get() {
+        return this.$store.state.firstName;
+      },
+      set(value) {
+        this.$store.commit("setFirstName", value);
       },
     },
 

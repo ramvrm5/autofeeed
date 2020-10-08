@@ -14,6 +14,8 @@ export default new Vuex.Store({
     usuario: null,
     nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
+    firstName:null,
+    surname:null,
     apellidos: null,
     teléfono: null,
     address: null,
@@ -28,6 +30,7 @@ export default new Vuex.Store({
     tags_array_completo: [],
     tag: '',
     error: null,
+    noticiasLength: null,
     tarea: { nombre: '', id: '' },
     tareas: [],
     noticias_backup: [],
@@ -37,6 +40,7 @@ export default new Vuex.Store({
     keywordactual: [],
     items2: [],
     noticias: [],
+    noticiasTemp: [],
     translated: [],
   },
   mutations: {
@@ -51,6 +55,12 @@ export default new Vuex.Store({
     },
     setNoticias(state, payload) {
       state.noticias = payload
+    },
+    setNoticiasLength(state, payload) {
+      state.noticiasLength = payload
+    },
+    setNoticiasTemp(state, payload) {
+      state.noticiasTemp = payload
     },
     setTranslated(state, payload) {
       state.translated = payload
@@ -72,6 +82,12 @@ export default new Vuex.Store({
     },
     setNombre(state, payload) {
       state.nombre = payload
+    },
+    setFirstName(state, payload) {
+      state.firstName = payload
+    },
+    setSurname(state, payload) {
+      state.surname = payload
     },
     setApellido(state, payload) {
       state.apellidos = payload
@@ -193,6 +209,8 @@ export default new Vuex.Store({
             if (typeof datos !== "undefined") {
 
               commit('setNombre', datos.nombre)
+              commit('setSurname', datos.surname)
+              commit('setFirstName', datos.firstName)
               commit('setApellido', datos.apellidos)
               commit('setCity', datos.city)
               commit('setAddress', datos.address)
@@ -505,7 +523,7 @@ export default new Vuex.Store({
 
 
 
-    getNoticias({ commit }) {
+    getNoticias({ commit },objectdata) {
       const noticias_compuestas = []
       var noticias_alerta = []
       var noticias_alerta_2 = []
@@ -528,7 +546,7 @@ export default new Vuex.Store({
 
           db.collection('usuarios').doc(user.email).get()
             .then(doc => {
-
+              let lengthOfDocument = 0
               let datos = doc.data()
               let objeto_tags = datos.tags;
 
@@ -544,13 +562,32 @@ export default new Vuex.Store({
               commit('setTags_array', tags)
 
               var today = Math.round(new Date(new Date().setDate(new Date().getDate())).getTime() / 1000);
-              var yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000);
+              var yesterday
+              if (objectdata.rangedateChoosen == "today") {
+                yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
+              } else if (objectdata.rangedateChoosen == "2 days ago") {
+                yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 2)).getTime() / 1000)
+              }else if (objectdata.rangedateChoosen == "last week") {
+                yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 7)).getTime() / 1000)
+              }
+              var dateStartOEnd = objectdata.yesterdayDate ? objectdata.yesterdayDate : yesterday;
+              var yeaterdayTemp = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
               let tags_filtrar = this.state.tags
               let firts10tags = tags.slice(0, 9);
-              //db.collection('noticias').where("fecha", ">", yesterday).get()
-              db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get()
-                .then(res => {
+              db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+                lengthOfDocument = snapshot.size;
+                
+              })
+             // debugger
+              var querryRef
+              if (objectdata.type == "next") {
+                querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(10).get()
+              } else {
+                querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(10).get()
+              }
+
+              querryRef.then(res => {
                   res.forEach(doc => {
                     let noticia_leida = doc.data()
                     let titulo = noticia_leida.titulo;
@@ -626,6 +663,8 @@ export default new Vuex.Store({
                   //este era el commit en español commit('setNoticias', c2)
                   c_filtradas = c_filtradas.reverse()
                   commit('setNoticias', c_filtradas)
+                  commit('setNoticiasTemp', c_filtradas)
+                  commit('setNoticiasLength', lengthOfDocument)
                   commit('setNoticiasBackupES', c_filtradas)
                   commit('setNoticiasLikes', noticias_like)
                   /*fin de poner solo en español*/
@@ -695,6 +734,8 @@ export default new Vuex.Store({
 
           let datos = doc.data()
           commit('setNombre', datos.nombre)
+          commit('setFirstName', datos.firstName)
+          commit('setSurname', datos.surname)
           commit('setApellido', datos.apellidos)
           commit('setCity', datos.city)
           commit('setAddress', datos.address)
@@ -946,6 +987,8 @@ export default new Vuex.Store({
     editarTarea2({ commit }, objeto_recibido) {
       db.collection('usuarios').doc(this.state.usuario.email).update({
         nombre: objeto_recibido.nombre,
+        firstName: objeto_recibido.firstName,
+        surname: objeto_recibido.surname,
         apellidos: objeto_recibido.apellidos,
         address: objeto_recibido.address,
         city: objeto_recibido.city,

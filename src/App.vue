@@ -7,7 +7,7 @@
 
 
 
-      <div id="nav" class="topmenu">
+      <div id="nav" class="topmenu" style="position: sticky;top: 0;z-index: 999999">
   <b-navbar toggleable="lg" type="dark" variant="info">
      <router-link to="/"><img style="width: 40px;height: 40px;" src="./assets/logoblanco.png"></router-link>
     <b-navbar-brand class="pagina_actual" href="#">{{this.$route.name}}</b-navbar-brand>
@@ -31,7 +31,7 @@
         <b-nav-item v-if="existeUsuario"> <router-link to="/createNews" style="text-decoration: none;color: unset;color: white;">Crear noticias</router-link></b-nav-item>
 
 
-<b-dropdown  v-if="existeUsuario" id="ddCommodity"
+<b-dropdown style="text-decoration: none;color: unset;color: white;" v-if="existeUsuario" id="ddCommodity"
                   name="filtrarKeyword"
                   text="Intereses"
                   variant="primary"
@@ -84,7 +84,6 @@
 <!--panel de usuario logueado-->
    <!-- <div id="nav">
       <router-link to="/">Inicio</router-link> |
-
        <router-link to="/inicio" v-if="existeUsuario">Usuario</router-link> |
       <router-link to="/about">Nosotros</router-link> |
       <router-link to="/registro"  v-if="!existeUsuario" >Registro</router-link> |
