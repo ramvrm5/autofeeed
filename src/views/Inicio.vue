@@ -75,8 +75,8 @@
                 ? classB
                 : 'likepulsado',
             ]"
-            :id="item.fecha"
-            @click="darlike(item.url, item.fecha)"
+            :id="item.id"
+            @click="darlike(item.id)"
             variant="primary"
           >
             <span v-if="!item.likes">0</span>
@@ -244,6 +244,7 @@ import { v4 as uuidv4 } from "uuid";
 import { db } from "../firebase";
 import { auth } from "../firebase";
 import firebase from "firebase/app";
+import SPANISH_LANGUAGE from "../contants/language.js";
 import "firebase/storage";
 import Swal from "sweetalert2";
 import $ from "jquery";
@@ -315,18 +316,17 @@ export default {
         limit: 10,
       });
     },
-    darlike(href, idelemento) {
+    darlike(id) {
       let contador_veces = 0;
 
       let user = firebase.auth().currentUser;
 
-      let url = encodeURIComponent(href);
-      url = url.replace("%3A", ":");
+/*       let url = encodeURIComponent(href);
+      url = url.replace("%3A", ":"); */
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
-
       db.collection("noticias")
-        .where("url", "==", href)
+        .where("id", "==", id)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
@@ -334,24 +334,23 @@ export default {
             let correos_like = data2.correos_like3;
             let correos_like_vacio = [];
             let correos_like2 = [];
-
-            if (typeof correos_like != "undefined") {
+            if (typeof correos_like != "undefined" && correos_like.length > 0) {
               if (correos_like.includes(user.email)) {
                 if (contador_veces == 0) {
                   //cuidado porque pasa varias veces
                   let likes_elemento = document
-                    .getElementById(idelemento)
+                    .getElementById(id)
                     .getElementsByTagName("span")[0].innerText;
                   //alert(likes_elemento)
                   document
-                    .getElementById(idelemento)
+                    .getElementById(id)
                     .classList.remove("likepulsado");
-                  document.getElementById(idelemento).style.color = "#ffffff";
-                  document.getElementById(idelemento).style.backgroundColor =
+                  document.getElementById(id).style.color = "#ffffff";
+                  document.getElementById(id).style.backgroundColor =
                     "#007bff";
                   let likesmasuno = parseInt(likes_elemento) - 1;
                   document
-                    .getElementById(idelemento)
+                    .getElementById(id)
                     .getElementsByTagName("span")[0].innerText = likesmasuno;
 
                   if (typeof correos_like != "undefined") {
@@ -373,15 +372,15 @@ export default {
               }
             } else {
               let likes_elemento = document
-                .getElementById(idelemento)
+                .getElementById(id)
                 .getElementsByTagName("span")[0].innerText;
               //alert(likes_elemento)
-              document.getElementById(idelemento).style.color = "#007bff";
-              document.getElementById(idelemento).style.backgroundColor =
+              document.getElementById(id).style.color = "#007bff";
+              document.getElementById(id).style.backgroundColor =
                 "#ffffff";
               let likesmasuno = parseInt(likes_elemento) + 1;
               document
-                .getElementById(idelemento)
+                .getElementById(id)
                 .getElementsByTagName("span")[0].innerText = likesmasuno;
 
               if (typeof correos_like != "undefined") {

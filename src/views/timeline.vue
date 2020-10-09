@@ -5,20 +5,24 @@
         <div id="app">
           <v-app id="inspire">
             <v-timeline>
-              <v-timeline-item v-for="(timelineItem, index) in timelineItems"  :key="index" large>
+              <v-timeline-item
+                v-for="(timelineItem, index) in timelineItems"
+                :key="index"
+                large
+              >
                 <template v-slot:icon>
                   <v-avatar>
-                    <img
-                      :src="timelineItem.image"
-                    />
+                    <img :src="timelineItem.image" />
                   </v-avatar>
                 </template>
                 <template v-slot:opposite>
-                  <span>{{timelineItem.from}}</span>
+                  <span>{{ timelineItem.from }}</span>
                 </template>
                 <v-card class="elevation-2">
-                  <v-card-title class="headline"> {{timelineItem.title}} </v-card-title>
-                  <v-card-text>{{timelineItem.content}}</v-card-text>
+                  <v-card-title class="headline">
+                    {{ timelineItem.title }}
+                  </v-card-title>
+                  <v-card-text>{{ timelineItem.content }}</v-card-text>
                 </v-card>
               </v-timeline-item>
             </v-timeline>
@@ -45,10 +49,16 @@ export default {
     return {
       timelineItems: [],
       messageWhenNoItems: "There are not items",
+      wherequery: [],
     };
   },
   mounted: function () {
     (this.timelineItems = []),
+      (this.wherequery = [
+        { where: "fuenteId", querry: "==" },
+        { where: "comentariosArray", querry: "array-contains" },
+        { where: "correos_like3", querry: "array-contains" },
+      ]),
       setTimeout(() => {
         this.getNewscretedData();
       }, 100);
@@ -61,21 +71,45 @@ export default {
       let email = user.email;
       let noticasArray = [];
       let noticiasDB = await db.collection("noticias");
-      let wherequery = noticiasDB.where("fuenteId", "==", email);
-      wherequery.get().then(async function (querySnapshot) {
-        let documents = await querySnapshot.docs;
-        for (let document of documents) {
-          var data = document.data();
-          var date = moment(data.fechaClasica).format("LL");
-          noticasArray.push({
-            from: date,
-            title: data.titulo,
-            subtitle: data.fuente,
-            content: data.description,
-            image: data.img,
-          });
-        }
-      });
+
+      for (let i = 0; this.wherequery.length > i; i++) {
+        let query = noticiasDB.where(
+          this.wherequery[i].where,
+          this.wherequery[i].querry,
+          email
+        );
+        query.get().then(async function (querySnapshot) {
+          let documents = await querySnapshot.docs;
+          for (let document of documents) {
+            var data = document.data();
+            var date = moment(data.fechaClasica).format("LL");
+            if (noticasArray.length > 0) {
+              let arrayFind = noticasArray.some(
+                (element) => element.id == data.id
+              );
+              if (!arrayFind) {
+                noticasArray.push({
+                  from: date,
+                  id: data.id,
+                  title: data.titulo,
+                  subtitle: data.fuente,
+                  content: data.description,
+                  image: data.img,
+                });
+              }
+            } else {
+              noticasArray.push({
+                from: date,
+                id: data.id,
+                title: data.titulo,
+                subtitle: data.fuente,
+                content: data.description,
+                image: data.img,
+              });
+            }
+          }
+        });
+      }
       this.timelineItems = noticasArray;
     },
   },

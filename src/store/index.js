@@ -658,7 +658,7 @@ export default new Vuex.Store({
                   */
 
                   let c2 = noticias_compuestas
-                  let c_filtradas = noticias_compuestas
+                  let c_filtradas = noticias_compuestas.reverse()
 
                   //este era el commit en español commit('setNoticias', c2)
                   c_filtradas = c_filtradas.reverse()

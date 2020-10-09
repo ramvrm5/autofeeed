@@ -3,16 +3,22 @@
     <div>
       <b-container fluid style="padding: 0px">
         <b-row
-          style="height: 90vh !important;width:100%"
+          style="height: 90vh !important; width: 100%"
           class="bg-light align-items-center"
         >
-        <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
-            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</router-link>
-        </div>
-          <b-col class="col-lg-8 mx-auto" style="height:90%;border: 1px solid #cac5c5;">
+          <div style="left: 25px; top: 60px; position: absolute; z-index: 9999">
+            <router-link to="/"
+              ><i class="fa fa-chevron-left" aria-hidden="true"></i>
+              Back</router-link
+            >
+          </div>
+          <b-col
+            class="col-lg-8 mx-auto"
+            style="height: 90%; border: 1px solid #cac5c5"
+          >
             <b-row class="h-100">
               <b-col
-                class="col-12 col-sm-12 col-md-6 col-lg-8  comments-scrollBar h-100"
+                class="col-12 col-sm-12 col-md-6 col-lg-8 comments-scrollBar h-100"
                 style="overflow-y: scroll; padding: 0px"
               >
                 <b-card
@@ -51,10 +57,13 @@
                   </template>
                 </b-card>
               </b-col>
-              <b-col class="col-12 col-sm-12 col-md-6 col-lg-4 h-100" style="padding: 0px">
+              <b-col
+                class="col-12 col-sm-12 col-md-6 col-lg-4 h-100"
+                style="padding: 0px"
+              >
                 <b-row
                   class="m-0 w-100"
-                  style="height:17%;border-bottom: 2px solid rgb(223 223 223)"
+                  style="border-bottom: 2px solid rgb(223 223 223)"
                 >
                   <b-col cols="4 d-block d-sm-block d-md-block d-lg-block">
                     <img
@@ -76,7 +85,7 @@
                 </b-row>
                 <b-row
                   v-if="item.comentarios && item.comentarios.length > 0"
-                  style="height:71%; overflow-y: scroll"
+                  style="height: 71%; overflow-y: scroll"
                   class="comments-scrollBar m-0 w-100"
                   id="commentSection"
                 >
@@ -101,7 +110,9 @@
                         "
                       />
                     </b-col>
-                    <b-col cols="9 d-block d-sm-block d-md-block d-lg-block pl-0">
+                    <b-col
+                      cols="9 d-block d-sm-block d-md-block d-lg-block pl-0"
+                    >
                       <b-row>
                         <b-col
                           cols="4 pl-3"
@@ -126,23 +137,23 @@
                 </b-row>
                 <b-row
                   v-if="!item.comentarios || item.comentarios.length == 0"
-                  style="height:71%; overflow-y: scroll; color: #afaeae"
+                  style="height: 71%; overflow-y: scroll; color: #afaeae"
                   class="comments-scrollBar ml-0 mr-1 pt-5 text-center"
                   id="commentSection"
                 >
                   <b-col cols="12">No comments yet</b-col>
                 </b-row>
-                <b-row class="w-100 m-0" style="height:12%;">
+                <b-row class="w-100 m-0" style="height: 12%">
                   <b-col cols="12 p-0">
                     <b-form-textarea
                       id="addComment"
                       v-model="addComent"
                       class="form-control"
-                      style="border-radius: 0;"
+                      style="border-radius: 0"
                       placeholder="Añadir comentarios"
                     ></b-form-textarea>
                     <b-button
-                      @click="postCommets(item, noticias)"
+                      @click="postCommets(item)"
                       :disabled="!addComent"
                       class="post-Button"
                       variant="primary"
@@ -184,7 +195,7 @@ export default {
   mounted: function () {
     this.details();
     setTimeout(() => {
-    this.setProfileImage();
+      this.setProfileImage();
     }, 150);
   },
   methods: {
@@ -220,8 +231,21 @@ export default {
         scrollToBottom.scrollTop = scrollToBottom.scrollHeight;
       }, 852);
     },
-    async postCommets(object, comentArray) {
+
+    async postCommets(object) {
       let doc_id = null;
+        let commentArrayOfUsersEmail = [];
+      if (object.commentsArray) {
+        let comentariosarrayFind = object.some((element) => 
+          element.commentsArray == this.username
+        );
+        if (!comentariosarrayFind) {
+          object.commentsArray.push(this.username);
+        }
+      }else{
+        commentArrayOfUsersEmail.push(this.username)
+         object["comentariosArray"] = commentArrayOfUsersEmail;
+      }
       let user_name = this.username.split("@")[0];
       let currentDate = moment(new Date()).format("L");
       let currenttime = moment(new Date()).format("HH:mm");
@@ -261,6 +285,7 @@ export default {
           .doc(doc.id)
           .update({
             comentarios: object.comentarios,
+            comentariosArray: object.comentariosArray,
           })
           .then(() => {
             console.log("updated");
@@ -274,6 +299,7 @@ export default {
       this.$bvModal.hide(id);
     },
   },
+
   computed: {},
 };
 </script>
