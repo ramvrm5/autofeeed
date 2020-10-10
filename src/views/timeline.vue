@@ -4,7 +4,10 @@
       <b-col class="col-10 mx-auto p-0">
         <div id="app">
           <v-app id="inspire">
-            <v-timeline>
+            <v-timeline
+              :reverse="reverse"
+              :dense="$vuetify.breakpoint.smAndDown"
+            >
               <v-timeline-item
                 v-for="(timelineItem, index) in timelineItems"
                 :key="index"

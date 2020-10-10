@@ -9,7 +9,12 @@
           <div style="left: 25px; top: 60px; position: absolute; z-index: 9999">
             <router-link to="/"
               ><i class="fa fa-chevron-left" aria-hidden="true"></i>
-              Back</router-link
+              {{selectedLan == 'es'
+              ? $Back_es
+              : selectedLan == 'pt'
+              ? $Back_pt
+              : $Back_en}}
+              </router-link
             >
           </div>
           <b-col
@@ -171,6 +176,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapActions, mapState } from "vuex";
 import moment from "moment";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -299,9 +305,14 @@ export default {
       this.$bvModal.hide(id);
     },
   },
-
-  computed: {},
+  computed: {
+    ...mapState(["selectedLan"]),
+  },
 };
+
+Vue.prototype.$Back_es = "atrás";
+Vue.prototype.$Back_pt = "Costas";
+Vue.prototype.$Back_en = "Back";
 </script>
 <style>
 .comments-modal .modal-dialog.modal-md {

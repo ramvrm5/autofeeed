@@ -3,7 +3,11 @@
     <b-row style="height: 90vh !important" class="bg-light align-items-center">
       
         <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
-            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</router-link>
+            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{selectedLan == 'es'
+              ? $Back_es
+              : selectedLan == 'pt'
+              ? $Back_pt
+              : $Back_en}}</router-link>
         </div>
       <b-col cols="8 mx-auto h-75">
         <form @submit.stop.prevent="handleSubmit">
@@ -12,7 +16,12 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="title-input"
-            label="Titulo * :"
+            :label="
+            selectedLan == 'es'
+              ? $Title_es + '* :'
+              : selectedLan == 'pt'
+              ? $Title_pt + '* :'
+              : $Title_en+ ' * :'"
             label-for="title-input"
           >
             <b-form-input
@@ -23,7 +32,12 @@
               :state="validateState('title-input')"
               aria-describedby="title-input-live-feedback-1"
               data-vv-as="titulo"
-              placeholder="Entrar titulo"
+              :placeholder="
+            selectedLan == 'es'
+              ? $Enter_title_es
+              : selectedLan == 'pt'
+              ? $Enter_title_pt
+              : $Enter_title_en"
             ></b-form-input>
             <b-form-invalid-feedback id="title-input-live-feedback-1">{{
               veeErrors.first("title-input")
@@ -36,7 +50,12 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="description-input"
-            label="Cuerpo * :"
+            :label="
+            selectedLan == 'es'
+              ? $description_es +' * :'
+              : selectedLan == 'pt'
+              ? $description_pt +' * :'
+              : $description_en +' * :'"
             label-for="description-input"
           >
             <b-form-textarea
@@ -47,7 +66,12 @@
               :state="validateState('description-input')"
               aria-describedby="description-input-live-feedback-2"
               data-vv-as="Cuerpo"
-              placeholder="Entrar cuerpo"
+              :placeholder="
+            selectedLan == 'es'
+              ? $Enter_description_es
+              : selectedLan == 'pt'
+              ? $Enter_description_pt
+              : $Enter_description_en"
             ></b-form-textarea>
             <b-form-invalid-feedback id="description-input-live-feedback-2">{{
               veeErrors.first("description-input")
@@ -60,7 +84,12 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="Language-input"
-            label="Idioma * :"
+            :label="
+            selectedLan == 'es'
+              ? $Language_es +' * :'
+              : selectedLan == 'pt'
+              ? $Language_pt +' * :'
+              : $Language_en +' * :'"
             label-for="Language-input"
           >
             <b-form-input
@@ -77,7 +106,12 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="Tags-input"
-            label="Tags * :"
+            :label="
+            selectedLan == 'es'
+              ? $Tags_es +' * :'
+              : selectedLan == 'pt'
+              ? $Tags_pt +' * :'
+              : $Tags_en +' * :'"
             label-for="Tags-input"
           >
             <b-form-tags
@@ -90,14 +124,37 @@
               data-vv-as="Tags"
               remove-on-delete
               add-on-enter
-              placeholder="Añadir tag"
+              :placeholder="
+            selectedLan == 'es'
+              ? $Add_tag_es
+              : selectedLan == 'pt'
+              ? $Add_tag_pt
+              : $Add_tag_en"
             ></b-form-tags>
             <b-form-text id="tags-remove-on-delete-help" class="mt-2">
-              Prensa
-              <kbd>Icono de retroceso / Cruz</kbd> para borrar la última
-              etiqueta ingresada / Presione
-              <kbd>Botón Entrar / Agregar</kbd> para agregar la etiqueta
-              ingresada
+              {{selectedLan == 'es'
+              ? $Tags1_es
+              : selectedLan == 'pt'
+              ? $Tags1_pt
+              : $Tags1_en}}
+              <kbd>{{selectedLan == 'es'
+              ? $Tags2_es
+              : selectedLan == 'pt'
+              ? $Tags2_pt
+              : $Tags2_en}}</kbd> {{selectedLan == 'es'
+              ? $Tags3_es
+              : selectedLan == 'pt'
+              ? $Tags3_pt
+              : $Tags3_en}}
+              <kbd>{{selectedLan == 'es'
+              ? $Tags4_es
+              : selectedLan == 'pt'
+              ? $Tags4_pt
+              : $Tags4_en}}</kbd> {{selectedLan == 'es'
+              ? $Tags5_es
+              : selectedLan == 'pt'
+              ? $Tags5_pt
+              : $Tags5_en}}
             </b-form-text>
             <b-form-invalid-feedback id="Tags-input-live-feedback-2">{{
               veeErrors.first("Tags-input")
@@ -110,7 +167,11 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="img-input"
-            label="Image"
+            :label="selectedLan == 'es'
+              ? $Image_es
+              : selectedLan == 'pt'
+              ? $Image_pt
+              : $Image_en"
             label-for="img-input"
           >
             <b-form-file
@@ -122,7 +183,11 @@
               aria-describedby="img-input-live-feedback-2"
               data-vv-as="Image"
               accept=".jpg"
-              placeholder="Elija un archivo o suéltelo aquí"
+              :placeholder="selectedLan == 'es'
+              ? $Choose_a_file_or_drop_es
+              : selectedLan == 'pt'
+              ? $Choose_a_file_or_drop_pt
+              : $Choose_a_file_or_drop_en"
               drop-placeholder="Suelta el archivo aquí"
             ></b-form-file>
             <b-form-invalid-feedback id="img-input-live-feedback-2">{{
@@ -147,7 +212,11 @@
               :state="validateState('url-input')"
               aria-describedby="url-input-live-feedback-2"
               data-vv-as="URL"
-              placeholder="Agregar URL de noticias"
+              :placeholder="selectedLan == 'es'
+              ? $Add_news_URL_es
+              : selectedLan == 'pt'
+              ? $Add_news_URL_pt
+              : $Add_news_URL_en"
             ></b-form-input>
             <b-form-invalid-feedback id="url-input-live-feedback-2">{{
               veeErrors.first("url-input")
@@ -156,7 +225,11 @@
           <!-- Image End -->
           <div class="text-center">
             <b-button type="submit" size="lg" variant="primary"
-              >Submit</b-button
+              >{{selectedLan == 'es'
+              ? $Submit_es
+              : selectedLan == 'pt'
+              ? $Submit_pt
+              : $Submit_en}}</b-button
             >
           </div>
         </form>
@@ -166,6 +239,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapActions, mapState } from "vuex";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
@@ -299,5 +373,63 @@ export default {
       });
     },
   },
+  computed: {
+    ...mapState(["selectedLan"]),
+  },
 };
+
+///Contants
+
+Vue.prototype.$Title_es = "Titulo";
+Vue.prototype.$Title_pt = "Título";
+Vue.prototype.$Title_en = "Title";
+Vue.prototype.$Enter_title_es = "Entrar titulo";
+Vue.prototype.$Enter_title_pt = "Digite o título";
+Vue.prototype.$Enter_title_en = "Enter title";
+Vue.prototype.$description_es = "descripción";
+Vue.prototype.$description_pt = "descrição";
+Vue.prototype.$description_en = "description";
+Vue.prototype.$Enter_description_es = "Entrar descripción";
+Vue.prototype.$Enter_description_pt = "Insira a descrição";
+Vue.prototype.$Enter_description_en = "Enter description";
+Vue.prototype.$Language_es = "Idioma";
+Vue.prototype.$Language_pt = "Língua";
+Vue.prototype.$Language_en = "Language";
+Vue.prototype.$Tags_es = "Etiquetas";
+Vue.prototype.$Tags_pt = "Tag";
+Vue.prototype.$Tags_en = "Tags";
+Vue.prototype.$Add_tag_es = "Añadir etiqueta";
+Vue.prototype.$Add_tag_pt = "Adicionar etiqueta";
+Vue.prototype.$Add_tag_en = "Add tag";
+Vue.prototype.$Tags1_es = "Prensa";
+Vue.prototype.$Tags1_pt = "pressione";
+Vue.prototype.$Tags1_en = "Press";
+Vue.prototype.$Tags2_es = "Icono de retroceso / Cruz";
+Vue.prototype.$Tags2_pt = "Retrocesso / ícone de cruz";
+Vue.prototype.$Tags2_en = "Backspace / Cross Icon";
+Vue.prototype.$Tags3_es = "para borrar la última etiqueta ingresada / Presione";
+Vue.prototype.$Tags3_pt = "para excluir a última tag inserida / Pressione";
+Vue.prototype.$Tags3_en = "to delete the last tag entered / Press";
+Vue.prototype.$Tags4_es = "Botón Entrar / Agregar";
+Vue.prototype.$Tags4_pt = "Botão Entrar / Adicionar";
+Vue.prototype.$Tags4_en = "Enter / Add button";
+Vue.prototype.$Tags5_es = "para agregar la etiqueta ingresada";
+Vue.prototype.$Tags5_pt = "para adicionar a tag inserida";
+Vue.prototype.$Tags5_en = "to add the entered tag";
+Vue.prototype.$Image_es = "Imagen";
+Vue.prototype.$Image_pt = "Imagem";
+Vue.prototype.$Image_en = "Image";
+Vue.prototype.$Choose_a_file_or_drop_es = "Elija un archivo o suéltelo aquí";
+Vue.prototype.$Choose_a_file_or_drop_pt = "Escolha um arquivo ou solte-o aqui";
+Vue.prototype.$Choose_a_file_or_drop_en = "Choose a file or drop it here";
+Vue.prototype.$URL = "URL";
+Vue.prototype.$Add_news_URL_es = "Agregar URL de noticias";
+Vue.prototype.$Add_news_URL_pt = "Adicionar URL de notícias";
+Vue.prototype.$Add_news_URL_en = "Add news URL";
+Vue.prototype.$Submit_es = "Enviar";
+Vue.prototype.$Submit_pt = "Enviar";
+Vue.prototype.$Submit_en = "Submit";
+Vue.prototype.$Back_es = "atrás";
+Vue.prototype.$Back_pt = "Costas";
+Vue.prototype.$Back_en = "Back";
 </script>

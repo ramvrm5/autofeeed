@@ -4,7 +4,6 @@ import Home from '../views/Home.vue'
 import {auth} from '../firebase'
 
 Vue.use(VueRouter)
-
   const routes = [
   /*{
     path: '/',
@@ -96,6 +95,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
   })
-
 
 export default router

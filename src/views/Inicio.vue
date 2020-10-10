@@ -12,7 +12,13 @@
           <b-form-select
             id="input-3"
             v-model="rangeDate"
-            :options="rangeDateOptions"
+            :options="
+              selectedLan == 'es'
+                ? $rangeDateOptions_es
+                : selectedLan == 'pt'
+                ? $rangeDateOptions_pt
+                : $rangeDateOptions_en
+            "
             required
             @change="rangeTimeSelectChnage"
           ></b-form-select>
@@ -62,7 +68,13 @@
             target="_blank"
             :href="item.url"
             variant="primary"
-            >Ver más</b-button
+            >{{
+                  selectedLan == "es"
+                    ? $see_more_es
+                    : selectedLan == "pt"
+                    ? $see_more_pt
+                    : $see_more_en
+                }}</b-button
           >
 
           <b-button
@@ -99,7 +111,7 @@
           </b-button>
           <router-link
             :to="{ name: 'Comment', params: { id: item.id } }"
-            style="text-decoration: none; color: unset;color: white;"
+            style="text-decoration: none; color: unset; color: white"
           >
             <!-- @click="setProfileImage()" --><b-button
               :id="'comment-' + index"
@@ -131,7 +143,13 @@
           <template v-slot:footer>
             <div v-if="item.fecha">
               <small class="text-muted"
-                >Fecha: {{ item.fechaClasica.split("T")[0] }}</small
+                >{{
+                  selectedLan == "es"
+                    ? $Date_es
+                    : selectedLan == "pt"
+                    ? $Date_pt
+                    : $Date_en
+                }}: {{ item.fechaClasica.split("T")[0] }}</small
               >
             </div>
             <div v-if="item.tags">
@@ -146,7 +164,13 @@
               <small class="text-muted">Intereses: indefinidos</small>
             </div>
             <div v-if="item.fuente">
-              <small class="text-muted">Fuente: {{ item.fuente }}</small>
+              <small class="text-muted">{{
+                  selectedLan == "es"
+                    ? $Source_es
+                    : selectedLan == "pt"
+                    ? $Source_pt
+                    : $Source_en
+                }}: {{ item.fuente }}</small>
             </div>
           </template>
         </b-card>
@@ -214,7 +238,13 @@
           style="width: 100% !important"
           size="sm"
           variant="primary"
-          >Previous Page</b-button
+          >{{
+            selectedLan == "es"
+              ? $previous_page_es
+              : selectedLan == "pt"
+              ? $previous_page_pt
+              : $previous_page_en
+          }}</b-button
         >
       </div>
       <div class="col-2" @click="next">
@@ -223,7 +253,13 @@
           style="width: 100% !important"
           size="sm"
           variant="primary"
-          >Next Page</b-button
+          >{{
+            selectedLan == "es"
+              ? $Next_page_es
+              : selectedLan == "pt"
+              ? $Next_page_pt
+              : $Next_page_en
+          }}</b-button
         >
         <!-- <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select> -->
       </div>
@@ -236,6 +272,7 @@
 // @ is an alias to /src
 //import HelloWorld from '@/components/HelloWorld.vue'
 
+import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from "vuex";
 import moment from "moment";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -248,6 +285,7 @@ import SPANISH_LANGUAGE from "../contants/language.js";
 import "firebase/storage";
 import Swal from "sweetalert2";
 import $ from "jquery";
+
 
 const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
 const { Translate } = require("@google-cloud/translate").v2;
@@ -262,7 +300,7 @@ export default {
       name: "Inicio",
       classA: null,
       previousCount: 0,
-      rangeDate: "today",
+      rangeDate:"today",
       rangeDateOptions: [
         { text: "Today", value: "today" },
         { text: "2 days ago", value: "2 days ago" },
@@ -278,7 +316,12 @@ export default {
   created() {
     //this.getTareas()
     //this.getAlertas()
-    this.getNoticias({ rangedateChoosen:this.rangeDate,yesterdayDate: "", type: "next", limit: 10 });
+    this.getNoticias({
+      rangedateChoosen: this.rangeDate,
+      yesterdayDate: "",
+      type: "next",
+      limit: 10,
+    });
   },
   mounted: function () {
     (this.classA = "likepulsado"), (this.classB = "likepulsado");
@@ -291,15 +334,20 @@ export default {
       "saveCreatedNews",
     ]),
     rangeTimeSelectChnage() {
-      this.previousCount = 0
-      this.getNoticias({ rangedateChoosen:this.rangeDate,yesterdayDate: "", type: "next", limit: 10 });
+      this.previousCount = 0;
+      this.getNoticias({
+        rangedateChoosen: this.rangeDate,
+        yesterdayDate: "",
+        type: "next",
+        limit: 10,
+      });
     },
     previous() {
       this.previousCount -= 1;
       var arrayItem;
       arrayItem = this.noticias[this.noticias.length - this.noticias.length];
       this.getNoticias({
-        rangedateChoosen:this.rangeDate,
+        rangedateChoosen: this.rangeDate,
         yesterdayDate: arrayItem.fecha,
         type: "previous",
         limit: 10,
@@ -310,7 +358,7 @@ export default {
       var arrayItem;
       arrayItem = this.noticias[this.noticias.length - 1];
       this.getNoticias({
-        rangedateChoosen:this.rangeDate,
+        rangedateChoosen: this.rangeDate,
         yesterdayDate: arrayItem.fecha,
         type: "next",
         limit: 10,
@@ -321,7 +369,7 @@ export default {
 
       let user = firebase.auth().currentUser;
 
-/*       let url = encodeURIComponent(href);
+      /*       let url = encodeURIComponent(href);
       url = url.replace("%3A", ":"); */
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
@@ -342,12 +390,9 @@ export default {
                     .getElementById(id)
                     .getElementsByTagName("span")[0].innerText;
                   //alert(likes_elemento)
-                  document
-                    .getElementById(id)
-                    .classList.remove("likepulsado");
+                  document.getElementById(id).classList.remove("likepulsado");
                   document.getElementById(id).style.color = "#ffffff";
-                  document.getElementById(id).style.backgroundColor =
-                    "#007bff";
+                  document.getElementById(id).style.backgroundColor = "#007bff";
                   let likesmasuno = parseInt(likes_elemento) - 1;
                   document
                     .getElementById(id)
@@ -376,8 +421,7 @@ export default {
                 .getElementsByTagName("span")[0].innerText;
               //alert(likes_elemento)
               document.getElementById(id).style.color = "#007bff";
-              document.getElementById(id).style.backgroundColor =
-                "#ffffff";
+              document.getElementById(id).style.backgroundColor = "#ffffff";
               let likesmasuno = parseInt(likes_elemento) + 1;
               document
                 .getElementById(id)
@@ -457,4 +501,36 @@ export default {
     ...mapState(["usuario", "keywordactual"]),
   },
 };
+
+
+Vue.prototype.$rangeDateOptions_es = [
+    { text: "Hoy", value: "today" },
+    { text: "hace 2 días", value: "2 days ago" },
+    { text: "La semana pasada", value: "last week" }
+];
+Vue.prototype.$rangeDateOptions_pt = [
+    { text: "Hoje", value: "today" },
+    { text: "2 dias atrás", value: "2 days ago" },
+    { text: "Semana Anterior", value: "last week" }
+];
+Vue.prototype.$rangeDateOptions_en = [
+    { text: "Today", value: "today" },
+    { text: "2 days ago", value: "2 days ago" },
+    { text: "Last week", value: "last week" }
+];
+Vue.prototype.$previous_page_es = "Pagina anterior";
+Vue.prototype.$previous_page_pt = "Página anterior";
+Vue.prototype.$previous_page_en = "Previous page";
+Vue.prototype.$Next_page_es = "Siguiente página";
+Vue.prototype.$Next_page_pt = "Página seguinte";
+Vue.prototype.$Next_page_en = "Next page";
+Vue.prototype.$see_more_es = "Ver más";
+Vue.prototype.$see_more_pt = "Ver mais";
+Vue.prototype.$see_more_en = "see more";
+Vue.prototype.$Source_es = "Fuente";
+Vue.prototype.$Source_pt = "Fonte";
+Vue.prototype.$Source_en = "Source";
+Vue.prototype.$Date_es = "Fecha";
+Vue.prototype.$Date_pt = "Encontro";
+Vue.prototype.$Date_en = "Date";
 </script>
