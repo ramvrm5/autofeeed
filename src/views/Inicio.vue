@@ -398,7 +398,7 @@ export default {
       const noticiasRef = db.collection("noticias");
       const snapshot = await noticiasRef.where("id", "==", id).get();
       if (snapshot.empty) {
-        console.log("No matching documents.");
+        console.log("No matching documents");
         return;
       }
       snapshot.forEach((doc) => {
