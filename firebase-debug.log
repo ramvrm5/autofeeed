@@ -1,0 +1,38 @@
+[debug] [2020-10-13T17:02:15.232Z] ----------------------------------------------------------------------
+[debug] [2020-10-13T17:02:15.234Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\pc\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --force
+[debug] [2020-10-13T17:02:15.234Z] CLI Version:   8.9.2
+[debug] [2020-10-13T17:02:15.234Z] Platform:      win32
+[debug] [2020-10-13T17:02:15.234Z] Node Version:  v10.15.0
+[debug] [2020-10-13T17:02:15.236Z] Time:          Tue Oct 13 2020 19:02:15 GMT+0200 (GMT+02:00)
+[debug] [2020-10-13T17:02:15.236Z] ----------------------------------------------------------------------
+[debug] [2020-10-13T17:02:15.236Z] 
+[debug] [2020-10-13T17:02:15.245Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-10-13T17:02:15.245Z] > authorizing via signed-in user
+[debug] [2020-10-13T17:02:15.246Z] [iam] checking project autofeed2020 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-10-13T17:02:15.248Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-10-13T17:02:15.248Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-10-13T17:02:15.414Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","date":"Tue, 13 Oct 2020 17:02:14 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-13T17:02:15.419Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/autofeed2020:testIamPermissions  
+ {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-10-13T17:02:16.191Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 13 Oct 2020 17:02:15 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=655","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-13T17:02:16.193Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/autofeed2020  
+ 
+[debug] [2020-10-13T17:02:16.499Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 13 Oct 2020 17:02:16 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'autofeed2020'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2020-10-13T17:02:16.511Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/autofeed2020:test  
+ {"source":{"files":[{"name":"firestore.rules","content":"rules_version = '2';\r\nservice cloud.firestore {\r\n  match /databases/{database}/documents {\r\n\r\n    // This rule allows anyone on the internet to view, edit, and delete\r\n    // all data in your Firestore database. It is useful for getting\r\n    // started, but it is configured to expire after 30 days because it\r\n    // leaves your app open to attackers. At that time, all client\r\n    // requests to your Firestore database will be denied.\r\n    //\r\n    // Make sure to write security rules for your app before that time, or else\r\n    // your app will lose access to your Firestore database\r\n    match /{document=**} {\r\n      allow read, write: if true;\r\n    }\r\n  }\r\n}"}]}}
+[debug] [2020-10-13T17:02:17.361Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 13 Oct 2020 17:02:16 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2020-10-13T17:02:17.365Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/autofeed2020/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-10-13T17:02:18.701Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 13 Oct 2020 17:02:18 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-13T17:02:18.703Z] >>> HTTP REQUEST GET https://firebaserules.googleapis.com/v1/projects/autofeed2020/releases?pageSize=10&pageToken=  
+ 
+[debug] [2020-10-13T17:02:18.703Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1/projects/autofeed2020/databases/(default)/collectionGroups/-/indexes  
+ 

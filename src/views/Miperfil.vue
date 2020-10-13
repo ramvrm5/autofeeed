@@ -340,10 +340,24 @@
                 <div
                   class="input-group mt-2 col-12 col-sm-12 col-md-12 col-lg-2"
                 >
+                       <button
+                    @click="cambiarcontraseña(email_password)"
+                    class="btn btn-primary mb-2"
+                    style="margin-left: auto; margin-right: auto;color:white"
+                  >
+                      {{
+                        selectedLan == "es"
+                          ? $password_es
+                          : selectedLan == "pt"
+                          ? $password_pt
+                          : $password_en
+                      }}
+                  </button>
+                  
                   <button
                     type="submit"
                     class="btn btn-primary mb-2"
-                    style="margin-left: auto; margin-right: auto"
+                    style="margin-left: auto; margin-right: auto;color:white"
                   >
                       {{
                         selectedLan == "es"
@@ -392,6 +406,7 @@ export default {
   imgurl3: "",
   data() {
     return {
+      email_password: "",
       name_card_id: null,
       fields: [
         // A column that needs custom formatting
@@ -479,6 +494,7 @@ export default {
       "cambiarIdioma",
       "editarTarea2",
       "editarAlertas",
+      "cambiarcontraseña"
     ]),
     cambiarimagen(imagen) {
       setTimeout(() => {
@@ -589,6 +605,7 @@ export default {
     ValidateSize(file) {},
   },
   mounted: function () {
+    this.email_password = this.usuario.email;
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
     document.getElementById("emailid").value = this.usuario.email;
     document.getElementById("emailid").placeholder = this.usuario.email;
@@ -751,4 +768,7 @@ Vue.prototype.$Postal_Code_en = "Postal Code";
 Vue.prototype.$Update_data_es = "Actualizar datos";
 Vue.prototype.$Update_data_pt = "Dados de atualização";
 Vue.prototype.$Update_data_en = "Update data";
+Vue.prototype.$password_es = "Cambiar contraseña";
+Vue.prototype.$password_pt = "Cambiar contrasinal";
+Vue.prototype.$password_en = "Change password";
 </script>

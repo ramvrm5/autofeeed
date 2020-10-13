@@ -312,7 +312,7 @@ export default new Vuex.Store({
 
 
     cambiarcontraseña({ commit }, correo) {
-      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña2')
+      alert('Hemos enviado un correo a ' + correo.email + ' con las intrucciones para cambiar tu contraseña')
       auth.sendPasswordResetEmail(correo.email)
     },
 
@@ -691,7 +691,7 @@ export default new Vuex.Store({
 
                       //alert("Alerta! Se ha detectado tu texto en la siguiente noticia: \n" + aviso_alarma2.titulo + "\n" +aviso_alarma2.cuerpo +"\nURL: " + aviso_alarma2.url);
                     }
-                    document.getElementById("noticiasid").innerHTML = "Hasta aquí por ahora, regresa en unas horas a por más noticias"
+                    //document.getElementById("noticiasid").innerHTML = "Hasta aquí por ahora, regresa en unas horas a por más noticias"
                   }
 
                   commit('setNoticiasAlerta', noticias_alerta_2)
