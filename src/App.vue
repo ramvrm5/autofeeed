@@ -33,7 +33,7 @@
             >
             <b-nav-item v-if="existeUsuario && this.$route.name != 'Timeline'"
               ><router-link
-                to="/timeline"
+                :to="{ name: 'Timeline', params: { email: emailId } }"
                 style="text-decoration: none; color: unset"
                 >{{
                   selectedLan == "es"
@@ -48,12 +48,12 @@
               v-if="this.$route.name != 'Nosotros'"
               :to="{ name: 'Nosotros' }"
               >{{
-                  selectedLan == "es"
-                    ? $We_es
-                    : selectedLan == "pt"
-                    ? $We_pt
-                    : $We_en
-                }}</b-nav-item
+                selectedLan == "es"
+                  ? $We_es
+                  : selectedLan == "pt"
+                  ? $We_pt
+                  : $We_en
+              }}</b-nav-item
             >
             <b-nav-item :to="{ name: 'Nosotros' }">v 1.01b</b-nav-item>
           </b-navbar-nav>
@@ -66,12 +66,12 @@
 
             <b-nav-item @click="mostrarAlarmas()">
               <span id="alarmatexto">{{
-                  selectedLan == "es"
-                    ? $No_alarms_es
-                    : selectedLan == "pt"
-                    ? $No_alarms_pt
-                    : $No_alarms_en
-                }}</span></b-nav-item
+                selectedLan == "es"
+                  ? $No_alarms_es
+                  : selectedLan == "pt"
+                  ? $No_alarms_pt
+                  : $No_alarms_en
+              }}</span></b-nav-item
             >
             <b-nav-item v-if="existeUsuario">
               <router-link
@@ -92,11 +92,13 @@
               v-if="existeUsuario"
               id="ddCommodity"
               name="filtrarKeyword"
-              :text="selectedLan == 'es'
-                    ? $Interests_es
-                    : selectedLan == 'pt'
-                    ? $Interests_pt
-                    : $Interests_en"
+              :text="
+                selectedLan == 'es'
+                  ? $Interests_es
+                  : selectedLan == 'pt'
+                  ? $Interests_pt
+                  : $Interests_en
+              "
               variant="primary"
               class="claseintereses"
             >
@@ -182,13 +184,14 @@
                   style="color: #212529"
                   @click="filtrarporKeyword('todos')"
                   v-if="existeUsuario"
-                >{{
-                  selectedLan == "es"
-                    ? $All_the_news_es
-                    : selectedLan == "pt"
-                    ? $All_the_news_pt
-                    : $All_the_news_en
-                }}
+                >
+                  {{
+                    selectedLan == "es"
+                      ? $All_the_news_es
+                      : selectedLan == "pt"
+                      ? $All_the_news_pt
+                      : $All_the_news_en
+                  }}
                 </div></b-dropdown-item
               >
               <b-dropdown-item
@@ -196,13 +199,14 @@
                   style="color: #212529"
                   @click="filtrarporLikes()"
                   v-if="existeUsuario"
-                >{{
-                  selectedLan == "es"
-                    ? $Bookmarks_es
-                    : selectedLan == "pt"
-                    ? $Bookmarks_pt
-                    : $Bookmarks_en
-                }}
+                >
+                  {{
+                    selectedLan == "es"
+                      ? $Bookmarks_es
+                      : selectedLan == "pt"
+                      ? $Bookmarks_pt
+                      : $Bookmarks_en
+                  }}
                 </div></b-dropdown-item
               >
               <b-dropdown-item
@@ -211,23 +215,21 @@
                   to="/intereses"
                   v-if="existeUsuario"
                   >{{
-                  selectedLan == "es"
-                    ? $Interests_and_Alerts_es
-                    : selectedLan == "pt"
-                    ? $Interests_and_Alerts_pt
-                    : $Interests_and_Alerts_en
-                }}</router-link
+                    selectedLan == "es"
+                      ? $Interests_and_Alerts_es
+                      : selectedLan == "pt"
+                      ? $Interests_and_Alerts_pt
+                      : $Interests_and_Alerts_en
+                  }}</router-link
                 ></b-dropdown-item
               >
-              <b-dropdown-item @click="cerrarSesion" v-if="existeUsuario"
-                >{{
-                  selectedLan == "es"
-                    ? $Sign_off_es
-                    : selectedLan == "pt"
-                    ? $Sign_off_pt
-                    : $Sign_off_en
-                }}</b-dropdown-item
-              >
+              <b-dropdown-item @click="logout" v-if="existeUsuario">{{
+                selectedLan == "es"
+                  ? $Sign_off_es
+                  : selectedLan == "pt"
+                  ? $Sign_off_pt
+                  : $Sign_off_en
+              }}</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -249,7 +251,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -258,6 +260,11 @@ import firebase from "firebase/app";
 library.add(faBell);
 export default {
   imgurl3: "",
+  data() {
+    return {
+      emailId: null,
+    };
+  },
   watch: {
     $route: {
       immediate: true,
@@ -277,42 +284,75 @@ export default {
       "cambiarIdioma",
       "mostrarAlarmas",
     ]),
+    logout() {
+      this.cerrarSesion()
+    },
     cambiarimagen(imagen) {
       document.getElementById("imgmenu").src = imagen;
     },
     selectedRouter() {
-      let routeNmae = this.$route.name
-      if(routeNmae == "Mi Mundo"){
-        return this.selectedLan == "es"? this.$My_world_es: this.selectedLan == "pt"? this.$My_world_pt: this.$My_world_en
-      }else if(routeNmae == "Mi Perfil"){
-        return this.selectedLan == "es"? this.$My_profile_es: this.selectedLan == "pt"? this.$My_profile_pt: this.$My_profile_en
-      }else if(routeNmae == "Intereses"){
-        return this.selectedLan == "es"? this.$Interests_es: this.selectedLan == "pt"? this.$Interests_pt: this.$Interests_en
-      }else if(routeNmae == "Timeline"){
-        return this.selectedLan == "es"? this.$Timeline_es: this.selectedLan == "pt"? this.$Timeline_pt: this.$Timeline_en
-      }else if(routeNmae == "Comment"){
-        return this.selectedLan == "es"? this.$Comment_es: this.selectedLan == "pt"? this.$Comment_pt: this.$Comment_en
-      }else if(routeNmae == "CreateNews"){
-        return "CreateNews"
-      }else if(routeNmae == "Nosotros"){
-        return this.selectedLan == "es"? this.$We_es: this.selectedLan == "pt"? this.$We_pt: this.$We_en
+      let routeNmae = this.$route.name;
+      let user = firebase.auth().currentUser;
+      if (user) {
+        this.emailId = user.email;
       }
-    }
+      if (routeNmae == "Mi Mundo") {
+        return this.selectedLan == "es"
+          ? this.$My_world_es
+          : this.selectedLan == "pt"
+          ? this.$My_world_pt
+          : this.$My_world_en;
+      } else if (routeNmae == "Mi Perfil") {
+        return this.selectedLan == "es"
+          ? this.$My_profile_es
+          : this.selectedLan == "pt"
+          ? this.$My_profile_pt
+          : this.$My_profile_en;
+      } else if (routeNmae == "Intereses") {
+        return this.selectedLan == "es"
+          ? this.$Interests_es
+          : this.selectedLan == "pt"
+          ? this.$Interests_pt
+          : this.$Interests_en;
+      } else if (routeNmae == "Timeline") {
+        return this.selectedLan == "es"
+          ? this.$Timeline_es
+          : this.selectedLan == "pt"
+          ? this.$Timeline_pt
+          : this.$Timeline_en;
+      } else if (routeNmae == "Comment") {
+        return this.selectedLan == "es"
+          ? this.$Comment_es
+          : this.selectedLan == "pt"
+          ? this.$Comment_pt
+          : this.$Comment_en;
+      } else if (routeNmae == "CreateNews") {
+        return "CreateNews";
+      } else if (routeNmae == "Nosotros") {
+        return this.selectedLan == "es"
+          ? this.$We_es
+          : this.selectedLan == "pt"
+          ? this.$We_pt
+          : this.$We_en;
+      }
+    },
   },
   mounted: function () {
     setTimeout(function () {
       let user = firebase.auth().currentUser;
-      let fecha2 = new Date();
+      if (user) {
+        let fecha2 = new Date();
 
-      var imgurl2 =
-        "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
-        encodeURIComponent(user.email) +
-        ".jpg?alt=media&time=" +
-        fecha2.getTime();
+        var imgurl2 =
+          "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
+          encodeURIComponent(user.email) +
+          ".jpg?alt=media&time=" +
+          fecha2.getTime();
 
-      this.imgurl3 = imgurl2;
-      document.getElementById("imgmenu").src = imgurl2;
-      //this.cambiarimagen(this.imgurl3) //method1 will execute at pageload
+        this.imgurl3 = imgurl2;
+        document.getElementById("imgmenu").src = imgurl2;
+        //this.cambiarimagen(this.imgurl3) //method1 will execute at pageload
+      }
     }, 100);
   },
   computed: {
@@ -362,5 +402,4 @@ Vue.prototype.$Interests_and_Alerts_pt = "Interests and Alerts";
 Vue.prototype.$Sign_off_es = "Cerrar sesión";
 Vue.prototype.$Sign_off_pt = "Fechar Sessão";
 Vue.prototype.$Sign_off_en = "Sign off";
-
 </script>

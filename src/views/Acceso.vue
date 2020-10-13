@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import {mapActions, mapState,mapGetters} from 'vuex'
 import image1 from '../assets/fondoc1.jpg'
 import image2 from '../assets/fondoc2.jpg'
 import image3 from '../assets/fondoc3.jpg'
@@ -115,6 +115,7 @@ export default {
     },
     computed:{
         ...mapState(['error']),
+        ...mapGetters(["existeUsuario"]),
         desactivar()
         {
            return true

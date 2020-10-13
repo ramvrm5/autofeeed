@@ -98,7 +98,7 @@
                 </b-button>
               </router-link>
             </div>
-            <div class="col-6">
+            <div class="col-7">
               <b-button
                 style="float: right"
                 target="_blank"
@@ -181,7 +181,13 @@
             </div>
             <div v-if="item.tags">
               <small class="text-muted"
-                >Intereses:
+                >{{
+                  selectedLan == "es"
+                    ? $Interests_es
+                    : selectedLan == "pt"
+                    ? $Interests_pt
+                    : $Interests_en
+                }}:
                 {{
                   item.tags.join(", ").replace("que,", "").replace(" ,", "")
                 }}</small
@@ -391,9 +397,11 @@ export default {
           });
         } else {
           item.ratingArray.push({ email: user.email, rating: value });
+          item.ratingArrayAccounts.push(user.email);
         }
       } else {
         item["ratingArray"] = [{ email: user.email, rating: value }];
+        item["ratingArrayAccounts"] = [user.email];
       }
       const noticiasRef = db.collection("noticias");
       const snapshot = await noticiasRef.where("id", "==", id).get();
@@ -406,6 +414,7 @@ export default {
           .doc(doc.id)
           .update({
             ratingArray: item.ratingArray,
+            ratingArrayAccounts: item.ratingArrayAccounts,
           })
           .then(() => {
             console.log("updated");
@@ -610,6 +619,9 @@ Vue.prototype.$Source_en = "Source";
 Vue.prototype.$Date_es = "Fecha";
 Vue.prototype.$Date_pt = "Encontro";
 Vue.prototype.$Date_en = "Date";
+Vue.prototype.$Interests_es = "Intereses";
+Vue.prototype.$Interests_pt = "Interesses";
+Vue.prototype.$Interests_en = "Interests";
 Vue.prototype.$Rating_es = "Clasificación";
 Vue.prototype.$Rating_pt = "Avaliação";
 Vue.prototype.$Rating_en = "Rating";

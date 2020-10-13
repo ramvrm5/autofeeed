@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import {auth} from '../firebase'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 
 Vue.use(VueRouter)
   const routes = [
@@ -36,7 +37,7 @@ Vue.use(VueRouter)
   {
     path: '/login',
     name: 'Acceso',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Acceso.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/Acceso.vue'),
   },
   {
     path: '/agregar',
@@ -44,7 +45,7 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/Agregar.vue')
   },
   {
-    path: '/timeline',
+    path: '/timeline/:email',
     name: 'Timeline',
     component: () => import(/* webpackChunkName: "about" */ '../views/timeline.vue'),
     meta: {requiresAuth: true}

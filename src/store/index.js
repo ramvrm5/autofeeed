@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { Store } from 'vuex';
 import { db } from '../firebase';
 import { auth } from '../firebase';
 import router from '../router';
@@ -187,6 +187,7 @@ export default new Vuex.Store({
       auth.signOut()
         .then(() => {
           router.push('/login')
+          //window.location.reload()
         })
     },
 

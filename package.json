@@ -48,6 +48,7 @@
     "vue-analytics": "^5.22.1",
     "vue-loading-overlay": "^3.4.1",
     "vue-router": "^3.4.4",
+    "vue-spinner": "^1.0.4",
     "vue-sweetalert2": "^3.0.8",
     "vue-tags": "^1.0.4",
     "vuelidate": "^0.7.5",
