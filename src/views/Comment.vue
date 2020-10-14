@@ -107,7 +107,7 @@
                 style="padding: 0px"
               >
                 <b-row
-                  class="m-0 w-100"
+                  class="m-0 w-100 d-sm-none"
                   style="border-bottom: 2px solid rgb(223 223 223); height: 20%"
                 >
                   <b-col

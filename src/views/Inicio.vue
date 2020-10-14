@@ -98,9 +98,8 @@
                 </b-button>
               </router-link>
             </div>
-            <div class="col-7">
+            <div class="col-7 text-center">
               <b-button
-                style="float: right"
                 target="_blank"
                 :href="item.url"
                 variant="primary"
@@ -148,7 +147,7 @@
             </svg>
           </b-button> -->
           <div class="mt-2 row">
-            <div class="col-10 mx-auto">
+            <div class="col-12 col-sm-12 col-md-10 col-lg-10 mx-auto text-center">
               <v-rating
                 :value="ratingAverageCalculate(item, index, '')"
                 :half-increments="halfIncrements"
@@ -161,9 +160,7 @@
             </div>
           </div>
           <div class="row text-center">
-            <div
-              class="col-6 mx-auto text-secondary mt-n4"
-            >
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto text-secondary mt-n4">
               ({{ item.ratingArray ? item.ratingArray.length : 0 }} Votes)
             </div>
           </div>
@@ -265,8 +262,8 @@
         position: sticky;
       "
     >
-      <div class="col-4"></div>
-      <div class="col-2" @click="previous">
+      <div class="col-2 col-sm-2 col-md-4 col-lg-4"></div>
+      <div class="col-4 col-sm-4 col-md-2 col-lg-2" @click="previous">
         <b-button
           :disabled="previousCount == 0"
           style="width: 100% !important"
@@ -281,7 +278,7 @@
           }}</b-button
         >
       </div>
-      <div class="col-2" @click="next">
+      <div class="col-4 col-sm-4 col-md-2 col-lg-2" @click="next">
         <b-button
           :disabled="previousCount == noticiasLength"
           style="width: 100% !important"
@@ -297,7 +294,7 @@
         >
         <!-- <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select> -->
       </div>
-      <div class="col-4"></div>
+      <div class="col-2 col-sm-2 col-md-4 col-lg-4"></div>
     </div>
   </div>
 </template>
@@ -351,6 +348,7 @@ export default {
   created() {
     //this.getTareas()
     //this.getAlertas()
+    this.getLocation();
     this.getNoticias({
       rangedateChoosen: this.rangeDate,
       yesterdayDate: "",
@@ -368,6 +366,32 @@ export default {
       "translateText",
       "saveCreatedNews",
     ]),
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    },
+    showPosition(position) {
+      let user = firebase.auth().currentUser;
+      let Latitude = position.coords.latitude;
+      let Longitude = position.coords.longitude;
+      let geoLocation ={
+        Latitude,Longitude
+      }
+      db.collection("usuarios")
+        .doc(user.email)
+        .update({
+          geoLocation:geoLocation,
+        })
+        .then(() => {
+          console.log("Updated Lat and Long")
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    },
     ratingAverageCalculate(item, index, value) {
       if (item.ratingArray && item.ratingArray.length > 0) {
         let getrating = item.ratingArray.reduce(function (sum, current) {
@@ -420,7 +444,7 @@ export default {
             console.log("updated");
           });
       });
-      Vue.set(item, item.ratingArray, item.ratingArray)
+      Vue.set(item, item.ratingArray, item.ratingArray);
       this.ratingAverageCalculate(item, value);
     },
     rangeTimeSelectChnage() {
