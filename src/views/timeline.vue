@@ -11,7 +11,7 @@
               class="border"
               :src="profileImage"
               alt="avtar"
-              style="width: 60% !important; border-radius: 50%"
+              style="    width: 10em !important; height: 10em!important;border-radius: 50%"
             />
           </div>
         </div>

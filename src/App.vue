@@ -10,7 +10,7 @@
     >
       <b-navbar toggleable="lg" type="dark" variant="info">
         <router-link to="/"
-          ><img style="width: 40px; height: 40px" src="./assets/logoblanco.png"
+          ><img style="width: 50px; max-height: 41.89px" src="./assets/logoblanco.png"
         /></router-link>
         <b-navbar-brand class="pagina_actual" href="#">{{
           selectedRouter()
@@ -55,7 +55,7 @@
                   : $We_en
               }}</b-nav-item
             >
-            <b-nav-item :to="{ name: 'Nosotros' }">v 1.01b</b-nav-item>
+            <b-nav-item :to="{ name: 'Nosotros' }">v 1.02b</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
