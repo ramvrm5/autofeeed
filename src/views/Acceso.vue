@@ -59,7 +59,7 @@
                 placeholder="Ingrese contraseña"
                 v-model="pass"
             >-->
-          <b-button type="submit" variant="primary" :disabled="!desactivar"
+          <b-button type="submit" variant="primary" style="color:white" :disabled="!desactivar"
             >Acceder</b-button
           >
           <b-button
