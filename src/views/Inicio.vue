@@ -11,7 +11,8 @@
         <div class="col-8 col-sm-8 col-md-4 col-lg-4">
           <b-form-select
             id="input-3"
-            v-model="rangeDate"
+            :value="getCurrentFilter()"
+            :disabled="checkWhichSelected()"
             :options="
               selectedLan == 'es'
                 ? $rangeDateOptions_es
@@ -265,7 +266,7 @@
       <div class="col-2 col-sm-2 col-md-4 col-lg-4"></div>
       <div class="col-4 col-sm-4 col-md-2 col-lg-2" @click="previous">
         <b-button
-          :disabled="previousCount == 0"
+          :disabled="previousCount == 0 || paginationCount == 0"
           style="width: 100% !important"
           size="sm"
           variant="primary"
@@ -280,9 +281,9 @@
       </div>
       <div class="col-4 col-sm-4 col-md-2 col-lg-2" @click="next">
         <b-button
-          :disabled="previousCount == noticiasLength"
-          style="width: 100% !important"
-          size="sm"
+          :disabled="previousCount == noticiasLength || paginationCount == noticiasLength"
+          style="width: 100% !important" 
+          size="sm" 
           variant="primary"
           >{{
             selectedLan == "es"
@@ -332,7 +333,7 @@ export default {
       name: "Inicio",
       classA: null,
       previousCount: 0,
-      rangeDate: "today",
+      rangeDate: this.$store.state.changeRangeDate?this.$store.state.changeRangeDate:"today",
       rangeDateOptions: [
         { text: "Today", value: "today" },
         { text: "2 days ago", value: "2 days ago" },
@@ -354,6 +355,7 @@ export default {
       yesterdayDate: "",
       type: "next",
       limit: 10,
+      selectedTag:this.$store.state.selectedTag
     });
   },
   mounted: function () {
@@ -366,6 +368,12 @@ export default {
       "translateText",
       "saveCreatedNews",
     ]),
+    getCurrentFilter(){
+     return this.$store.state.changeRangeDate?this.$store.state.changeRangeDate:this.rangeDate;
+    },
+    checkWhichSelected(){
+     return this.$store.state.changeRangeDate?true:false;
+    },
     getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -454,6 +462,7 @@ export default {
         yesterdayDate: "",
         type: "next",
         limit: 10,
+      selectedTag:this.$store.state.selectedTag
       });
     },
     previous() {
@@ -465,6 +474,7 @@ export default {
         yesterdayDate: arrayItem.fecha,
         type: "previous",
         limit: 10,
+      selectedTag:this.$store.state.selectedTag
       });
     },
     next() {
@@ -476,6 +486,7 @@ export default {
         yesterdayDate: arrayItem.fecha,
         type: "next",
         limit: 10,
+      selectedTag:this.$store.state.selectedTag
       });
     },
     darlike(id) {
@@ -608,6 +619,9 @@ export default {
       "noticiasTemp",
       "noticiasLength",
       "selectedLan",
+      "changeRangeDate",
+      "selectedTag",
+      "paginationCount"
     ]),
     ...mapState(["usuario", "keywordactual"]),
   },

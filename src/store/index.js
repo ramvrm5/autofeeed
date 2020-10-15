@@ -11,6 +11,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    paginationCount: null,
     usuario: null,
     nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
@@ -18,11 +19,13 @@ export default new Vuex.Store({
     surname:null,
     apellidos: null,
     teléfono: null,
+    selectedTag:'Notselected',
     address: null,
     city: null,
     email: null,
     psCode: null,
     selectedLan: null,
+    changeRangeDate: null,
     alerta: null,
     alertaObject: [],
     tags: [],
@@ -47,6 +50,9 @@ export default new Vuex.Store({
     setTareas(state, payload) {
       state.tareas = payload
     },
+    setPaginationCount(state, payload) {
+      state.paginationCount = payload
+    },
     set_items2(state, payload) {
       state.items2 = payload
     },
@@ -61,6 +67,9 @@ export default new Vuex.Store({
     },
     setNoticiasTemp(state, payload) {
       state.noticiasTemp = payload
+    },
+    setChangeRangeDate(state, payload) {
+      state.changeRangeDate = payload
     },
     setTranslated(state, payload) {
       state.translated = payload
@@ -128,6 +137,9 @@ export default new Vuex.Store({
     setTag(state, payload) {
       state.tag = payload
     },
+    setSelectedTag(state, payload) {
+      state.selectedTag = payload
+    },
     setUsuario(state, payload) {
       state.usuario = payload
     },
@@ -150,6 +162,7 @@ export default new Vuex.Store({
           db.collection('usuarios').doc(res.user.email).set({
             nombre: 'Tu nombre',
             tags: tagsoriginal,
+            terms_condition: usuario.termsAndCondition,
             languages: idiomas_defecto
           }).then(doc => {
             alert("usuario creado")
@@ -411,13 +424,51 @@ export default new Vuex.Store({
 
 
     filtrarporKeyword({ commit }, keyword) {
+      commit('setPaginationCount',0 )
       if (keyword == "todos") {
+        let ChangeRangeDate = null;
         let noticias_compuestas = this.state.noticias_backupES
         commit('setNoticias', noticias_compuestas)
+        commit('setChangeRangeDate', ChangeRangeDate)
+        commit('setSelectedTag', 'Notselected')
       }
-      /*  else if (keyword == "Crear noticias") {
-         document.getElementById("modal-create-news").click()
-       } */
+      else if (keyword !== "todos") {
+        commit('setKeywordactual', keyword)
+        let lengthOfDocument = 0
+        let ChangeRangeDate = 'last week';
+        let noticias_compuestas = [];
+        let yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 7)).getTime() / 1000)
+        db.collection('noticias').where("tags", "array-contains", keyword).where("fecha", ">", yesterday).get().then(snapshot => {
+          lengthOfDocument = snapshot.size;
+        })
+        let querryRef = db.collection("noticias").where("tags", "array-contains", keyword).where("fecha", ">", yesterday).limit(10).get()
+        querryRef.then(res => {
+          res.forEach(doc => {
+            let noticia_leida = doc.data()
+            let titulo = noticia_leida.titulo;
+            let correos_like = noticia_leida.correos_like3;
+            let cuerpo = noticia_leida.cuerpo;
+            let texto_noticia = titulo + cuerpo;
+            let idioma = noticia_leida.idioma;
+            let url = noticia_leida.tags;
+            let img = noticia_leida.img;
+            let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+            noticias_compuestas.push(noticia_leida)
+          })
+          if (noticias_compuestas.length < 1) {
+            router.push('/') //volver a inicio
+            commit('setKeywordactual', keyword)
+            document.getElementById("botonmodal").click()
+          } else {
+            let c_filtradas = noticias_compuestas.reverse()
+            commit('setNoticias', c_filtradas)
+            commit('setChangeRangeDate', ChangeRangeDate)
+            commit('setNoticiasTemp', c_filtradas)
+            commit('setNoticiasLength', lengthOfDocument)
+            commit('setSelectedTag', 'selected')
+          }
+        })
+       }
       else {
         let noticias_compuestas = this.state.noticias_backup
 
@@ -433,6 +484,7 @@ export default new Vuex.Store({
 
 
           if (c.length < 1) {
+            debugger
             router.push('/') //volver a inicio
             commit('setKeywordactual', keyword)
             document.getElementById("botonmodal").click()
@@ -443,8 +495,6 @@ export default new Vuex.Store({
           else { commit('setNoticias', c) }
           console.log(noticias_compuestas)
         }
-
-
         if (keyword.split(' ').length == 2) {
           let keywords = keyword.split(' ');
           let b = keywords[0]
@@ -456,46 +506,17 @@ export default new Vuex.Store({
               c.push(valor);
             }
           });
-
-
-
-
-          /*
-          let c1 = noticias_compuestas.filter(({ tags }) => b.includes(tags[0]))
-             .sort(({ tags: r }, { tags: t }) => b.indexOf(r) - b.indexOf(t));
-  
-          let c2 = noticias_compuestas.filter(({ tags }) => b2.includes(tags[0]))
-             .sort(({ tags: r }, { tags: t }) => b2.indexOf(r) - b2.indexOf(t));
-             */
-
-          // let c = c1.push(...c2)
           commit('setNoticias', c)
 
           if (c.length < 1) {
             document.getElementById("botonmodal").click()
             router.push('/') //volver a inicio
             commit('setKeywordactual', keyword)
-            //document.getElementById("keywordsid").innerHTML = JSON.stringify(keyword)
 
           }
           else { commit('setNoticias', c) }
           router.push('/') //volver a inicio
-
         }
-
-
-
-        /*
-        Object.keys(noticias_compuestas).sort().forEach(function(key) {
-          ordered[key] = noticias_compuestas[key];
-        });*/
-
-
-
-
-
-        //sin ordenar commit('setNoticias', noticias_compuestas)
-
       }
 
     },
@@ -524,7 +545,9 @@ export default new Vuex.Store({
 
 
 
-    getNoticias({ commit },objectdata) {
+    getNoticias({ commit }, objectdata) {
+      
+      commit('setPaginationCount', null)
       const noticias_compuestas = []
       var noticias_alerta = []
       var noticias_alerta_2 = []
@@ -576,16 +599,25 @@ export default new Vuex.Store({
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
               let tags_filtrar = this.state.tags
               let firts10tags = tags.slice(0, 9);
-              db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
-                lengthOfDocument = snapshot.size;
-                
-              })
-             // debugger
-              var querryRef
-              if (objectdata.type == "next") {
-                querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(10).get()
-              } else {
-                querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(10).get()
+              let querryRef
+              if (objectdata.selectedTag == 'selected') {
+                db.collection('noticias').where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).get().then(snapshot => {
+                  lengthOfDocument = snapshot.size;
+                })
+                if (objectdata.type == "next") {
+                  querryRef = db.collection("noticias").where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", dateStartOEnd).limit(10).get()
+                } else {
+                  querryRef = db.collection("noticias").where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(10).get()
+                }
+              } else if(objectdata.selectedTag == 'Notselected'){
+                db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+                  lengthOfDocument = snapshot.size;
+                })
+                if (objectdata.type == "next") {
+                  querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(10).get()
+                } else {
+                  querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(10).get()
+                }
               }
 
               querryRef.then(res => {

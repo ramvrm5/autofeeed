@@ -40,6 +40,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Acceso.vue'),
   },
   {
+    path: '/terms-conditions',
+    name: 'Terms&Conditions',
+    component: () => import(/* webpackChunkName: "about" */ '../views/termsAndCondition.vue'),
+  },
+  {
     path: '/agregar',
     name: 'Agregar',
     component: () => import(/* webpackChunkName: "about" */ '../views/Agregar.vue')

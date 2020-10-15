@@ -105,7 +105,9 @@
               <!--v-on:change="changeItem"-->
               <!-- <b-dropdown-item value="0"  @click="filtrarporKeyword('Crear noticias')">Crear noticias </b-dropdown-item> -->
               <!-- <b-dropdown-item> <router-link to="/createNews" style="text-decoration: none;color: unset;">Crear noticias</router-link></b-dropdown-item> -->
-              <b-dropdown-item value="0" @click="filtrarporKeyword('todos')"
+              <b-dropdown-item
+                value="todos"
+                @click="filterOnTagsSellected('todos')"
                 >{{
                   selectedLan == "es"
                     ? $See_all_es
@@ -118,7 +120,8 @@
                 v-for="(item, index) in tags"
                 :key="index"
                 :value="item"
-                @click="filtrarporKeyword(item)"
+                :id="'item_' + index"
+                @click="filterOnTagsSellected(item, index, tags)"
               >
                 {{ item }}
               </b-dropdown-item>
@@ -257,6 +260,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { auth } from "../firebase";
 import firebase from "firebase/app";
+import $ from "jquery";
 library.add(faBell);
 export default {
   imgurl3: "",
@@ -285,7 +289,18 @@ export default {
       "mostrarAlarmas",
     ]),
     logout() {
-      this.cerrarSesion()
+      this.cerrarSesion();
+    },
+    filterOnTagsSellected(value, index, array) {
+      this.$store.state.tags.forEach(function (object, index, array) {
+        $("#item_" + index).css("background-color", "unset");
+      });
+      if (value !== "todos") {
+        $("#item_" + index).css("background-color", "#007bff99");
+        this.filtrarporKeyword(value);
+      } else {
+        this.filtrarporKeyword(value);
+      }
     },
     cambiarimagen(imagen) {
       document.getElementById("imgmenu").src = imagen;

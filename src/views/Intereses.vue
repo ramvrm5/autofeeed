@@ -1,44 +1,64 @@
 <template>
   <div class="container">
-    <br />
-    <h2>Mis intereses</h2>
-    <form
-      class="form-inline"
-      @submit.prevent="editarTags({ tags: tags, email: usuario.email })"
-    >
-      <div class="input-group mb-2 mr-sm-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Tags</div>
-        </div>
-
-        <div>
-          <vue-tags-input
-            id="tagsid"
-            v-model="tag"
-            :tags="tags"
-            :autocomplete-items="filteredItems"
-            :validation="validation"
-            :addOnKey="[9, 13, 188]"
-            @tags-changed="
-              (newTags) => {
-                settagslocal(newTags);
-                tags = newTags;
-              }
-            "
-          />
-        </div>
+    <!-- <br /> -->
+    <div class="row mt-3">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <h2>Mis intereses</h2>
       </div>
-      <button type="submit" class="btn btn-primary mb-2">Actualizar</button>
-    </form>
-    <br />
-
-    <h2>Sistema de alertas</h2>
-
-    <p>
-      Recuerda que si estás pendiente de alguna noticia en concreto podemos
-      hacerlo por ti, tan solo escribe el texto que quieras buscar en todas tus
-      noticias y nosotros nos encargamos de avisarte.
-    </p>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <form
+          class="form-inline"
+          @submit.prevent="editarTags({ tags: tags, email: usuario.email })"
+        >
+          <div class="row">
+            <div class="col-12 col-sm-7 col-md-4 col-lg-4">
+              <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Tags</div>
+                </div>
+                <div>
+                  <vue-tags-input
+                    id="tagsid"
+                    v-model="tag"
+                    :tags="tags"
+                    :autocomplete-items="filteredItems"
+                    :validation="validation"
+                    :addOnKey="[9, 13, 188]"
+                    @tags-changed="
+                      (newTags) => {
+                        settagslocal(newTags);
+                        tags = newTags;
+                      }
+                    "
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-4 col-md-2 col-lg-2">
+              <button type="submit" class="btn btn-primary mb-2">
+                Actualizar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h2>Sistema de alertas</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <p>
+          Recuerda que si estás pendiente de alguna noticia en concreto podemos
+          hacerlo por ti, tan solo escribe el texto que quieras buscar en todas
+          tus noticias y nosotros nos encargamos de avisarte.
+        </p>
+      </div>
+    </div>
 
     <form
       style="display: none"
@@ -63,54 +83,66 @@
     </form>
 
     <!-- COLUMNA NUEVA CON INTERESES Y ALARMAS -->
-    <div>
-      <b-table small :fields="fields" :items="items2" responsive="sm">
-        <!-- A custom formatted column -->
-        <template v-slot:cell(name)="data">
-          <b onchange='alert("Hola")' id="tagtabla">{{ data.value }}</b>
-          <!--<input v-model="data.value" size="5" type="text" class="table-control form-control" >-->
-        </template>
-        <template v-slot:cell(typeOfTag)="data">
-          <button :id="'button_'+data.index" class="btn btn-primary w-50" @click="onToggle(data.value,data.index)">
-            {{data.value?data.value : "Leisure"}}
-          </button>
-        </template>
-        <template v-slot:cell(typeOfTrend)="data">
-          <button :id="'button_Trend_'+data.index" class="btn btn-primary w-50" @click="onToggleTrend(data.value,data.index)">
-            {{data.value?data.value : "Neutral"}} 
-            <span v-if="data.value =='Up'"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
-            <span v-if="data.value =='Down'"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
-            <!-- <span v-if="data.value =='Neutral'"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            <span v-if="!data.value"><i class="fa fa-arrows-h" aria-hidden="true"></i></span> -->
-          </button>
-        </template>
-        <!-- descomentar A virtual composite column 
-      <template  v-slot:cell(nameage)="data" class="ancho">
-        {{ data.item.alarmas }} 
-      </template>-->
-
-        <!-- TEXTO DE ALARMA -->
-        <template v-slot:cell(alarma)="data">
-          <div style="width: 100%">
-            <input
-              v-model="data.value"
-              size="5"
-              type="text"
-              class="table-control form-control"
-              style="width: 49%; float: left; margin-right: 3%"
-            />
+    <div class="row">
+      <div class="col-12">
+        <b-table responsive :fields="fields" :items="items2">
+          <template v-slot:cell(name)="data">
+            <b onchange='alert("Hola")' id="tagtabla">{{ data.value }}</b>
+          </template>
+          <template v-slot:cell(typeOfTag)="data">
             <button
-              class="btn btn-primary mb-2"
-              style="width: 48%"
-              @click="
-                setAlertalocal2(data.value, data.item.name, data.item.typeOfTag,data.item.typeOfTrend,data.index)
-              "
+              :id="'button_' + data.index"
+              class="btn btn-primary"
+              @click="onToggle(data.value, data.index)"
             >
-              Actualizar
+              {{ data.value ? data.value : "Leisure" }}
             </button>
-          </div>
-        </template>
-      </b-table>
+          </template>
+          <template v-slot:cell(typeOfTrend)="data">
+            <button
+              :id="'button_Trend_' + data.index"
+              class="btn btn-primary"
+              @click="onToggleTrend(data.value, data.index)"
+            >
+              {{ data.value ? data.value : "Neutral" }}
+              <span v-if="data.value == 'Up'"
+                ><i class="fa fa-arrow-up" aria-hidden="true"></i
+              ></span>
+              <span v-if="data.value == 'Down'"
+                ><i class="fa fa-arrow-down" aria-hidden="true"></i
+              ></span>
+            </button>
+          </template>
+
+          <!-- TEXTO DE ALARMA -->
+          <template v-slot:cell(alarma)="data">
+            <div style="width: 310px">
+              <input
+                v-model="data.value"
+                size="5"
+                type="text"
+                class="table-control form-control"
+                style="width: 200px; float: left; margin-right: 3%"
+              />
+              <button
+                class="btn btn-primary mb-2"
+                style="width: 100px"
+                @click="
+                  setAlertalocal2(
+                    data.value,
+                    data.item.name,
+                    data.item.typeOfTag,
+                    data.item.typeOfTrend,
+                    data.index
+                  )
+                "
+              >
+                Actualizar
+              </button>
+            </div>
+          </template>
+        </b-table>
+      </div>
     </div>
     <!-- FIN DE COLUMNA NUEVA CON INTERESES Y ALARMAS -->
 
@@ -149,7 +181,6 @@ import { auth } from "../firebase";
 import firebase from "firebase/app";
 import "firebase/storage";
 import $ from "jquery";
-
 
 export default {
   components: {
@@ -288,41 +319,53 @@ export default {
           document.getElementById("alertaid").value
       );
     },
-    onToggle(value,index) {
-      let btnvalue = $('#button_'+index).text().trim()
+    onToggle(value, index) {
+      let btnvalue = $("#button_" + index)
+        .text()
+        .trim();
       if (btnvalue == "Leisure") {
         btnvalue = "Business";
         value = "Business";
-        $('#button_'+index).text("Business")
+        $("#button_" + index).text("Business");
       } else if (btnvalue == "Business") {
         btnvalue = "Leisure";
         value = "Leisure";
-        $('#button_'+index).text("Leisure")
+        $("#button_" + index).text("Leisure");
       }
     },
-    onToggleTrend(value,index) {
-      let btnvalue = $('#button_Trend_'+index).text().trim()
-      $( "#button_Trend_down_"+index+" i" ).detach();
+    onToggleTrend(value, index) {
+      let btnvalue = $("#button_Trend_" + index)
+        .text()
+        .trim();
+      $("#button_Trend_down_" + index + " i").detach();
       if (btnvalue == "Neutral") {
         btnvalue = "Up";
         value = "Up";
-         $('#button_Trend_'+index).text("Up")
-        $('#button_Trend_'+index).append(" <i class='fa fa-arrow-up' aria-hidden='true'></i>");
+        $("#button_Trend_" + index).text("Up");
+        $("#button_Trend_" + index).append(
+          " <i class='fa fa-arrow-up' aria-hidden='true'></i>"
+        );
       } else if (btnvalue == "Up") {
         btnvalue = "Down";
         value = "Down";
-        $('#button_Trend_'+index).text("Down")
-        $('#button_Trend_'+index).append(" <i class='fa fa-arrow-down' aria-hidden='true'></i>");
-      }else if(btnvalue == "Down"){
+        $("#button_Trend_" + index).text("Down");
+        $("#button_Trend_" + index).append(
+          " <i class='fa fa-arrow-down' aria-hidden='true'></i>"
+        );
+      } else if (btnvalue == "Down") {
         btnvalue = "Neutral";
         value = "Neutral";
-        $('#button_Trend_'+index).text("Neutral")
+        $("#button_Trend_" + index).text("Neutral");
         /* $('#button_Trend_'+index).append(" <i class='fa fa-arrows-h' aria-hidden='true'></i>"); */
       }
     },
-    setAlertalocal2(alarma, elemento, typeOfTag,typeOfTrend,index) {
-      typeOfTag = $('#button_'+index).text().trim();
-      typeOfTrend = $('#button_Trend_'+index).text().trim();
+    setAlertalocal2(alarma, elemento, typeOfTag, typeOfTrend, index) {
+      typeOfTag = $("#button_" + index)
+        .text()
+        .trim();
+      typeOfTrend = $("#button_Trend_" + index)
+        .text()
+        .trim();
       let repetido = 0;
       let nueva_alerta = "";
       if (this.alerta) {
@@ -334,7 +377,15 @@ export default {
 
           if (alertarecorrer3[1] == elemento) {
             repetido = 1;
-            nueva_alerta += "//" + alarma + ";" + elemento + ";" + typeOfTag+ ";" + typeOfTrend;
+            nueva_alerta +=
+              "//" +
+              alarma +
+              ";" +
+              elemento +
+              ";" +
+              typeOfTag +
+              ";" +
+              typeOfTrend;
           } else {
             if (element) {
               nueva_alerta += "//" + element;
@@ -344,9 +395,18 @@ export default {
       }
       if (repetido == 0 && this.alerta) {
         nueva_alerta =
-          this.alerta + "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
+          this.alerta +
+          "//" +
+          alarma +
+          ";" +
+          elemento +
+          ";" +
+          typeOfTag +
+          ";" +
+          typeOfTrend;
       } else if (repetido == 0 && !this.alerta) {
-        nueva_alerta = "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
+        nueva_alerta =
+          "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
       }
       let found = 0;
       if (this.alertaObject.length > 0) {
