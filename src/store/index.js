@@ -580,9 +580,6 @@ export default new Vuex.Store({
               taglist.forEach(function (entry) {
                 tags.push(entry)
               });
-
-
-
               commit('setTags_array', tags)
 
               var today = Math.round(new Date(new Date().setDate(new Date().getDate())).getTime() / 1000);
