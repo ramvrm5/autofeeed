@@ -253,6 +253,7 @@
       </h4>
     </center>
     <div
+      v-if="noticias.length > 0"
       class="row mt-2 pt-1 pb-1"
       style="
         border-top: 1px solid #d6d6d6;

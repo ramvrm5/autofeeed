@@ -117,13 +117,14 @@
           <!-- TEXTO DE ALARMA -->
           <template v-slot:cell(alarma)="data">
             <div style="width: 310px">
-              <input
+              <b-form-tags
                 v-model="data.value"
-                size="5"
+                placeholder=""
                 type="text"
-                class="table-control form-control"
+                remove-on-delete
+                add-on-enter
                 style="width: 200px; float: left; margin-right: 3%"
-              />
+              ></b-form-tags>
               <button
                 class="btn btn-primary mb-2"
                 style="width: 100px"
@@ -191,13 +192,9 @@ export default {
   data() {
     return {
       fields: [
-        // A column that needs custom formatting
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: "Type of tag" },
         { key: "typeOfTrend", label: "Trend" },
-        // A regular column
-        //descomentar { key: 'Publicaciones', label: 'Posts', class: 'ancho_publicaciones2' },
-        // A regular column
         { key: "alarma", label: "Texto alarma" },
       ],
       items: [
@@ -206,12 +203,8 @@ export default {
         { alarmas: 0, name: "Novacyt", alarma: "Tests", Publicaciones: 73 },
         { alarmas: 0, name: "Ikea", alarma: "Ofertas", Publicaciones: 62 },
       ],
-
       id: this.$route.params.id,
-      //nombre: this.state.nombre,
-      //apellidos: this.state.apellidos,
       tag: "",
-      //tags: [],
       autocompleteItems: [
         {
           text: "grafeno",
@@ -360,6 +353,7 @@ export default {
       }
     },
     setAlertalocal2(alarma, elemento, typeOfTag, typeOfTrend, index) {
+      debugger;
       typeOfTag = $("#button_" + index)
         .text()
         .trim();
@@ -379,7 +373,7 @@ export default {
             repetido = 1;
             nueva_alerta +=
               "//" +
-              alarma +
+              JSON.stringify(alarma) +
               ";" +
               elemento +
               ";" +
@@ -397,7 +391,7 @@ export default {
         nueva_alerta =
           this.alerta +
           "//" +
-          alarma +
+          JSON.stringify(alarma) +
           ";" +
           elemento +
           ";" +
@@ -406,7 +400,7 @@ export default {
           typeOfTrend;
       } else if (repetido == 0 && !this.alerta) {
         nueva_alerta =
-          "//" + alarma + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
+          "//" + JSON.stringify(alarma) + ";" + elemento + ";" + typeOfTag + ";" + typeOfTrend;
       }
       let found = 0;
       if (this.alertaObject.length > 0) {
