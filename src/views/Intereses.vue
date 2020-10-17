@@ -265,11 +265,11 @@ export default {
       "editarTarea2",
       "editarAlertas",
     ]),
-    cambiarimagen(imagen) {
+    /* cambiarimagen(imagen) {
       setTimeout(() => {
         document.getElementById("imguser").src = imagen;
       }, 500);
-    },
+    }, */
     subiravatar(file1) {
       //var file = $('#inputavatar').prop('files')[0];
       var photo = document.getElementById("inputavatar");
@@ -447,7 +447,7 @@ export default {
     ValidateSize(file) {},
   },
   mounted: function () {
-    this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
+   // this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
   },
   computed: {
     filteredItems() {

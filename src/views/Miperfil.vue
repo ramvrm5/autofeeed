@@ -409,11 +409,8 @@ export default {
       email_password: "",
       name_card_id: null,
       fields: [
-        // A column that needs custom formatting
         { key: "name", label: "Intereses" },
-        // A regular column
         { key: "Publicaciones", label: "Posts", class: "ancho_publicaciones2" },
-        // A regular column
         { key: "alarma", label: "Texto alarma" },
       ],
       items: [
@@ -422,7 +419,6 @@ export default {
         { alarmas: 0, name: "Novacyt", alarma: "Tests", Publicaciones: 73 },
         { alarmas: 0, name: "Ikea", alarma: "Ofertas", Publicaciones: 62 },
       ],
-      /* selectedLan: this.$store.state.selectedLan, */
       options: [
         { value: "en", text: "English" },
         { value: "es", text: "Spanish" },
@@ -430,10 +426,7 @@ export default {
       ],
 
       id: this.$route.params.id,
-      //nombre: this.state.nombre,
-      //apellidos: this.state.apellidos,
       tag: "",
-      //tags: [],
       autocompleteItems: [
         {
           text: "grafeno",
@@ -499,7 +492,7 @@ export default {
     cambiarimagen(imagen) {
       setTimeout(() => {
         document.getElementById("imguser").src = imagen;
-      }, 100);
+      }, 50);
     },
     subimtcardId(file1) {
       var photo = document.getElementById("subimtcardId");
@@ -607,8 +600,8 @@ export default {
   mounted: function () {
     this.email_password = this.usuario.email;
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
-    document.getElementById("emailid").value = this.usuario.email;
-    document.getElementById("emailid").placeholder = this.usuario.email;
+    //document.getElementById("emailid").value = this.usuario.email;
+    //document.getElementById("emailid").placeholder = this.usuario.email;
   },
   computed: {
     filteredItems() {

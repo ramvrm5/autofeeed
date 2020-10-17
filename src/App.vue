@@ -185,7 +185,7 @@
               <b-dropdown-item
                 ><div
                   style="color: #212529"
-                  @click="filtrarporKeyword('todos')"
+                  @click="filterOnAllNewsSelected('todos')"
                   v-if="existeUsuario"
                 >
                   {{
@@ -290,6 +290,12 @@ export default {
     ]),
     logout() {
       this.cerrarSesion();
+    },
+    filterOnAllNewsSelected(value){
+      this.$store.state.tags.forEach(function (object, index, array) {
+        $("#item_" + index).css("background-color", "unset");
+      });
+      this.filtrarporKeyword(value);
     },
     filterOnTagsSellected(value, index, array) {
       this.$store.state.tags.forEach(function (object, index, array) {
