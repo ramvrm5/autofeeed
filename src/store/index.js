@@ -269,6 +269,7 @@ export default new Vuex.Store({
                     let alarmas_lista3 = element.split(";");
 
                     if (alarmas_lista3[1] == entry) {
+                      //alarmaponer = alarmas_lista3[0]
                       alarmaponer = alarmas_lista3[0] && alarmas_lista3[0].length > 0?JSON.parse(alarmas_lista3[0]):alarmas_lista3[0]
                       typeOfTag = alarmas_lista3[2] ? alarmas_lista3[2] : "Leisure";
                       typeOfTrend = alarmas_lista3[3] ? alarmas_lista3[3] : "Neutral";

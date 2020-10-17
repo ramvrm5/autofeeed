@@ -13,7 +13,7 @@
           @submit.prevent="editarTags({ tags: tags, email: usuario.email })"
         >
           <div class="row">
-            <div class="col-12 col-sm-7 col-md-4 col-lg-4">
+            <div class="col-12 col-sm-7 col-md-8 col-lg-8">
               <div class="input-group mb-2 mr-sm-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">Tags</div>
@@ -353,7 +353,6 @@ export default {
       }
     },
     setAlertalocal2(alarma, elemento, typeOfTag, typeOfTrend, index) {
-      debugger;
       typeOfTag = $("#button_" + index)
         .text()
         .trim();
