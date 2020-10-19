@@ -1014,20 +1014,18 @@ export default new Vuex.Store({
 
     editarTarea2({ commit }, objeto_recibido) {
       db.collection('usuarios').doc(this.state.usuario.email).update({
-        nombre: objeto_recibido.nombre,
-        firstName: objeto_recibido.firstName,
-        surname: objeto_recibido.surname,
-        apellidos: objeto_recibido.apellidos,
-        address: objeto_recibido.address,
-        city: objeto_recibido.city,
-        teléfono: objeto_recibido.teléfono,
-        psCode: objeto_recibido.psCode,
-        email: objeto_recibido.email,
-        default_language: objeto_recibido.selectedLan,
+        nombre: objeto_recibido.nombre?objeto_recibido.nombre:"",
+        firstName: objeto_recibido.firstName?objeto_recibido.firstName:"",
+        surname: objeto_recibido.surname?objeto_recibido.surname:"",
+        apellidos: objeto_recibido.apellidos?objeto_recibido.apellidos:"",
+        address: objeto_recibido.address?objeto_recibido.address:"",
+        city: objeto_recibido.city?objeto_recibido.city:"",
+        teléfono: objeto_recibido.teléfono?objeto_recibido.teléfono:"",
+        psCode: objeto_recibido.psCode?objeto_recibido.psCode:"",
+        email: objeto_recibido.email?objeto_recibido.email:"",
+        default_language: objeto_recibido.selectedLan?objeto_recibido.selectedLan:"",
 
       }).then(() => {
-        // alert("Nombre y apellidos actualizados")
-        // router.push('/miperfil') //volver a la ruta raiz
         Swal.fire({
           position: 'top-end',
           icon: 'success',

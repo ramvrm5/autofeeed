@@ -401,11 +401,11 @@ import "firebase/storage";
 
 export default {
   components: {},
-  email: "",
   name: "Miperfil",
   imgurl3: "",
   data() {
     return {
+      /* email: "", */
       email_password: "",
       name_card_id: null,
       fields: [
@@ -468,7 +468,9 @@ export default {
     };
   },
   created() {
+    setTimeout(() => {
     this.email = this.usuario.email;
+    }, 1000);
     this.getDatos(this.usuario.email);
 
     let fecha2 = new Date();
@@ -500,7 +502,6 @@ export default {
       this.name_card_id = file.name;
       let user = firebase.auth().currentUser;
       var email3 = user.email;
-      debugger;
       var storageRef = firebase.storage().ref();
 
       var image = new FormData();
@@ -523,7 +524,7 @@ export default {
       var file = photo.files[0]; //aqui se puede ver el size
       console.log(photo);
       console.log(file);
-
+      debugger
       let user = firebase.auth().currentUser;
       var email3 = user.email;
       console.log(email3);
@@ -600,8 +601,6 @@ export default {
   mounted: function () {
     this.email_password = this.usuario.email;
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
-    //document.getElementById("emailid").value = this.usuario.email;
-    //document.getElementById("emailid").placeholder = this.usuario.email;
   },
   computed: {
     filteredItems() {

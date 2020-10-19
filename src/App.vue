@@ -10,7 +10,10 @@
     >
       <b-navbar toggleable="lg" type="dark" variant="info">
         <router-link to="/"
-          ><img style="width: 50px; max-height: 41.89px" src="./assets/logoblanco.png"
+          ><img 
+          style="width: 50px; max-height: 41.89px" 
+          src="./assets/logoblanco.png"
+          onerror="this.onerror=null;this.src='./assets/logoblanco.png';"
         /></router-link>
         <b-navbar-brand class="pagina_actual" href="#">{{
           selectedRouter()
@@ -370,8 +373,8 @@ export default {
           ".jpg?alt=media&time=" +
           fecha2.getTime();
 
+        //document.getElementById("imgmenu").src = imgurl2;
         this.imgurl3 = imgurl2;
-        document.getElementById("imgmenu").src = imgurl2;
         //this.cambiarimagen(this.imgurl3) //method1 will execute at pageload
       }
     }, 100);
