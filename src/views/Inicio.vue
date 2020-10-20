@@ -34,7 +34,8 @@
           :key="index"
           :id="index"
           :title="item.titulo"
-          :img-src="item.img"
+          :img-src="getImage(item.tags)"
+          ref="imageError"
           img-alt="Image"
           img-top
           tag="article"
@@ -100,18 +101,13 @@
               </router-link>
             </div>
             <div class="col-7 text-center">
-              <b-button
-                target="_blank"
-                :href="item.url"
-                variant="primary"
-                >{{
-                  selectedLan == "es"
-                    ? $see_more_es
-                    : selectedLan == "pt"
-                    ? $see_more_pt
-                    : $see_more_en
-                }}</b-button
-              >
+              <b-button target="_blank" :href="item.url" variant="primary">{{
+                selectedLan == "es"
+                  ? $see_more_es
+                  : selectedLan == "pt"
+                  ? $see_more_pt
+                  : $see_more_en
+              }}</b-button>
             </div>
           </div>
 
@@ -148,7 +144,9 @@
             </svg>
           </b-button> -->
           <div class="mt-2 row">
-            <div class="col-12 col-sm-12 col-md-10 col-lg-10 mx-auto text-center">
+            <div
+              class="col-12 col-sm-12 col-md-10 col-lg-10 mx-auto text-center"
+            >
               <v-rating
                 :value="ratingAverageCalculate(item, index, '')"
                 :half-increments="halfIncrements"
@@ -161,7 +159,9 @@
             </div>
           </div>
           <div class="row text-center">
-            <div class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto text-secondary mt-n4">
+            <div
+              class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto text-secondary mt-n4"
+            >
               ({{ item.ratingArray ? item.ratingArray.length : 0 }} Votes)
             </div>
           </div>
@@ -282,9 +282,11 @@
       </div>
       <div class="col-4 col-sm-4 col-md-2 col-lg-2" @click="next">
         <b-button
-          :disabled="previousCount == noticiasLength || paginationCount == noticiasLength"
-          style="width: 100% !important" 
-          size="sm" 
+          :disabled="
+            previousCount == noticiasLength || paginationCount == noticiasLength
+          "
+          style="width: 100% !important"
+          size="sm"
           variant="primary"
           >{{
             selectedLan == "es"
@@ -334,7 +336,9 @@ export default {
       name: "Inicio",
       classA: null,
       previousCount: 0,
-      rangeDate: this.$store.state.changeRangeDate?this.$store.state.changeRangeDate:"today",
+      rangeDate: this.$store.state.changeRangeDate
+        ? this.$store.state.changeRangeDate
+        : "today",
       rangeDateOptions: [
         { text: "Today", value: "today" },
         { text: "2 days ago", value: "2 days ago" },
@@ -356,11 +360,17 @@ export default {
       yesterdayDate: "",
       type: "next",
       limit: 10,
-      selectedTag:this.$store.state.selectedTag
+      selectedTag: this.$store.state.selectedTag,
     });
   },
   mounted: function () {
     (this.classA = "likepulsado"), (this.classB = "likepulsado");
+ /*    setTimeout(() => {
+    this.$el.querySelector("img").onerror = e => {
+      debugger
+      this.$emit('onerror', e);
+    };
+    }, 500); */
   },
   methods: {
     ...mapActions([
@@ -369,11 +379,13 @@ export default {
       "translateText",
       "saveCreatedNews",
     ]),
-    getCurrentFilter(){
-     return this.$store.state.changeRangeDate?this.$store.state.changeRangeDate:this.rangeDate;
+    getCurrentFilter() {
+      return this.$store.state.changeRangeDate
+        ? this.$store.state.changeRangeDate
+        : this.rangeDate;
     },
-    checkWhichSelected(){
-     return this.$store.state.changeRangeDate?true:false;
+    checkWhichSelected() {
+      return this.$store.state.changeRangeDate ? true : false;
     },
     getLocation() {
       if (navigator.geolocation) {
@@ -386,19 +398,20 @@ export default {
       let user = firebase.auth().currentUser;
       let Latitude = position.coords.latitude;
       let Longitude = position.coords.longitude;
-      let geoLocation ={
-        Latitude,Longitude
-      }
+      let geoLocation = {
+        Latitude,
+        Longitude,
+      };
       db.collection("usuarios")
         .doc(user.email)
         .update({
-          geoLocation:geoLocation,
+          geoLocation: geoLocation,
         })
         .then(() => {
-          console.log("Updated Lat and Long")
+          console.log("Updated Lat and Long");
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         });
     },
     ratingAverageCalculate(item, index, value) {
@@ -463,7 +476,7 @@ export default {
         yesterdayDate: "",
         type: "next",
         limit: 10,
-      selectedTag:this.$store.state.selectedTag
+        selectedTag: this.$store.state.selectedTag,
       });
     },
     previous() {
@@ -475,7 +488,7 @@ export default {
         yesterdayDate: arrayItem.fecha,
         type: "previous",
         limit: 10,
-      selectedTag:this.$store.state.selectedTag
+        selectedTag: this.$store.state.selectedTag,
       });
     },
     next() {
@@ -487,8 +500,38 @@ export default {
         yesterdayDate: arrayItem.fecha,
         type: "next",
         limit: 10,
-      selectedTag:this.$store.state.selectedTag
+        selectedTag: this.$store.state.selectedTag,
       });
+    },
+    getImage(tagsArray) {
+      if (tagsArray.length > 0) {
+        for (let i = 0; tagsArray.length > 0; i++) {
+          //debugger;
+          if (tagsArray[i].length > 0) {
+            return "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
+           /* let imagePath =  "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
+            $.ajax({
+                url:imagePath,
+                type:'HEAD', 
+                headers: {
+                    'Access-Control-Allow-Origin': 'http://localhost:8080'
+                },
+                error: function()
+                {
+                  return imagePath
+                },
+                success: function()
+                {
+                  return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
+                }
+            }); */
+          } else  if(tagsArray.length == i+1){
+            return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
+          }
+        }
+      } else{
+        return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
+      }
     },
     darlike(id) {
       let contador_veces = 0;
@@ -622,7 +665,7 @@ export default {
       "selectedLan",
       "changeRangeDate",
       "selectedTag",
-      "paginationCount"
+      "paginationCount",
     ]),
     ...mapState(["usuario", "keywordactual"]),
   },
