@@ -29,16 +29,13 @@
         columns
         style="padding-left: 1em; padding-right: 1em; padding-top: 1em"
       >
-        <b-card
-          v-for="(item, index) in noticias"
+
+      <b-card :key="item"  v-for="(item, index) in noticias" no-body>
+ <b-card-img-lazy :key="item" class="card-img-top"   img-alt="Image"  img-top :src="item.img"  @error.native="error" />
+        <b-card-body 
           :key="index"
           :id="index"
           :title="item.titulo"
-          :img-src="getImage(item.tags)"
-          ref="imageError"
-          img-alt="Image"
-          img-top
-          tag="article"
         >
           <b-button
             :id="'translate_' + index"
@@ -206,6 +203,7 @@
               >
             </div>
           </template>
+          </b-card-body>
         </b-card>
       </b-card-group>
     </div>
