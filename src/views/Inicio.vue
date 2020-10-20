@@ -29,86 +29,88 @@
         columns
         style="padding-left: 1em; padding-right: 1em; padding-top: 1em"
       >
-
-      <b-card :key="item"  v-for="(item, index) in noticias" no-body>
- <b-card-img-lazy :key="item" class="card-img-top"   img-alt="Image"  img-top :src="item.img"  @error.native="error" />
-        <b-card-body 
-          :key="index"
-          :id="index"
-          :title="item.titulo"
-        >
-          <b-button
-            :id="'translate_' + index"
-            style="
-              position: absolute;
-              z-index: 999;
-              top: 2px;
-              right: 1px;
-              background-color: rgba(255, 255, 255, 0);
-              border: none;
-              box-shadow: none;
-              background-color: #ffffff00;
-            "
-            @click="toggleTranslate(item, index)"
-            aria-disabled="true"
-            variant="primary"
-            :disabled="checkTranslateButton(item)"
-            ><!-- :class="translate_lan" -->
-            <i
-              style="color: #007bff; font-size: 35px"
-              class="fa fa-language"
-              aria-hidden="true"
-            ></i>
-          </b-button>
-          <b-card-text>{{ item.cuerpo }}</b-card-text>
-          <div class="row">
-            <div class="col-5">
-              <router-link
-                :to="{ name: 'Comment', params: { id: item.id } }"
-                style="text-decoration: none; color: unset; color: white"
-              >
-                <b-button
-                  :id="'comment-' + index"
-                  style="float: right; margin-right: 3%"
-                  target="_blank"
-                  variant="primary"
+        <b-card :key="index" v-for="(item, index) in noticias" no-body>
+          <b-card-img-lazy
+            :id="'cardImage_'+index"
+            class="card-img-top"
+            img-alt="Image"
+            img-top
+            :src="getImage(item.tags)"
+            @error.native="error(index)"
+          />
+          <b-card-body :key="index" :id="index" :title="item.titulo">
+            <b-button
+              :id="'translate_' + index"
+              style="
+                position: absolute;
+                z-index: 999;
+                top: 2px;
+                right: 1px;
+                background-color: rgba(255, 255, 255, 0);
+                border: none;
+                box-shadow: none;
+                background-color: #ffffff00;
+              "
+              @click="toggleTranslate(item, index)"
+              aria-disabled="true"
+              variant="primary"
+              :disabled="checkTranslateButton(item)"
+              ><!-- :class="translate_lan" -->
+              <i
+                style="color: #007bff; font-size: 35px"
+                class="fa fa-language"
+                aria-hidden="true"
+              ></i>
+            </b-button>
+            <b-card-text>{{ item.cuerpo }}</b-card-text>
+            <div class="row">
+              <div class="col-5">
+                <router-link
+                  :to="{ name: 'Comment', params: { id: item.id } }"
+                  style="text-decoration: none; color: unset; color: white"
                 >
-                  <span
-                    >{{ item.comentarios ? item.comentarios.length : 0 }}
-                  </span>
-                  <svg
-                    style="bottom: 2px; position: relative"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-chat-left-text"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <b-button
+                    :id="'comment-' + index"
+                    style="float: right; margin-right: 3%"
+                    target="_blank"
+                    variant="primary"
                   >
-                    <path
-                      fill-rule="evenodd"
-                      d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
-                    />
-                  </svg>
-                </b-button>
-              </router-link>
+                    <span
+                      >{{ item.comentarios ? item.comentarios.length : 0 }}
+                    </span>
+                    <svg
+                      style="bottom: 2px; position: relative"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 16 16"
+                      class="bi bi-chat-left-text"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+                      />
+                    </svg>
+                  </b-button>
+                </router-link>
+              </div>
+              <div class="col-7 text-center">
+                <b-button target="_blank" :href="item.url" variant="primary">{{
+                  selectedLan == "es"
+                    ? $see_more_es
+                    : selectedLan == "pt"
+                    ? $see_more_pt
+                    : $see_more_en
+                }}</b-button>
+              </div>
             </div>
-            <div class="col-7 text-center">
-              <b-button target="_blank" :href="item.url" variant="primary">{{
-                selectedLan == "es"
-                  ? $see_more_es
-                  : selectedLan == "pt"
-                  ? $see_more_pt
-                  : $see_more_en
-              }}</b-button>
-            </div>
-          </div>
 
-          <!--  <b-button
+            <!--  <b-button
             :class="[
               classA,
               !(
@@ -140,70 +142,70 @@
               />
             </svg>
           </b-button> -->
-          <div class="mt-2 row">
-            <div
-              class="col-12 col-sm-12 col-md-10 col-lg-10 mx-auto text-center"
-            >
-              <v-rating
-                :value="ratingAverageCalculate(item, index, '')"
-                :half-increments="halfIncrements"
-                dense
-                hover
-                @input="On5ratingClick(item, index, item.id, $event)"
-                length="5"
-                size="28"
-              ></v-rating>
-            </div>
-          </div>
-          <div class="row text-center">
-            <div
-              class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto text-secondary mt-n4"
-            >
-              ({{ item.ratingArray ? item.ratingArray.length : 0 }} Votes)
-            </div>
-          </div>
-          <template v-slot:footer>
-            <div v-if="item.fecha">
-              <small class="text-muted"
-                >{{
-                  selectedLan == "es"
-                    ? $Date_es
-                    : selectedLan == "pt"
-                    ? $Date_pt
-                    : $Date_en
-                }}: {{ item.fechaClasica.split("T")[0] }}</small
+            <div class="mt-2 row">
+              <div
+                class="col-12 col-sm-12 col-md-10 col-lg-10 mx-auto text-center"
               >
+                <v-rating
+                  :value="ratingAverageCalculate(item, index, '')"
+                  :half-increments="halfIncrements"
+                  dense
+                  hover
+                  @input="On5ratingClick(item, index, item.id, $event)"
+                  length="5"
+                  size="28"
+                ></v-rating>
+              </div>
             </div>
-            <div v-if="item.tags">
-              <small class="text-muted"
-                >{{
-                  selectedLan == "es"
-                    ? $Interests_es
-                    : selectedLan == "pt"
-                    ? $Interests_pt
-                    : $Interests_en
-                }}:
-                {{
-                  item.tags.join(", ").replace("que,", "").replace(" ,", "")
-                }}</small
+            <div class="row text-center">
+              <div
+                class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto text-secondary mt-n4"
               >
+                ({{ item.ratingArray ? item.ratingArray.length : 0 }} Votes)
+              </div>
             </div>
-            <div v-if="!item.tags">
-              <small class="text-muted">Intereses: indefinidos</small>
-            </div>
-            <div class="d-none" v-if="item.fuente">
-              <small class="text-muted"
-                >{{
-                  selectedLan == "es"
-                    ? $Source_es
-                    : selectedLan == "pt"
-                    ? $Source_pt
-                    : $Source_en
-                }}: {{ item.fuente }}</small
-              >
-            </div>
-          </template>
           </b-card-body>
+            <b-card-footer>
+              <div v-if="item.fecha">
+                <small class="text-muted"
+                  >{{
+                    selectedLan == "es"
+                      ? $Date_es
+                      : selectedLan == "pt"
+                      ? $Date_pt
+                      : $Date_en
+                  }}: {{ item.fechaClasica.split("T")[0] }}</small
+                >
+              </div>
+              <div v-if="item.tags">
+                <small class="text-muted"
+                  >{{
+                    selectedLan == "es"
+                      ? $Interests_es
+                      : selectedLan == "pt"
+                      ? $Interests_pt
+                      : $Interests_en
+                  }}:
+                  {{
+                    item.tags.join(", ").replace("que,", "").replace(" ,", "")
+                  }}</small
+                >
+              </div>
+              <div v-if="!item.tags">
+                <small class="text-muted">Intereses: indefinidos</small>
+              </div>
+              <div class="d-none" v-if="item.fuente">
+                <small class="text-muted"
+                  >{{
+                    selectedLan == "es"
+                      ? $Source_es
+                      : selectedLan == "pt"
+                      ? $Source_pt
+                      : $Source_en
+                  }}: {{ item.fuente }}</small
+                >
+              </div>
+            </b-card-footer>
         </b-card>
       </b-card-group>
     </div>
@@ -363,12 +365,6 @@ export default {
   },
   mounted: function () {
     (this.classA = "likepulsado"), (this.classB = "likepulsado");
- /*    setTimeout(() => {
-    this.$el.querySelector("img").onerror = e => {
-      debugger
-      this.$emit('onerror', e);
-    };
-    }, 500); */
   },
   methods: {
     ...mapActions([
@@ -377,6 +373,9 @@ export default {
       "translateText",
       "saveCreatedNews",
     ]),
+    error(index) {
+      $("#cardImage_"+index).attr("src","https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01");
+    },
     getCurrentFilter() {
       return this.$store.state.changeRangeDate
         ? this.$store.state.changeRangeDate
@@ -506,29 +505,15 @@ export default {
         for (let i = 0; tagsArray.length > 0; i++) {
           //debugger;
           if (tagsArray[i].length > 0) {
-            return "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
-           /* let imagePath =  "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
-            $.ajax({
-                url:imagePath,
-                type:'HEAD', 
-                headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:8080'
-                },
-                error: function()
-                {
-                  return imagePath
-                },
-                success: function()
-                {
-                  return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
-                }
-            }); */
-          } else  if(tagsArray.length == i+1){
-            return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
+            return (
+              "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
+            );
+          } else if (tagsArray.length == i + 1) {
+            return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
           }
         }
-      } else{
-        return 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';
+      } else {
+        return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
       }
     },
     darlike(id) {
