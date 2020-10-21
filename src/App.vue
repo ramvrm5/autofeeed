@@ -105,9 +105,6 @@
               variant="primary"
               class="claseintereses"
             >
-              <!--v-on:change="changeItem"-->
-              <!-- <b-dropdown-item value="0"  @click="filtrarporKeyword('Crear noticias')">Crear noticias </b-dropdown-item> -->
-              <!-- <b-dropdown-item> <router-link to="/createNews" style="text-decoration: none;color: unset;">Crear noticias</router-link></b-dropdown-item> -->
               <b-dropdown-item
                 value="todos"
                 @click="filterOnTagsSellected('todos')"
@@ -130,18 +127,6 @@
               </b-dropdown-item>
             </b-dropdown>
 
-            <!-- Buscador
-        <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" placeholder="Buscar..."></b-form-input>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Buscar</b-button>
-        </b-nav-form>-->
-
-            <!-- <b-nav-item-dropdown  v-if="existeUsuario" class="colorblanco" text="Idioma" right>
-          <b-dropdown-item  @click="cambiarIdioma('es')">Español</b-dropdown-item>
-          <b-dropdown-item @click="cambiarIdioma('en')" >Inglés</b-dropdown-item>
-          <b-dropdown-item @click="cambiarIdioma('zh')" >Chino</b-dropdown-item>
-        </b-nav-item-dropdown> -->
-
             <b-nav-item>
               <router-link
                 style="color: white"
@@ -156,7 +141,7 @@
                 <em style="color: white"
                   ><img
                     id="imgmenu"
-                    src="./assets/avatar-01.png"
+                    :src="imgurl3"
                     onerror="this.onerror=null;this.src='./assets/avatar-01.png';"
                 /></em>
               </template>
@@ -242,16 +227,6 @@
       </b-navbar>
     </div>
 
-    <!--panel de usuario logueado-->
-    <!-- <div id="nav">
-      <router-link to="/">Inicio</router-link> |
-       <router-link to="/inicio" v-if="existeUsuario">Usuario</router-link> |
-      <router-link to="/about">Nosotros</router-link> |
-      <router-link to="/registro"  v-if="!existeUsuario" >Registro</router-link> |
-       <router-link to="/login" v-if="!existeUsuario">Login</router-link> |
-       <button @click="cerrarSesion"  v-if="existeUsuario" >Cerrar sesión</button>
-    </div>-->
-
     <router-view />
   </div>
 </template>
@@ -266,9 +241,9 @@ import firebase from "firebase/app";
 import $ from "jquery";
 library.add(faBell);
 export default {
-  imgurl3: "",
   data() {
     return {
+      imgurl3: "",
       emailId: null,
     };
   },
@@ -362,6 +337,7 @@ export default {
     },
   },
   mounted: function () {
+    (this.imgurl3 = null),
     setTimeout(function () {
       let user = firebase.auth().currentUser;
       if (user) {
@@ -372,10 +348,9 @@ export default {
           encodeURIComponent(user.email) +
           ".jpg?alt=media&time=" +
           fecha2.getTime();
-
-        //document.getElementById("imgmenu").src = imgurl2;
-        this.imgurl3 = imgurl2;
-        //this.cambiarimagen(this.imgurl3) //method1 will execute at pageload
+        document.getElementById("imgmenu").src = imgurl2;
+        //this.imgurl3 = imgurl2;
+        //this.cambiarimagen(imgurl2) //method1 will execute at pageload
       }
     }, 100);
   },

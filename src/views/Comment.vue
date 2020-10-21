@@ -392,7 +392,6 @@ export default {
         return;
       }
       snapshot.forEach((doc) => {
-        //console.log(doc.id, '=>', doc.data());
         db.collection("noticias")
           .doc(doc.id)
           .update({

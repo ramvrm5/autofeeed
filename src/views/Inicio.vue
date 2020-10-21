@@ -31,11 +31,11 @@
       >
         <b-card :key="index" v-for="(item, index) in noticias" no-body>
           <b-card-img-lazy
-            :id="'cardImage_'+index"
+            :id="'cardImage_' + index"
             class="card-img-top"
             img-alt="Image"
             img-top
-            :src="getImage(item.tags)"
+            :src="getImage(item, item.tags)"
             @error.native="error(index)"
           />
           <b-card-body :key="index" :id="index" :title="item.titulo">
@@ -165,47 +165,47 @@
               </div>
             </div>
           </b-card-body>
-            <b-card-footer>
-              <div v-if="item.fecha">
-                <small class="text-muted"
-                  >{{
-                    selectedLan == "es"
-                      ? $Date_es
-                      : selectedLan == "pt"
-                      ? $Date_pt
-                      : $Date_en
-                  }}: {{ item.fechaClasica.split("T")[0] }}</small
-                >
-              </div>
-              <div v-if="item.tags">
-                <small class="text-muted"
-                  >{{
-                    selectedLan == "es"
-                      ? $Interests_es
-                      : selectedLan == "pt"
-                      ? $Interests_pt
-                      : $Interests_en
-                  }}:
-                  {{
-                    item.tags.join(", ").replace("que,", "").replace(" ,", "")
-                  }}</small
-                >
-              </div>
-              <div v-if="!item.tags">
-                <small class="text-muted">Intereses: indefinidos</small>
-              </div>
-              <div class="d-none" v-if="item.fuente">
-                <small class="text-muted"
-                  >{{
-                    selectedLan == "es"
-                      ? $Source_es
-                      : selectedLan == "pt"
-                      ? $Source_pt
-                      : $Source_en
-                  }}: {{ item.fuente }}</small
-                >
-              </div>
-            </b-card-footer>
+          <b-card-footer>
+            <div v-if="item.fecha">
+              <small class="text-muted"
+                >{{
+                  selectedLan == "es"
+                    ? $Date_es
+                    : selectedLan == "pt"
+                    ? $Date_pt
+                    : $Date_en
+                }}: {{ item.fechaClasica.split("T")[0] }}</small
+              >
+            </div>
+            <div v-if="item.tags">
+              <small class="text-muted"
+                >{{
+                  selectedLan == "es"
+                    ? $Interests_es
+                    : selectedLan == "pt"
+                    ? $Interests_pt
+                    : $Interests_en
+                }}:
+                {{
+                  item.tags.join(", ").replace("que,", "").replace(" ,", "")
+                }}</small
+              >
+            </div>
+            <div v-if="!item.tags">
+              <small class="text-muted">Intereses: indefinidos</small>
+            </div>
+            <div class="d-none" v-if="item.fuente">
+              <small class="text-muted"
+                >{{
+                  selectedLan == "es"
+                    ? $Source_es
+                    : selectedLan == "pt"
+                    ? $Source_pt
+                    : $Source_en
+                }}: {{ item.fuente }}</small
+              >
+            </div>
+          </b-card-footer>
         </b-card>
       </b-card-group>
     </div>
@@ -374,7 +374,10 @@ export default {
       "saveCreatedNews",
     ]),
     error(index) {
-      $("#cardImage_"+index).attr("src","https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01");
+      $("#cardImage_" + index).attr(
+        "src",
+        "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01"
+      );
     },
     getCurrentFilter() {
       return this.$store.state.changeRangeDate
@@ -500,20 +503,26 @@ export default {
         selectedTag: this.$store.state.selectedTag,
       });
     },
-    getImage(tagsArray) {
-      if (tagsArray.length > 0) {
-        for (let i = 0; tagsArray.length > 0; i++) {
-          //debugger;
-          if (tagsArray[i].length > 0) {
-            return (
-              "http://35.195.38.33/img_tag/default_img/" + tagsArray[i] + ".png"
-            );
-          } else if (tagsArray.length == i + 1) {
-            return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+    getImage(item, tagsArray) {
+      if (item.fuente == "Google" || item.fuente == "seekingalpha") {
+        if (tagsArray.length > 0) {
+          for (let i = 0; tagsArray.length > 0; i++) {
+            //debugger;
+            if (tagsArray[i].length > 0) {
+              return (
+                "http://35.195.38.33/img_tag/default_img/" +
+                tagsArray[i] +
+                ".png"
+              );
+            } else if (tagsArray.length == i + 1) {
+              return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+            }
           }
+        } else {
+          return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
         }
       } else {
-        return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+        return item.img;
       }
     },
     darlike(id) {
