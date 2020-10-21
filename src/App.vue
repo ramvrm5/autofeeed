@@ -352,7 +352,7 @@ export default {
         //this.imgurl3 = imgurl2;
         //this.cambiarimagen(imgurl2) //method1 will execute at pageload
       }
-    }, 100);
+    }, 400);
   },
   computed: {
     ...mapGetters(["existeUsuario"]),
