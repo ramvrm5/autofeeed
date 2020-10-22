@@ -243,7 +243,7 @@ library.add(faBell);
 export default {
   data() {
     return {
-      imgurl3: "",
+      imgurl3: 'img/avatar-01.6b36b5f2.png',
       emailId: null,
     };
   },
@@ -337,7 +337,7 @@ export default {
     },
   },
   mounted: function () {
-    (this.imgurl3 = null),
+    (this.imgurl3 = 'img/avatar-01.6b36b5f2.png'),
     setTimeout(function () {
       let user = firebase.auth().currentUser;
       if (user) {
