@@ -18,3 +18,7 @@ Importante usar esto desde cd autofeed (no hace falta entrar en src-cordova)
 contraseña cuenta
 
 https://stackoverflow.com/questions/26449512/how-to-create-a-signed-apk-file-using-cordova-command-line-interface
+
+./jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore cuenta.keystore app-debug.apk cuenta
+
+C:\Users\pc\Documents\build-tools\29.0.2\zipalign -v 4 app.apk appr.apk
