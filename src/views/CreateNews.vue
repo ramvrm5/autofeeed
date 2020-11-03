@@ -223,6 +223,36 @@
             }}</b-form-invalid-feedback>
           </b-form-group>
           <!-- Image End -->
+
+          <!-- URL Start -->
+          <b-form-group
+            label-cols-sm="3"
+            label-cols-lg="3"
+            id="typeOfPost-input"
+            label="Type of post *"
+            label-for="typeOfPost-input"
+          >
+          <b-form-select
+            id="typeOfPost-input"
+            v-model="form.typeOfPost"
+            name="typeOfPost-input"
+            v-validate="'required'"
+            :state="validateState('typeOfPost-input')"
+            aria-describedby="typeOfPost-input-live-feedback-2"
+            data-vv-as="Type Of Post"
+            :options="
+              selectedLan == 'es'
+                ? $typeOfPost_es
+                : selectedLan == 'pt'
+                ? $typeOfPost_pt
+                : $typeOfPost_en
+            "
+          ></b-form-select>
+            <b-form-invalid-feedback id="typeOfPost-input-live-feedback-2">{{
+              veeErrors.first("typeOfPost-input")
+            }}</b-form-invalid-feedback>
+          </b-form-group>
+          <!-- Image End -->
           <div class="text-center">
             <b-button type="submit" size="lg" variant="primary"
               >{{selectedLan == 'es'
@@ -261,6 +291,7 @@ export default {
         tags: [],
         img: null,
         url: null,
+        typeOfPost: "News",
       },
     };
   },
@@ -284,6 +315,7 @@ export default {
           tags: [],
           img: null,
           url: null,
+          typeOfPost: null,
         });
       this.$nextTick(() => {
         this.$validator.reset();
@@ -334,6 +366,7 @@ export default {
           tags: this.form.tags,
           img: this.form.img ? this.imageURL : null,
           url: this.form.url ? this.form.url : null,
+          typeOfPost: this.form.typeOfPost,
         });
         let temparray = this.submittedNews;
         let unique_id = db.collection("noticias").doc().id;
@@ -353,6 +386,7 @@ export default {
             tags: temparray[0].tags,
             img: temparray[0].img,
             url: temparray[0].url,
+            typeOfPost: temparray[0].typeOfPost,
           })
           .then((doc) => {
             this.resetModal();
@@ -432,4 +466,19 @@ Vue.prototype.$Submit_en = "Submit";
 Vue.prototype.$Back_es = "atrás";
 Vue.prototype.$Back_pt = "Costas";
 Vue.prototype.$Back_en = "Back";
+Vue.prototype.$typeOfPost_es = [
+  { text: "Opinión", value: "Opinion" },
+  { text: "Análisis", value: "Analysis" },
+  { text: "Noticias", value: "News" },
+];
+Vue.prototype.$typeOfPost_pt = [
+  { text: "Opinião", value: "Opinion" },
+  { text: "Análise", value: "Analysis" },
+  { text: "Notícia", value: "News" },
+];
+Vue.prototype.$typeOfPost_en = [
+  { text: "Opinion", value: "Opinion" },
+  { text: "Analysis", value: "Analysis" },
+  { text: "News", value: "News" },
+];
 </script>

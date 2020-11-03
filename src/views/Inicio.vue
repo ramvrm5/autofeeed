@@ -7,8 +7,15 @@
     <!--columns or deck-->
     <div>
       <div class="row mt-4">
-        <div class="col-4 col-sm-4 col-md-8 col-lg-8"></div>
-        <div class="col-8 col-sm-8 col-md-4 col-lg-4">
+        <div class="col-6 col-sm-6 col-md-4 col-lg-4 pl-3">
+          <cool-select  :value="selectedUserInfo()" placeholder="Seach for user" @search="searchUserText" :loading="loading" item-text="firstName" v-model="selectedUser" :items="searchUseritems">      
+            <template v-if="loading" #input-end>
+            <img src="https://i.imgur.com/mTNe6tr.gif" class="loading-indicator">
+            </template>
+          </cool-select>
+        </div>
+        <div class="d-none d-sm-none d-md-block d-lg-block col-md-4 col-lg-4"></div>
+        <div class="col-6 col-sm-6 col-md-4 col-lg-4 pr-3">
           <b-form-select
             id="input-3"
             :value="getCurrentFilter()"
@@ -320,15 +327,21 @@ import SPANISH_LANGUAGE from "../contants/language.js";
 import "firebase/storage";
 import Swal from "sweetalert2";
 import $ from "jquery";
+import { CoolSelect } from 'vue-cool-select'
 
 const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
 const { Translate } = require("@google-cloud/translate").v2;
 
 const translate = new Translate({ projectId });
 export default {
+  components: { CoolSelect },
   data() {
     return {
-      /* rating: 0, */
+      loading: false,
+      searchUseritems:[],
+      selectedUser: null,
+      searchUserValue:false,
+      searchUser: null,
       halfIncrements: true,
       page: 1,
       imageProfile: "../assets/avatar-01.png",
@@ -503,11 +516,40 @@ export default {
         selectedTag: this.$store.state.selectedTag,
       });
     },
+    selectedUserInfo(){
+      this.selectedUser
+      if(this.selectedUser){
+        this.$router.push('/timeline/'+this.selectedUser.email);
+      }
+    },
+    searchUserText(searchtext){
+      this.searchUseritems = []
+      var items = []
+      this.loading = searchtext.length > 0?true:false
+      const noticiasRef = db.collection("usuarios").orderBy("firstName").startAt(searchtext).get();
+        noticiasRef.then(function (querySnapshot) {
+          querySnapshot.forEach((doc) => {
+            var dataTemp = doc.data();
+            items.push(dataTemp)
+          });
+          this.loading = false
+          this.searchUseritems = searchtext.length > 0?items:[];
+        }.bind(this));
+    },
     getImage(item, tagsArray) {
-      if (item.fuente == "Google" || item.fuente == "seekingalpha") {
+      if (item.fuente === "Google" || item.fuente === "seekingalpha") {
         if (tagsArray.length > 0) {
-          for (let i = 0; tagsArray.length > 0; i++) {
-            //debugger;
+         let tagIndex = tagsArray.findIndex(element => element.length > 0)
+          if (tagIndex >= 0) {
+              return (
+                "http://35.195.38.33/img_tag/default_img/" +
+                tagsArray[tagIndex] +
+                ".png"
+              );
+            } else {
+              return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+            }
+/*           for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
                 "http://35.195.38.33/img_tag/default_img/" +
@@ -517,7 +559,7 @@ export default {
             } else if (tagsArray.length == i + 1) {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-          }
+          } */
         } else {
           return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
         }
@@ -699,4 +741,14 @@ Vue.prototype.$Interests_en = "Interests";
 Vue.prototype.$Rating_es = "Clasificación";
 Vue.prototype.$Rating_pt = "Avaliação";
 Vue.prototype.$Rating_en = "Rating";
+Vue.prototype.$searchUser_es = "usuario de búsqueda";
+Vue.prototype.$searchUser_pt = "pesquisar usuário";
+Vue.prototype.$searchUser_en = "Search user";
 </script>
+<style>
+.loading-indicator {
+  width: 22px;
+  margin-right: 9px;
+  margin-bottom: 6px;
+}
+</style>

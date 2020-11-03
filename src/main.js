@@ -13,6 +13,12 @@ import { BootstrapVue, IconsPlugin,VBTooltip  } from 'bootstrap-vue'
 import VueAnalytics from 'vue-analytics';
 import App from './App.vue'
 
+import { CoolSelectPlugin } from 'vue-cool-select'
+import 'vue-cool-select/dist/themes/bootstrap.css'
+import 'vue-cool-select/dist/themes/material-design.css'
+ 
+Vue.use(CoolSelectPlugin)
+
 Vue.use(VeeValidate, {
   inject: true,
   fieldsBagName: "veeFields",
