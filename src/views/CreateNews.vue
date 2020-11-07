@@ -7,6 +7,8 @@
               ? $Back_es
               : selectedLan == 'pt'
               ? $Back_pt
+              : selectedLan == 'ar'
+              ? $Back_ar
               : $Back_en}}</router-link>
         </div>
       <b-col cols="8 mx-auto h-75">
@@ -21,6 +23,8 @@
               ? $Title_es + '* :'
               : selectedLan == 'pt'
               ? $Title_pt + '* :'
+              : selectedLan == 'ar'
+              ? $Title_ar + '* :'
               : $Title_en+ ' * :'"
             label-for="title-input"
           >
@@ -37,6 +41,8 @@
               ? $Enter_title_es
               : selectedLan == 'pt'
               ? $Enter_title_pt
+              : selectedLan == 'ar'
+              ? $Enter_title_ar
               : $Enter_title_en"
             ></b-form-input>
             <b-form-invalid-feedback id="title-input-live-feedback-1">{{
@@ -55,6 +61,8 @@
               ? $description_es +' * :'
               : selectedLan == 'pt'
               ? $description_pt +' * :'
+              : selectedLan == 'ar'
+              ? $description_ar +' * :'
               : $description_en +' * :'"
             label-for="description-input"
           >
@@ -71,6 +79,8 @@
               ? $Enter_description_es
               : selectedLan == 'pt'
               ? $Enter_description_pt
+              : selectedLan == 'ar'
+              ? $Enter_description_ar
               : $Enter_description_en"
             ></b-form-textarea>
             <b-form-invalid-feedback id="description-input-live-feedback-2">{{
@@ -89,6 +99,8 @@
               ? $Language_es +' * :'
               : selectedLan == 'pt'
               ? $Language_pt +' * :'
+              : selectedLan == 'ar'
+              ? $Language_ar +' * :'
               : $Language_en +' * :'"
             label-for="Language-input"
           >
@@ -111,6 +123,8 @@
               ? $Tags_es +' * :'
               : selectedLan == 'pt'
               ? $Tags_pt +' * :'
+              : selectedLan == 'ar'
+              ? $Tags_ar +' * :'
               : $Tags_en +' * :'"
             label-for="Tags-input"
           >
@@ -129,6 +143,8 @@
               ? $Add_tag_es
               : selectedLan == 'pt'
               ? $Add_tag_pt
+              : selectedLan == 'ar'
+              ? $Add_tag_ar
               : $Add_tag_en"
             ></b-form-tags>
             <b-form-text id="tags-remove-on-delete-help" class="mt-2">
@@ -136,24 +152,34 @@
               ? $Tags1_es
               : selectedLan == 'pt'
               ? $Tags1_pt
+              : selectedLan == 'ar'
+              ? $Tags1_a
               : $Tags1_en}}
               <kbd>{{selectedLan == 'es'
               ? $Tags2_es
               : selectedLan == 'pt'
               ? $Tags2_pt
+              : selectedLan == 'ar'
+              ? $Tags2_ar
               : $Tags2_en}}</kbd> {{selectedLan == 'es'
               ? $Tags3_es
               : selectedLan == 'pt'
               ? $Tags3_pt
+              : selectedLan == 'ar'
+              ? $Tags3_ar
               : $Tags3_en}}
               <kbd>{{selectedLan == 'es'
               ? $Tags4_es
               : selectedLan == 'pt'
               ? $Tags4_pt
+              : selectedLan == 'ar'
+              ? $Tags4_ar
               : $Tags4_en}}</kbd> {{selectedLan == 'es'
               ? $Tags5_es
               : selectedLan == 'pt'
               ? $Tags5_pt
+              : selectedLan == 'ar'
+              ? $Tags5_ar
               : $Tags5_en}}
             </b-form-text>
             <b-form-invalid-feedback id="Tags-input-live-feedback-2">{{
@@ -171,6 +197,8 @@
               ? $Image_es
               : selectedLan == 'pt'
               ? $Image_pt
+              : selectedLan == 'ar'
+              ? $Image_ar
               : $Image_en"
             label-for="img-input"
           >
@@ -187,6 +215,8 @@
               ? $Choose_a_file_or_drop_es
               : selectedLan == 'pt'
               ? $Choose_a_file_or_drop_pt
+              : selectedLan == 'ar'
+              ? $Choose_a_file_or_drop_ar
               : $Choose_a_file_or_drop_en"
               drop-placeholder="Suelta el archivo aquí"
             ></b-form-file>
@@ -216,6 +246,8 @@
               ? $Add_news_URL_es
               : selectedLan == 'pt'
               ? $Add_news_URL_pt
+              : selectedLan == 'ar'
+              ? $Add_news_URL_ar
               : $Add_news_URL_en"
             ></b-form-input>
             <b-form-invalid-feedback id="url-input-live-feedback-2">{{
@@ -245,6 +277,8 @@
                 ? $typeOfPost_es
                 : selectedLan == 'pt'
                 ? $typeOfPost_pt
+                : selectedLan == 'ar'
+                ? $typeOfPost_ar
                 : $typeOfPost_en
             "
           ></b-form-select>
@@ -259,6 +293,8 @@
               ? $Submit_es
               : selectedLan == 'pt'
               ? $Submit_pt
+              : selectedLan == 'ar'
+              ? $Submit_ar
               : $Submit_en}}</b-button
             >
           </div>
@@ -417,55 +453,72 @@ export default {
 Vue.prototype.$Title_es = "Titulo";
 Vue.prototype.$Title_pt = "Título";
 Vue.prototype.$Title_en = "Title";
+Vue.prototype.$Title_ar = "عنوان";
 Vue.prototype.$Enter_title_es = "Entrar titulo";
 Vue.prototype.$Enter_title_pt = "Digite o título";
 Vue.prototype.$Enter_title_en = "Enter title";
+Vue.prototype.$Enter_title_ar = "أدخل العنوان";
 Vue.prototype.$description_es = "descripción";
 Vue.prototype.$description_pt = "descrição";
 Vue.prototype.$description_en = "description";
+Vue.prototype.$description_ar = "وصف";
 Vue.prototype.$Enter_description_es = "Entrar descripción";
 Vue.prototype.$Enter_description_pt = "Insira a descrição";
 Vue.prototype.$Enter_description_en = "Enter description";
+Vue.prototype.$Enter_description_ar = "أدخل الوصف";
 Vue.prototype.$Language_es = "Idioma";
 Vue.prototype.$Language_pt = "Língua";
 Vue.prototype.$Language_en = "Language";
+Vue.prototype.$Language_ar = "لغة";
 Vue.prototype.$Tags_es = "Etiquetas";
 Vue.prototype.$Tags_pt = "Tag";
 Vue.prototype.$Tags_en = "Tags";
+Vue.prototype.$Tags_ar = "العلامات";
 Vue.prototype.$Add_tag_es = "Añadir etiqueta";
 Vue.prototype.$Add_tag_pt = "Adicionar etiqueta";
 Vue.prototype.$Add_tag_en = "Add tag";
+Vue.prototype.$Add_tag_ar = "إضافة علامة";
 Vue.prototype.$Tags1_es = "Prensa";
 Vue.prototype.$Tags1_pt = "pressione";
 Vue.prototype.$Tags1_en = "Press";
+Vue.prototype.$Tags1_ar = "صحافة";
 Vue.prototype.$Tags2_es = "Icono de retroceso / Cruz";
 Vue.prototype.$Tags2_pt = "Retrocesso / ícone de cruz";
 Vue.prototype.$Tags2_en = "Backspace / Cross Icon";
+Vue.prototype.$Tags2_ar = "مسافة للخلف / عبر أيقونة";
 Vue.prototype.$Tags3_es = "para borrar la última etiqueta ingresada / Presione";
 Vue.prototype.$Tags3_pt = "para excluir a última tag inserida / Pressione";
 Vue.prototype.$Tags3_en = "to delete the last tag entered / Press";
+Vue.prototype.$Tags3_ar = "لحذف آخر علامة تم إدخالها / صحافة";
 Vue.prototype.$Tags4_es = "Botón Entrar / Agregar";
 Vue.prototype.$Tags4_pt = "Botão Entrar / Adicionar";
 Vue.prototype.$Tags4_en = "Enter / Add button";
+Vue.prototype.$Tags4_ar = "أدخل / زر الإضافة";
 Vue.prototype.$Tags5_es = "para agregar la etiqueta ingresada";
 Vue.prototype.$Tags5_pt = "para adicionar a tag inserida";
 Vue.prototype.$Tags5_en = "to add the entered tag";
+Vue.prototype.$Tags5_ar = "لإضافة العلامة المدخلة";
 Vue.prototype.$Image_es = "Imagen";
 Vue.prototype.$Image_pt = "Imagem";
 Vue.prototype.$Image_en = "Image";
+Vue.prototype.$Image_ar = "صورة";
 Vue.prototype.$Choose_a_file_or_drop_es = "Elija un archivo o suéltelo aquí";
 Vue.prototype.$Choose_a_file_or_drop_pt = "Escolha um arquivo ou solte-o aqui";
 Vue.prototype.$Choose_a_file_or_drop_en = "Choose a file or drop it here";
+Vue.prototype.$Choose_a_file_or_drop_ar = "اختر ملفًا أو أسقطه هنا";
 Vue.prototype.$URL = "URL";
 Vue.prototype.$Add_news_URL_es = "Agregar URL de noticias";
 Vue.prototype.$Add_news_URL_pt = "Adicionar URL de notícias";
 Vue.prototype.$Add_news_URL_en = "Add news URL";
+Vue.prototype.$Add_news_URL_ar = "إضافة عنوان URL للأخبار";
 Vue.prototype.$Submit_es = "Enviar";
 Vue.prototype.$Submit_pt = "Enviar";
 Vue.prototype.$Submit_en = "Submit";
+Vue.prototype.$Submit_ar = "إرسال";
 Vue.prototype.$Back_es = "atrás";
 Vue.prototype.$Back_pt = "Costas";
 Vue.prototype.$Back_en = "Back";
+Vue.prototype.$Back_ar = "عودة";
 Vue.prototype.$typeOfPost_es = [
   { text: "Opinión", value: "Opinion" },
   { text: "Análisis", value: "Analysis" },
@@ -480,5 +533,10 @@ Vue.prototype.$typeOfPost_en = [
   { text: "Opinion", value: "Opinion" },
   { text: "Analysis", value: "Analysis" },
   { text: "News", value: "News" },
+];
+Vue.prototype.$typeOfPost_ar = [
+  { text: "رأي", value: "Opinion" },
+  { text: "تحليل", value: "Analysis" },
+  { text: "أخبار", value: "News" },
 ];
 </script>

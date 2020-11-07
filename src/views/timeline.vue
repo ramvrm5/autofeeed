@@ -32,23 +32,47 @@
           <div class="col-6" v-if="!isCurrentUser">
             <i class="fa fa-users text-primary" aria-hidden="true"></i
             ><b class="text-secondary">
-              {{ followingUsersArray.length }} Following</b
+              {{ followingUsersArray.length }} {{selectedLan == 'es'
+              ? $Following_es
+              : selectedLan == 'pt'
+              ? $Following_pt
+              : selectedLan == 'ar'
+              ? $Following_ar
+              : $Following_en}}</b
             >
           </div>
           <div class="col-6" v-if="isCurrentUser">
             <i class="fa fa-users text-primary" aria-hidden="true"></i
             ><b class="text-secondary">
-              {{ followingOnUsersPageArray.length }} Following</b
+              {{ followingOnUsersPageArray.length }} {{selectedLan == 'es'
+              ? $Following_es
+              : selectedLan == 'pt'
+              ? $Following_pt
+              : selectedLan == 'ar'
+              ? $Following_ar
+              : $Following_en}}</b
             >
           </div>
           <div class="col-6">
             <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i
-            ><b class="text-secondary"> {{ totalCreatedPost }} Posts</b>
+            ><b class="text-secondary"> {{ totalCreatedPost }} {{selectedLan == 'es'
+              ? $Posts_es
+              : selectedLan == 'pt'
+              ? $Posts_pt
+              : selectedLan == 'ar'
+              ? $Posts_ar
+              : $Posts_en}}</b>
           </div>
         </div>
         <div class="row">
           <div class="col-4">
-            <label class="text-secondary"><b>Name</b></label>
+            <label class="text-secondary"><b>{{selectedLan == 'es'
+              ? $Name_es
+              : selectedLan == 'pt'
+              ? $Name_pt
+              : selectedLan == 'ar'
+              ? $Name_ar
+              : $Name_en}}</b></label>
           </div>
           <div class="col-8">
             <h5 class="text-capitalize">{{ name }}</h5>
@@ -56,7 +80,13 @@
         </div>
         <div class="row">
           <div class="col-4">
-            <label class="text-secondary"><b>Country</b></label>
+            <label class="text-secondary"><b>{{selectedLan == 'es'
+              ? $Country_es
+              : selectedLan == 'pt'
+              ? $Country_pt
+              : selectedLan == 'ar'
+              ? $Country_ar
+              : $Country_en}}</b></label>
           </div>
           <div class="col-8">
             <h5 class="text-capitalize">{{ country }}</h5>
@@ -64,7 +94,13 @@
         </div>
         <div class="row">
           <div class="col-4">
-            <label class="text-secondary"><b>Language</b></label>
+            <label class="text-secondary"><b>{{selectedLan == 'es'
+              ? $Language_es
+              : selectedLan == 'pt'
+              ? $Language_pt
+              : selectedLan == 'ar'
+              ? $Language_ar
+              : $Language_en}}</b></label>
           </div>
           <div class="col-8">
             <h5 class="text-capitalize">{{ language }}</h5>
@@ -116,6 +152,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
@@ -422,7 +459,30 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState(["selectedLan"]),
+  },
 };
+Vue.prototype.$Following_es = "Siguiendo";
+Vue.prototype.$Following_pt = "Segue";
+Vue.prototype.$Following_en = "Following";
+Vue.prototype.$Following_ar = "التالية";
+Vue.prototype.$Posts_es = "Publicaciones";
+Vue.prototype.$Posts_pt = "Postagens";
+Vue.prototype.$Posts_en = "Posts";
+Vue.prototype.$Posts_ar = "المشاركات";
+Vue.prototype.$Name_es = "Nombre";
+Vue.prototype.$Name_pt = "Nome";
+Vue.prototype.$Name_en = "Name";
+Vue.prototype.$Name_ar = "اسم";
+Vue.prototype.$Country_es = "País";
+Vue.prototype.$Country_pt = "País";
+Vue.prototype.$Country_en = "Country";
+Vue.prototype.$Country_ar = "بلد";
+Vue.prototype.$Language_es = "Idioma";
+Vue.prototype.$Language_pt = "Língua";
+Vue.prototype.$Language_en = "Language";
+Vue.prototype.$Language_ar = "لغة";
 </script>
 <style>
 a {

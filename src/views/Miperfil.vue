@@ -44,6 +44,8 @@
                   ? $My_account_es
                   : selectedLan == "pt"
                   ? $My_account_pt
+                  : selectedLan == "ar"
+                  ? $My_account_ar
                   : $My_account_en
               }}
             </h4>
@@ -55,6 +57,8 @@
                     ? $USER_DATA_es
                     : selectedLan == "pt"
                     ? $USER_DATA_pt
+                    : selectedLan == "ar"
+                    ? $USER_DATA_ar
                     : $USER_DATA_en
                 }}
               </h6>
@@ -69,6 +73,8 @@
                           ? $Name_es
                           : selectedLan == "pt"
                           ? $Name_pt
+                          : selectedLan == "ar"
+                          ? $Name_ar
                           : $Name_en
                       }}
                     </div>
@@ -91,6 +97,8 @@
                           ? $Surname_es
                           : selectedLan == "pt"
                           ? $Surname_pt
+                          : selectedLan == "ar"
+                          ? $Surname_ar
                           : $Surname_en
                       }}
                     </div>
@@ -113,6 +121,8 @@
                           ? $Nick_es
                           : selectedLan == "pt"
                           ? $Nick_pt
+                          : selectedLan == "ar"
+                          ? $Nick_ar
                           : $Nick_en
                       }}
                     </div>
@@ -135,6 +145,8 @@
                           ? $Email_es
                           : selectedLan == "pt"
                           ? $Email_pt
+                          : selectedLan == "ar"
+                          ? $Email_ar
                           : $Email_en
                       }}
                     </div>
@@ -158,6 +170,8 @@
                           ? $Language_es
                           : selectedLan == "pt"
                           ? $Language_pt
+                          : selectedLan == "ar"
+                          ? $Language_ar
                           : $Language_en
                       }}
                     </div>
@@ -182,6 +196,8 @@
                           ? $Phone_es
                           : selectedLan == "pt"
                           ? $Phone_pt
+                          : selectedLan == "ar"
+                          ? $Phone_ar
                           : $Phone_en
                       }}
                     </div>
@@ -208,6 +224,8 @@
                           ? $Proof_of_residence_es
                           : selectedLan == "pt"
                           ? $Proof_of_residence_pt
+                          : selectedLan == "ar"
+                          ? $Proof_of_residence_ar
                           : $Proof_of_residence_en
                       }}
                     </div>
@@ -232,6 +250,8 @@
                     ? $CONTACT_INFORMATION_es
                     : selectedLan == "pt"
                     ? $CONTACT_INFORMATION_pt
+                    : selectedLan == "ar"
+                    ? $CONTACT_INFORMATION_ar
                     : $CONTACT_INFORMATION_en
                 }}
               </h6>
@@ -245,6 +265,8 @@
                         selectedLan == "es"
                           ? $Direction_es
                           : selectedLan == "pt"
+                          ? $Direction_ar
+                          : selectedLan == "ar"
                           ? $Direction_pt
                           : $Direction_en
                       }}
@@ -269,6 +291,8 @@
                           ? $City_es
                           : selectedLan == "pt"
                           ? $City_pt
+                          : selectedLan == "ar"
+                          ? $City_ar
                           : $City_en
                       }}
                     </div>
@@ -292,6 +316,8 @@
                           ? $country_es
                           : selectedLan == "pt"
                           ? $country_pt
+                          : selectedLan == "ar"
+                          ? $country_ar
                           : $country_en
                       }}
                     </div>
@@ -315,6 +341,8 @@
                           ? $Postal_Code_es
                           : selectedLan == "pt"
                           ? $Postal_Code_pt
+                          : selectedLan == "ar"
+                          ? $Postal_Code_ar
                           : $Postal_Code_en
                       }}
                       </div>
@@ -350,6 +378,8 @@
                           ? $password_es
                           : selectedLan == "pt"
                           ? $password_pt
+                          : selectedLan == "ar"
+                          ? $password_ar
                           : $password_en
                       }}
                   </button>
@@ -364,6 +394,8 @@
                           ? $Update_data_es
                           : selectedLan == "pt"
                           ? $Update_data_pt
+                          : selectedLan == "ar"
+                          ? $Update_data_ar
                           : $Update_data_en
                       }}
                   </button>
@@ -423,6 +455,7 @@ export default {
         { value: "en", text: "English" },
         { value: "es", text: "Spanish" },
         { value: "pt", text: "Portuguese" },
+        { value: "ar", text: "Arabic" },
       ],
 
       id: this.$route.params.id,
@@ -718,49 +751,65 @@ export default {
 Vue.prototype.$My_account_es = "Mi cuenta";
 Vue.prototype.$My_account_pt = "Minha conta";
 Vue.prototype.$My_account_en = "My account";
+Vue.prototype.$My_account_ar = "حسابي";
 Vue.prototype.$USER_DATA_es = "DATOS DE USUARIO";
 Vue.prototype.$USER_DATA_pt = "DADOS DO USUÁRIO";
 Vue.prototype.$USER_DATA_en = "USER DATA";
+Vue.prototype.$USER_DATA_ar = "بيانات المستخدم";
 Vue.prototype.$Name_es = "Nombre";
 Vue.prototype.$Name_pt = "Nome";
 Vue.prototype.$Name_en = "Name";
+Vue.prototype.$Name_ar = "اسم";
 Vue.prototype.$Surname_es = "Apellido";
 Vue.prototype.$Surname_pt = "Sobrenome";
 Vue.prototype.$Surname_en = "Surname";
+Vue.prototype.$Surname_ar = "لقب";
 Vue.prototype.$Nick_es = "Mella";
 Vue.prototype.$Nick_pt = "usuario";
 Vue.prototype.$Nick_en = "Nick";
+Vue.prototype.$Nick_ar = "نيك";
 Vue.prototype.$Email_es = "Correo electrónico";
 Vue.prototype.$Email_pt = "Correio eletrônico";
 Vue.prototype.$Email_en = "Email";
+Vue.prototype.$Email_ar = "البريد الإلكتروني";
 Vue.prototype.$Language_es = "Idioma";
 Vue.prototype.$Language_pt = "Língua";
 Vue.prototype.$Language_en = "Language";
+Vue.prototype.$Language_ar = "لغة";
 Vue.prototype.$Phone_es = "Teléfono";
 Vue.prototype.$Phone_pt = "telefone";
 Vue.prototype.$Phone_en = "Phone";
+Vue.prototype.$Phone_ar = "هاتف";
 Vue.prototype.$Proof_of_residence_es = "Prueba de residencia";
 Vue.prototype.$Proof_of_residence_pt = "Comprovante de residência";
 Vue.prototype.$Proof_of_residence_en = "Proof of residence";
+Vue.prototype.$Proof_of_residence_ar = "دليل الإقامة";
 Vue.prototype.$CONTACT_INFORMATION_es = "INFORMACIÓN DE CONTACTO";
 Vue.prototype.$CONTACT_INFORMATION_pt = "INFORMAÇÃO DE CONTATO";
 Vue.prototype.$CONTACT_INFORMATION_en = "CONTACT INFORMATION";
+Vue.prototype.$CONTACT_INFORMATION_ar = "معلومات الاتصال";
 Vue.prototype.$Direction_es = "Dirección";
 Vue.prototype.$Direction_pt = "Direção";
 Vue.prototype.$Direction_en = "Direction";
+Vue.prototype.$Direction_ar = "اتجاه";
 Vue.prototype.$City_es = "Ciudad";
 Vue.prototype.$City_pt = "Cidade";
 Vue.prototype.$City_en = "City";
+Vue.prototype.$City_ar = "مدينة";
 Vue.prototype.$country_es = "País";
 Vue.prototype.$country_pt = "País";
 Vue.prototype.$country_en = "country";
+Vue.prototype.$country_ar = "بلد";
 Vue.prototype.$Postal_Code_es = "Código Postal";
 Vue.prototype.$Postal_Code_pt = "Código postal";
 Vue.prototype.$Postal_Code_en = "Postal Code";
+Vue.prototype.$Postal_Code_ar = "رمز بريدي";
 Vue.prototype.$Update_data_es = "Actualizar datos";
 Vue.prototype.$Update_data_pt = "Dados de atualização";
 Vue.prototype.$Update_data_en = "Update data";
+Vue.prototype.$Update_data_ar = "تحديث البيانات";
 Vue.prototype.$password_es = "Cambiar contraseña";
 Vue.prototype.$password_pt = "Cambiar contrasinal";
 Vue.prototype.$password_en = "Change password";
+Vue.prototype.$password_ar = "غير كلمة السر";
 </script>

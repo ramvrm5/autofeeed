@@ -31,6 +31,8 @@
                   ? $My_world_es
                   : selectedLan == "pt"
                   ? $My_world_pt
+                  : selectedLan == "ar"
+                  ? $My_world_ar
                   : $My_world_en
               }}</b-nav-item
             >
@@ -43,6 +45,8 @@
                     ? $Timeline_es
                     : selectedLan == "pt"
                     ? $Timeline_pt
+                    : selectedLan == "ar"
+                    ? $Timeline_ar
                     : $Timeline_en
                 }}</router-link
               ></b-nav-item
@@ -55,6 +59,8 @@
                   ? $We_es
                   : selectedLan == "pt"
                   ? $We_pt
+                  : selectedLan == "ar"
+                  ? $We_ar
                   : $We_en
               }}</b-nav-item
             >
@@ -73,6 +79,8 @@
                   ? $No_alarms_es
                   : selectedLan == "pt"
                   ? $No_alarms_pt
+                  : selectedLan == "ar"
+                  ? $No_alarms_ar
                   : $No_alarms_en
               }}</span></b-nav-item
             >
@@ -85,6 +93,8 @@
                     ? $Create_news_es
                     : selectedLan == "pt"
                     ? $Create_news_pt
+                    : selectedLan == "ar"
+                    ? $Create_news_ar
                     : $Create_news_en
                 }}</router-link
               ></b-nav-item
@@ -100,6 +110,8 @@
                   ? $Interests_es
                   : selectedLan == 'pt'
                   ? $Interests_pt
+                  : selectedLan == 'ar'
+                  ? $Interests_ar
                   : $Interests_en
               "
               variant="primary"
@@ -113,6 +125,8 @@
                     ? $See_all_es
                     : selectedLan == "pt"
                     ? $See_all_pt
+                    : selectedLan == "ar"
+                    ? $See_all_ar
                     : $See_all_en
                 }}
               </b-dropdown-item>
@@ -181,6 +195,8 @@
                       ? $All_the_news_es
                       : selectedLan == "pt"
                       ? $All_the_news_pt
+                      : selectedLan == "ar"
+                      ? $All_the_news_ar
                       : $All_the_news_en
                   }}
                 </div></b-dropdown-item
@@ -196,6 +212,8 @@
                       ? $Bookmarks_es
                       : selectedLan == "pt"
                       ? $Bookmarks_pt
+                      : selectedLan == "ar"
+                      ? $Bookmarks_ar
                       : $Bookmarks_en
                   }}
                 </div></b-dropdown-item
@@ -210,6 +228,8 @@
                       ? $Interests_and_Alerts_es
                       : selectedLan == "pt"
                       ? $Interests_and_Alerts_pt
+                      : selectedLan == "ar"
+                      ? $Interests_and_Alerts_ar
                       : $Interests_and_Alerts_en
                   }}</router-link
                 ></b-dropdown-item
@@ -219,6 +239,8 @@
                   ? $Sign_off_es
                   : selectedLan == "pt"
                   ? $Sign_off_pt
+                  : selectedLan == "ar"
+                  ? $Sign_off_ar
                   : $Sign_off_en
               }}</b-dropdown-item>
             </b-nav-item-dropdown>
@@ -300,30 +322,40 @@ export default {
           ? this.$My_world_es
           : this.selectedLan == "pt"
           ? this.$My_world_pt
+          : this.selectedLan == "ar"
+          ? this.$My_world_ar
           : this.$My_world_en;
       } else if (routeNmae == "Mi Perfil") {
         return this.selectedLan == "es"
           ? this.$My_profile_es
           : this.selectedLan == "pt"
           ? this.$My_profile_pt
+          : this.selectedLan == "ar"
+          ? this.$My_profile_ar
           : this.$My_profile_en;
       } else if (routeNmae == "Intereses") {
         return this.selectedLan == "es"
           ? this.$Interests_es
           : this.selectedLan == "pt"
           ? this.$Interests_pt
+          : this.selectedLan == "ar"
+          ? this.$Interests_ar
           : this.$Interests_en;
       } else if (routeNmae == "Timeline") {
         return this.selectedLan == "es"
           ? this.$Timeline_es
           : this.selectedLan == "pt"
           ? this.$Timeline_pt
+          : this.selectedLan == "ar"
+          ? this.$Timeline_ar
           : this.$Timeline_en;
       } else if (routeNmae == "Comment") {
         return this.selectedLan == "es"
           ? this.$Comment_es
           : this.selectedLan == "pt"
           ? this.$Comment_pt
+          : this.selectedLan == "ar"
+          ? this.$Comment_ar
           : this.$Comment_en;
       } else if (routeNmae == "CreateNews") {
         return "CreateNews";
@@ -332,6 +364,8 @@ export default {
           ? this.$We_es
           : this.selectedLan == "pt"
           ? this.$We_pt
+          : this.selectedLan == "ar"
+          ? this.$We_ar
           : this.$We_en;
       }
     },
@@ -365,40 +399,53 @@ export default {
 Vue.prototype.$My_profile_es = "Mi Perfil";
 Vue.prototype.$My_profile_pt = "Meu perfil";
 Vue.prototype.$My_profile_en = "My profile";
+Vue.prototype.$My_profile_ar = "ملفي";
 Vue.prototype.$My_world_es = "Mi Mundo";
 Vue.prototype.$My_world_pt = "Meu mundo";
 Vue.prototype.$My_world_en = "My world";
+Vue.prototype.$My_world_ar = "عالمي";
 Vue.prototype.$Timeline_es = "Cronología";
 Vue.prototype.$Timeline_pt = "Linha do tempo";
 Vue.prototype.$Timeline_en = "Timeline";
+Vue.prototype.$Timeline_ar = "الجدول الزمني";
 Vue.prototype.$We_es = "Privacidad";
 Vue.prototype.$We_pt = "Privacidade";
 Vue.prototype.$We_en = "Privacy";
+Vue.prototype.$We_ar = "خصوصية";
 Vue.prototype.$No_alarms_es = "No hay alarmas";
 Vue.prototype.$No_alarms_pt = "Sem alarmes";
-Vue.prototype.$No_alarms_en = "No hay alarmas";
+Vue.prototype.$No_alarms_en = "No alarms";
+Vue.prototype.$No_alarms_ar = "ليس هناك منبهات";
 Vue.prototype.$Create_news_es = "Crear noticias";
 Vue.prototype.$Create_news_pt = "Crie notícias";
 Vue.prototype.$Create_news_en = "Create news";
+Vue.prototype.$Create_news_ar = "إنشاء الأخبار";
 Vue.prototype.$See_all_es = "Ver todos";
 Vue.prototype.$See_all_pt = "Ver todos";
 Vue.prototype.$See_all_en = "See all";
+Vue.prototype.$See_all_ar = "اظهار الكل";
 Vue.prototype.$Interests_es = "Interests";
 Vue.prototype.$Interests_pt = "Interesses";
 Vue.prototype.$Interests_en = "Interests";
+Vue.prototype.$Interests_ar = "الإهتمامات";
 Vue.prototype.$Comment_es = "Comentario";
 Vue.prototype.$Comment_pt = "Comente";
 Vue.prototype.$Comment_en = "Comment";
+Vue.prototype.$Comment_ar = "تعليق";
 Vue.prototype.$All_the_news_es = "Todas las noticias";
 Vue.prototype.$All_the_news_pt = "Todas as novidades";
 Vue.prototype.$All_the_news_en = "All the news";
+Vue.prototype.$All_the_news_ar = "كل الأخبار";
 Vue.prototype.$Bookmarks_es = "Marcadores";
 Vue.prototype.$Bookmarks_pt = "Favoritos";
 Vue.prototype.$Bookmarks_en = "Bookmarks";
+Vue.prototype.$Bookmarks_ar = "إشارات مرجعية";
 Vue.prototype.$Interests_and_Alerts_es = "Intereses y Alertas";
 Vue.prototype.$Interests_and_Alerts_en = "Interesses e alertas";
 Vue.prototype.$Interests_and_Alerts_pt = "Interests and Alerts";
+Vue.prototype.$Interests_and_Alerts_ar = "الاهتمامات والتنبيهات";
 Vue.prototype.$Sign_off_es = "Cerrar sesión";
 Vue.prototype.$Sign_off_pt = "Fechar Sessão";
 Vue.prototype.$Sign_off_en = "Sign off";
+Vue.prototype.$Sign_off_ar = "تسجيل خروج";
 </script>

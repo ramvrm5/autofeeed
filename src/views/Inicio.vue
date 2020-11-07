@@ -8,7 +8,16 @@
     <div>
       <div class="row mt-4">
         <div class="col-6 col-sm-6 col-md-4 col-lg-4 pl-3">
-          <cool-select  :value="selectedUserInfo()" placeholder="Seach for user" @search="searchUserText" :loading="loading" item-text="firstName" v-model="selectedUser" :items="searchUseritems">      
+          <cool-select  :value="selectedUserInfo()" :placeholder="
+              selectedLan == 'es'
+                ? $searchUser_es
+                : selectedLan == 'pt'
+                ? $searchUser_pt
+                : selectedLan == 'ar'
+                ? $searchUser_ar
+                : $searchUser_en
+            "
+             @search="searchUserText" :loading="loading" item-text="firstName" v-model="selectedUser" :items="searchUseritems">      
             <template v-if="loading" #input-end>
             <img src="https://i.imgur.com/mTNe6tr.gif" class="loading-indicator">
             </template>
@@ -25,6 +34,8 @@
                 ? $rangeDateOptions_es
                 : selectedLan == 'pt'
                 ? $rangeDateOptions_pt
+                : selectedLan == 'ar'
+                ? $rangeDateOptions_ar
                 : $rangeDateOptions_en
             "
             required
@@ -112,6 +123,8 @@
                     ? $see_more_es
                     : selectedLan == "pt"
                     ? $see_more_pt
+                    : selectedLan == "ar"
+                    ? $see_more_ar
                     : $see_more_en
                 }}</b-button>
               </div>
@@ -180,6 +193,8 @@
                     ? $Date_es
                     : selectedLan == "pt"
                     ? $Date_pt
+                    : selectedLan == "ar"
+                    ? $Date_ar
                     : $Date_en
                 }}: {{ item.fechaClasica.split("T")[0] }}</small
               >
@@ -191,6 +206,8 @@
                     ? $Interests_es
                     : selectedLan == "pt"
                     ? $Interests_pt
+                    : selectedLan == "ar"
+                    ? $Interests_ar
                     : $Interests_en
                 }}:
                 {{
@@ -208,6 +225,8 @@
                     ? $Source_es
                     : selectedLan == "pt"
                     ? $Source_pt
+                    : selectedLan == "ar"
+                    ? $Source_ar
                     : $Source_en
                 }}: {{ item.fuente }}</small
               >
@@ -283,6 +302,8 @@
               ? $previous_page_es
               : selectedLan == "pt"
               ? $previous_page_pt
+              : selectedLan == "ar"
+              ? $previous_page_ar
               : $previous_page_en
           }}</b-button
         >
@@ -300,6 +321,8 @@
               ? $Next_page_es
               : selectedLan == "pt"
               ? $Next_page_pt
+              : selectedLan == "ar"
+              ? $Next_page_ar
               : $Next_page_en
           }}</b-button
         >
@@ -720,30 +743,47 @@ Vue.prototype.$rangeDateOptions_en = [
   { text: "2 days ago", value: "2 days ago" },
   { text: "Last week", value: "last week" },
 ];
+Vue.prototype.$rangeDateOptions_ar = [
+  { text: "اليوم", value: "today" },
+  { text: "2 منذ أيام", value: "2 days ago" },
+  { text: "الاسبوع الماضي", value: "last week" },
+];
+Vue.prototype.$searchUser_es = "Buscar usuario";
+Vue.prototype.$searchUser_pt = "Pesquisar por usuário";
+Vue.prototype.$searchUser_en = "Search for user";
+Vue.prototype.$searchUser_ar = "ابحث عن المستخدم";
 Vue.prototype.$previous_page_es = "Pagina anterior";
 Vue.prototype.$previous_page_pt = "Página anterior";
 Vue.prototype.$previous_page_en = "Previous page";
+Vue.prototype.$previous_page_ar = "الصفحة السابقة";
 Vue.prototype.$Next_page_es = "Siguiente página";
 Vue.prototype.$Next_page_pt = "Página seguinte";
 Vue.prototype.$Next_page_en = "Next page";
+Vue.prototype.$Next_page_ar = "الصفحة التالية";
 Vue.prototype.$see_more_es = "Ver más";
 Vue.prototype.$see_more_pt = "Ver mais";
 Vue.prototype.$see_more_en = "see more";
+Vue.prototype.$see_more_ar = "شاهد المزيد";
 Vue.prototype.$Source_es = "Fuente";
 Vue.prototype.$Source_pt = "Fonte";
 Vue.prototype.$Source_en = "Source";
+Vue.prototype.$Source_ar = "مصدر";
 Vue.prototype.$Date_es = "Fecha";
 Vue.prototype.$Date_pt = "Encontro";
 Vue.prototype.$Date_en = "Date";
+Vue.prototype.$Date_ar = "تاريخ";
 Vue.prototype.$Interests_es = "Intereses";
 Vue.prototype.$Interests_pt = "Interesses";
 Vue.prototype.$Interests_en = "Interests";
+Vue.prototype.$Interests_ar = "الإهتمامات";
 Vue.prototype.$Rating_es = "Clasificación";
 Vue.prototype.$Rating_pt = "Avaliação";
 Vue.prototype.$Rating_en = "Rating";
+Vue.prototype.$Rating_ar = "تقييم";
 Vue.prototype.$searchUser_es = "usuario de búsqueda";
 Vue.prototype.$searchUser_pt = "pesquisar usuário";
 Vue.prototype.$searchUser_en = "Search user";
+Vue.prototype.$searchUser_ar = "مستخدم البحث";
 </script>
 <style>
 .loading-indicator {

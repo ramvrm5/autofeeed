@@ -14,6 +14,8 @@
                   ? $Back_es
                   : selectedLan == "pt"
                   ? $Back_pt
+                  : selectedLan == "ar"
+                  ? $Back_ar
                   : $Back_en
               }}
             </router-link>
@@ -43,6 +45,8 @@
                             ? $Date_es
                             : selectedLan == "pt"
                             ? $Date_pt
+                            : selectedLan == "ar"
+                            ? $Date_ar
                             : $Date_en
                         }}: {{ item.fechaClasica.split("T")[0] }}</small
                       >
@@ -54,6 +58,8 @@
                             ? $Interests_es
                             : selectedLan == "pt"
                             ? $Interests_pt
+                            : selectedLan == "ar"
+                            ? $Interests_ar
                             : $Interests_en
                         }}:
                         {{
@@ -418,12 +424,15 @@ export default {
 Vue.prototype.$Back_es = "atrás";
 Vue.prototype.$Back_pt = "Costas";
 Vue.prototype.$Back_en = "Back";
+Vue.prototype.$Back_ar = "عودة";
 Vue.prototype.$Date_es = "Fecha";
 Vue.prototype.$Date_pt = "Encontro";
 Vue.prototype.$Date_en = "Date";
+Vue.prototype.$Date_ar = "تاريخ";
 Vue.prototype.$Interests_es = "Intereses";
 Vue.prototype.$Interests_pt = "Interesses";
 Vue.prototype.$Interests_en = "Interests";
+Vue.prototype.$Interests_ar = "الإهتمامات";
 </script>
 <style>
 .comments-modal .modal-dialog.modal-md {

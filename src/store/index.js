@@ -45,10 +45,14 @@ export default new Vuex.Store({
     noticias: [],
     noticiasTemp: [],
     translated: [],
+    rawTags: [],
   },
   mutations: {
     setTareas(state, payload) {
       state.tareas = payload
+    },
+    setRawTags(state, payload) {
+      state.rawTags = payload
     },
     setPaginationCount(state, payload) {
       state.paginationCount = payload
@@ -232,6 +236,7 @@ export default new Vuex.Store({
               commit('setPsCode', datos.psCode)
               commit('setEmail', datos.email)
               commit('setSelectedLan', datos.default_language)
+              commit('setRawTags', datos.tags[0])
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
             }
@@ -778,7 +783,44 @@ export default new Vuex.Store({
           commit('setTags', taglist)
         })
     },
+    addTags({ commit }, objeto_tags) {
+      let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
+      let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
+      var tags = []
+      this.state.rawTags += ';' + objeto_tags.addedTag;
+      tags.push(this.state.rawTags)
+      db.collection('usuarios').doc(this.state.email).update({
+        tags: tags
+      }).then(() => {
+        console.log("update")
+        var pcg = 30;
+        document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
+        document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
 
+        fetch(url2, { mode: 'no-cors' })
+          .then(response => {
+            pcg = 50;
+            document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
+            document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
+            if (objeto_tags.addedTag) {
+
+              fetch(url3, { mode: 'no-cors' })
+                .then(response => {
+                })
+                .then((data) => {
+                  pcg = 75;
+                  document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
+                  document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
+                })
+                .catch((error) => {
+                  console.log(error)
+                })
+            }
+          })
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
 
     editarTags({ commit }, objeto_tags) {
 
@@ -870,8 +912,8 @@ export default new Vuex.Store({
           }).then(() => {
             let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
             let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(tags_get_preparados)
-            let urlbaidu = 'https://bit4block.es/autofeed/autofeed_baidu_factory.php?lang=zh&tags=' + encodeURIComponent(tags_get_preparados)
-            let urlec = 'https://bit4block.es/autofeed/autofeed_eleconomista_factory.php?tags=' + encodeURIComponent(tags_get_preparados)
+            /* let urlbaidu = 'https://bit4block.es/autofeed/autofeed_baidu_factory.php?lang=zh&tags=' + encodeURIComponent(tags_get_preparados)
+            let urlec = 'https://bit4block.es/autofeed/autofeed_eleconomista_factory.php?tags=' + encodeURIComponent(tags_get_preparados) */
 
             //document.getElementById("cargandoid").style.display = "block";
 
@@ -898,14 +940,10 @@ export default new Vuex.Store({
                       document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
 
                       //aqui llama al economista
-                      fetch(urlec, { mode: 'no-cors' })
+/*                       fetch(urlec, { mode: 'no-cors' })
                         .then(response => {
                         })
                         .then((data) => {
-
-
-                          //y aqui llama a baidu
-
                           fetch(urlbaidu, { mode: 'no-cors' })
                             .then(response => {
                             })
@@ -914,42 +952,24 @@ export default new Vuex.Store({
                               pcg = 100;
                               document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
                               document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
-
-
-                              //document.getElementById("cargandoid").style.display = "none";
                               document.getElementById("barraid").style.display = "none";
                               location.reload();
-
 
                             })
                             .catch((error) => {
                               console.log(error)
                             })
 
-                          //fin llamada a baidu
-
                         })
                         .catch((error) => {
                           console.log(error)
-                        })
-                      //fin del economista
+                        }) */
                     })
                     .catch((error) => {
                       console.log(error)
                     })
                   //fin de newsapi
-
-
-
-
                 }
-
-
-
-
-
-
-
               })
               .then((data) => {
               })

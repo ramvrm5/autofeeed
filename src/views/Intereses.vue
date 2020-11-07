@@ -6,7 +6,7 @@
         <h2>Mis intereses</h2>
       </div>
     </div>
-    <div class="row">
+<!--     <div class="row">
       <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <form
           class="form-inline"
@@ -44,42 +44,59 @@
           </div>
         </form>
       </div>
-    </div>
-    <div class="row">
+    </div> -->
+<!--     <div class="row">
       <div class="col-12">
         <h2>Sistema de alertas</h2>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-12">
         <p>
-          Recuerda que si estás pendiente de alguna noticia en concreto podemos
-          hacerlo por ti, tan solo escribe el texto que quieras buscar en todas
-          tus noticias y nosotros nos encargamos de avisarte.
+          {{selectedLan == 'es'
+              ? $Note_es
+              : selectedLan == 'pt'
+              ? $Note_pt
+              : selectedLan == 'ar'
+              ? $Note_ar
+              : $Note_en}}
         </p>
       </div>
     </div>
 
     <form
-      style="display: none"
       class="form-inline"
-      @submit.prevent="editarAlertas({ alerta: alerta })"
+      @submit.prevent="addTagsTemp"
     >
-      <div class="input-group mb-2 mr-sm-2" style="min-width: 70%">
-        <div class="input-group-prepend">
+      <div class="input-group mb-2 mr-sm-2">
+      <!--   <div class="input-group-prepend">
           <div class="input-group-text">Alerta actual</div>
-        </div>
+        </div> -->
         <input
-          @change="setAlertalocal"
-          id="alertaid"
-          ref="alertaid"
+          id="addedTag"
+          placeholder="Type here to add tag"
           class="form-control"
           type="text"
-          v-model="alerta"
+          v-model="addedTag"
         />
       </div>
-
-      <button type="submit" class="btn btn-primary mb-2">Añadir alerta</button>
+      <div class="input-group mb-2 mr-sm-2">
+          <b-form-select
+            id="typeOfTrend"
+            v-model="typeOfTrend"
+            :options="
+              selectedLan == 'es'
+                ? $Trend_es
+                : selectedLan == 'pt'
+                ? $Trend_pt
+                : selectedLan == 'ar'
+                ? $Trend_ar
+                : $Trend_en
+            "
+          ></b-form-select>
+      </div>
+      <button type="submit" :disabled="!addedTag" class="btn btn-primary mb-2">Añadir etiqueta</button>
+      
     </form>
 
     <!-- COLUMNA NUEVA CON INTERESES Y ALARMAS -->
@@ -169,11 +186,19 @@
       </div>
     </div>
 
-    <p>Sesión iniciada como: {{ usuario.email }}</p>
+    <p>
+          {{selectedLan == 'es'
+              ? $SessionStartedAs_es
+              : selectedLan == 'pt'
+              ? $SessionStartedAs_pt
+              : selectedLan == 'ar'
+              ? $SessionStartedAs_ar
+              : $SessionStartedAs_en}}: {{ usuario.email }}</p>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from "vuex";
 import store from "../store";
 import VueTagsInput from "@johmun/vue-tags-input";
@@ -184,13 +209,15 @@ import "firebase/storage";
 import $ from "jquery";
 
 export default {
-  components: {
+ /*  components: {
     VueTagsInput,
-  },
+  }, */
   name: "Miperfil",
   imgurl3: "",
   data() {
     return {
+      typeOfTrend:"Neutral",
+      addedTag: null,
       fields: [
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: "Type of tag" },
@@ -262,6 +289,7 @@ export default {
       "detectarUsuario",
       "getDatos",
       "editarTags",
+      "addTags",
       "editarTarea2",
       "editarAlertas",
     ]),
@@ -270,6 +298,35 @@ export default {
         document.getElementById("imguser").src = imagen;
       }, 500);
     }, */
+    addTagsTemp(){
+      this.items2.push({
+      Publicaciones: "25",
+      alarma: [],
+      alarmas: "0",
+      name: this.addedTag,
+      typeOfTag: "Leisure",
+      typeOfTrend: this.typeOfTrend,
+      });
+      var addedTag = this.addedTag;
+      var emptyArray = []
+      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag+';Leisure;'+this.typeOfTrend
+      var alertTemp = this.alerta;
+      alertTemp += alertAppend;
+      this.addedTag = null;
+      this.typeOfTrend = "Neutral"
+      Vue.set(this.items2)
+      db.collection("usuarios")
+        .doc(this.usuario.email)
+        .update({
+          alerta: alertTemp,
+        })
+        .then(() => {
+        console.log("updated")
+      this.addTags({ addedTag: addedTag })
+        }).catch((error) => {
+        console.log(error)
+      });
+    },
     subiravatar(file1) {
       //var file = $('#inputavatar').prop('files')[0];
       var photo = document.getElementById("inputavatar");
@@ -455,6 +512,7 @@ export default {
       });
     },
     ...mapState([
+      "selectedLan",
       "usuario",
       "nombre",
       "apellidos",
@@ -465,4 +523,32 @@ export default {
     ]),
   },
 };
+Vue.prototype.$Note_es = "Recuerda que si estás al tanto de alguna noticia concreta podemos hacerlo por ti, solo escribe el texto que quieras encontrar en todas tus noticias y te avisaremos.";
+Vue.prototype.$Note_pt = "Lembre-se que caso você tenha conhecimento de alguma notícia específica nós podemos fazer isso por você, basta escrever o texto que deseja encontrar em todas as suas notícias e nós o avisaremos.";
+Vue.prototype.$Note_en = "Remember that if you are aware of any specific news we can do it for you, just write the text you want to find in all your news and we will notify you.";
+Vue.prototype.$Note_ar = "تذكر أنه إذا كنت على دراية بأي أخبار معينة ، فيمكننا القيام بذلك نيابة عنك ، فقط اكتب النص الذي تريد العثور عليه في جميع أخبارك وسنخطرك بذلك.";
+Vue.prototype.$SessionStartedAs_es = "La sesión comenzó como";
+Vue.prototype.$SessionStartedAs_pt = "Sessão iniciada como";
+Vue.prototype.$SessionStartedAs_en = "Session started as";
+Vue.prototype.$SessionStartedAs_ar = "بدأت الجلسة كـ";
+Vue.prototype.$Trend_es = [
+  { text: "Neutral", value: "Neutral" },
+  { text: "Arriba", value: "Up" },
+  { text: "Abajo", value: "Down" },
+];
+Vue.prototype.$Trend_pt = [
+  { text: "Neutro", value: "Neutral" },
+  { text: "Acima", value: "Up" },
+  { text: "Baixo", value: "Down" },
+];
+Vue.prototype.$Trend_en = [
+  { text: "Neutral", value: "Neutral" },
+  { text: "Up", value: "Up" },
+  { text: "Down", value: "Down" },
+];
+Vue.prototype.$Trend_ar = [
+  { text: "محايد", value: "Neutral" },
+  { text: "فوق", value: "Up" },
+  { text: "أسفل", value: "Down" },
+];
 </script>
