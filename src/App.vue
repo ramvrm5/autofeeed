@@ -64,7 +64,7 @@
                   : $We_en
               }}</b-nav-item
             >
-            <b-nav-item :to="{ name: 'Nosotros' }">v 1.02b</b-nav-item>
+            <b-nav-item :to="{ name: 'Nosotros' }">v 1.05</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->

@@ -19,6 +19,26 @@ contraseña cuenta
 
 https://stackoverflow.com/questions/26449512/how-to-create-a-signed-apk-file-using-cordova-command-line-interface
 
-./jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore cuenta.keystore app-debug.apk cuenta
+PRIMERO HACER CORDOVA BUILD --RELEASE ANDROID
+
+PRIMERO ALINEAR EL ZIP ANTES DE FIRMAR
+
+DESPUES FIRMAR
+
+DESPUES ALINEAR
+
+DESPUES FIRMAR OTRA VEZ
+
+./jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore cuenta.keystore appr.apk cuenta
 
 C:\Users\pc\Documents\build-tools\29.0.2\zipalign -v 4 app.apk appr.apk
+
+./zipalign.exe -v 4 app.apk appr.apk
+
+Para alinear el apk infile.apk y guardarlo como outfile.apk:
+
+zipalign [-f] [-v] <alignment> infile.apk outfile.apk
+
+Para confirmar la alineación del apk existing.apk:
+
+zipalign -c -v <alignment> existing.apk
