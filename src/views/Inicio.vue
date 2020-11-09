@@ -751,17 +751,17 @@ Vue.prototype.$rangeDateOptions_ar = [
   { text: "2 منذ أيام", value: "2 days ago" },
   { text: "الاسبوع الماضي", value: "last week" },
 ];
-Vue.prototype.$searchUser_es = "Buscar usuario";
-Vue.prototype.$searchUser_pt = "Pesquisar por usuário";
-Vue.prototype.$searchUser_en = "Search for user";
+Vue.prototype.$searchUser_es = "Buscar...";
+Vue.prototype.$searchUser_pt = "Pesquisar...";
+Vue.prototype.$searchUser_en = "Search...";
 Vue.prototype.$searchUser_ar = "ابحث عن المستخدم";
-Vue.prototype.$previous_page_es = "Pagina anterior";
-Vue.prototype.$previous_page_pt = "Página anterior";
-Vue.prototype.$previous_page_en = "Previous page";
+Vue.prototype.$previous_page_es = "Anterior";
+Vue.prototype.$previous_page_pt = "Anterior";
+Vue.prototype.$previous_page_en = "Previous";
 Vue.prototype.$previous_page_ar = "الصفحة السابقة";
-Vue.prototype.$Next_page_es = "Siguiente página";
-Vue.prototype.$Next_page_pt = "Página seguinte";
-Vue.prototype.$Next_page_en = "Next page";
+Vue.prototype.$Next_page_es = "Siguiente";
+Vue.prototype.$Next_page_pt = "Seguinte";
+Vue.prototype.$Next_page_en = "Next";
 Vue.prototype.$Next_page_ar = "الصفحة التالية";
 Vue.prototype.$see_more_es = "Ver más";
 Vue.prototype.$see_more_pt = "Ver mais";
