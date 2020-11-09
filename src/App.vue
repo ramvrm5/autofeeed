@@ -87,7 +87,7 @@
             <b-nav-item v-if="existeUsuario">
               <router-link
                 to="/createNews"
-                style="text-decoration: none; color: unset; color: white"
+                style="text-decoration: none; color: unset; color: #ffffffa6"
                 >{{
                   selectedLan == "es"
                     ? $Create_news_es

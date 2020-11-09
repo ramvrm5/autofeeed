@@ -102,7 +102,10 @@
     <!-- COLUMNA NUEVA CON INTERESES Y ALARMAS -->
     <div class="row">
       <div class="col-12">
-        <b-table responsive :fields="fields" :items="items2">
+        <b-table
+      responsive 
+      :fields="fields"
+      :items="items2">
           <template v-slot:cell(name)="data">
             <b onchange='alert("Hola")' id="tagtabla">{{ data.value }}</b>
           </template>
@@ -159,6 +162,10 @@
               </button>
             </div>
           </template>
+          <template  v-slot:cell(action)="data">
+            <i style="cursor:pointer" class="fa fa-times ml-3" aria-hidden="true"               
+             @click=" deleteTag(data.item,data.index)"></i>
+          </template>
         </b-table>
       </div>
     </div>
@@ -206,11 +213,12 @@ import { db } from "../firebase";
 import { auth } from "../firebase";
 import firebase from "firebase/app";
 import "firebase/storage";
+import sweetAlert from 'sweetalert2';
 import $ from "jquery";
 
 export default {
- /*  components: {
-    VueTagsInput,
+/*   components: {
+    sweetAlert,
   }, */
   name: "Miperfil",
   imgurl3: "",
@@ -219,6 +227,7 @@ export default {
       typeOfTrend:"Neutral",
       addedTag: null,
       fields: [
+        { key: "action", label: "Delete tag"},
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: "Type of tag" },
         { key: "typeOfTrend", label: "Trend" },
@@ -298,6 +307,62 @@ export default {
         document.getElementById("imguser").src = imagen;
       }, 500);
     }, */
+    deleteTag(array,index){
+    sweetAlert.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Delete it!'
+    }).then((result) => {
+      if (result.value) {
+        var alerta = this.alerta.split("//");
+        var alertaObject = this.alertaObject;
+        var tags = this.rawTags.split(";");
+        for(let i=0;alerta.length > i;i++){
+          var alertaSplit = alerta[i].split(";")
+            if(alertaSplit[1] == array.name){
+              alerta.splice(i,1)
+              break
+            }
+          }
+        for(let m=0;tags.length > m;m++){
+          if(tags[m] == array.name){
+            tags.splice(m,1)
+            break
+          }
+        }
+        for(let j=0;alertaObject.length > j;j++){
+          if(alertaObject[j].tag == array.name){
+            alertaObject.splice(j,1)
+            break
+          }
+        }
+        alerta = alerta.join("//");
+        alertaObject
+        tags = tags.length > 1?tags.join(";"):tags;
+        store.commit("setAlerta", alerta);
+        store.commit("setAlertaObject", alertaObject);
+        store.commit("setRawTags", tags);
+      db.collection('usuarios').doc(this.usuario.email).update({
+        tags: tags,
+        alerta:alerta,
+        alertaObject:alertaObject
+      }).then(() => {
+        this.items2.splice(index, 1);
+         sweetAlert.fire(
+              'Deleted!',
+              `This Tag (${tags}) is deleted.`,
+              'success'
+            )
+      }).catch((error) => {
+        console.log(error)
+      })
+      }
+    })
+    },
     addTagsTemp(){
       this.items2.push({
       Publicaciones: "25",
@@ -311,7 +376,12 @@ export default {
       var emptyArray = []
       var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag+';Leisure;'+this.typeOfTrend
       var alertTemp = this.alerta;
+      if(alertTemp && alertTemp.length > 0){
       alertTemp += alertAppend;
+      }else{
+      alertTemp = alertAppend;
+      }
+      store.commit("setAlerta", alertTemp);
       this.addedTag = null;
       this.typeOfTrend = "Neutral"
       Vue.set(this.items2)
@@ -517,6 +587,7 @@ export default {
       "nombre",
       "apellidos",
       "tags",
+      "rawTags",
       "alerta",
       "alertaObject",
       "items2",

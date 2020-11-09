@@ -391,13 +391,15 @@ export default {
     //this.getTareas()
     //this.getAlertas()
     this.getLocation();
-    this.getNoticias({
+    if(this.keywordactual == "todos" || this.keywordactual == ""){
+     this.getNoticias({
       rangedateChoosen: this.rangeDate,
       yesterdayDate: "",
       type: "next",
       limit: 10,
       selectedTag: this.$store.state.selectedTag,
     });
+    }
   },
   mounted: function () {
     (this.classA = "likepulsado"), (this.classB = "likepulsado");
@@ -720,6 +722,7 @@ export default {
       "noticiasTemp",
       "noticiasLength",
       "selectedLan",
+      "keywordactual",
       "changeRangeDate",
       "selectedTag",
       "paginationCount",

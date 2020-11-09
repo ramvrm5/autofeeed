@@ -430,6 +430,7 @@ export default new Vuex.Store({
 
 
     filtrarporKeyword({ commit }, keyword) {
+      //router.push('/')
       commit('setPaginationCount',0 )
       if (keyword == "todos") {
         let ChangeRangeDate = null;
@@ -466,12 +467,15 @@ export default new Vuex.Store({
             commit('setKeywordactual', keyword)
             document.getElementById("botonmodal").click()
           } else {
-            let c_filtradas = noticias_compuestas.reverse()
-            commit('setNoticias', c_filtradas)
-            commit('setChangeRangeDate', ChangeRangeDate)
-            commit('setNoticiasTemp', c_filtradas)
-            commit('setNoticiasLength', lengthOfDocument)
-            commit('setSelectedTag', 'selected')
+            router.push('/')
+            setTimeout(() => {
+              let c_filtradas = noticias_compuestas.reverse()
+              commit('setNoticias', c_filtradas)
+              commit('setChangeRangeDate', ChangeRangeDate)
+              //commit('setNoticiasTemp', c_filtradas)
+              commit('setNoticiasLength', lengthOfDocument)
+              commit('setSelectedTag', 'selected')
+            }, 1000);
           }
         })
        }
@@ -787,7 +791,12 @@ export default new Vuex.Store({
       let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
       let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
       var tags = []
-      this.state.rawTags += ';' + objeto_tags.addedTag;
+      if(this.state.rawTags && this.state.rawTags.length > 0){
+        this.state.rawTags += ';' + objeto_tags.addedTag;
+      }else{
+        this.state.rawTags = objeto_tags.addedTag;
+      }
+      commit("setRawTags",this.state.rawTags)
       tags.push(this.state.rawTags)
       db.collection('usuarios').doc(this.state.email).update({
         tags: tags
@@ -857,8 +866,6 @@ export default new Vuex.Store({
 
             if ((entry.text != "") && ((entry.text).length > 2)) {
               let guardartag = (entry.text).toLowerCase();
-              //esta version quita la ñ
-              //guardartag = guardartag.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
               guardartag = guardartag.split('').map(letra => acentos[letra] || letra).join('').toString();
 
 
