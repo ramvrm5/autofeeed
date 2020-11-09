@@ -170,7 +170,6 @@
       </div>
     </div>
     <!-- FIN DE COLUMNA NUEVA CON INTERESES Y ALARMAS -->
-
     <div class="text-center">
       <b-spinner
         id="cargandoid"
