@@ -278,7 +278,10 @@
         Preparando tus noticias personalizadas
       </h4>
     </center>
-    <div
+	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button">&lt;</button>
+    <button @click="next" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;right: 20px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button">&gt;</button>
+
+	<div
       v-if="noticias.length > 0"
       class="row mt-2 pt-1 pb-1"
       style="
@@ -287,6 +290,7 @@
         background: white;
         z-index: 9999999;
         bottom: 0;
+		display:none;
         position: sticky;
       "
     >
@@ -783,9 +787,9 @@ Vue.prototype.$Rating_es = "Clasificación";
 Vue.prototype.$Rating_pt = "Avaliação";
 Vue.prototype.$Rating_en = "Rating";
 Vue.prototype.$Rating_ar = "تقييم";
-Vue.prototype.$searchUser_es = "usuario de búsqueda";
-Vue.prototype.$searchUser_pt = "pesquisar usuário";
-Vue.prototype.$searchUser_en = "Search user";
+Vue.prototype.$searchUser_es = "Buscar...";
+Vue.prototype.$searchUser_pt = "Pesquisar...";
+Vue.prototype.$searchUser_en = "Search...";
 Vue.prototype.$searchUser_ar = "مستخدم البحث";
 </script>
 <style>
