@@ -261,7 +261,7 @@
             label-cols-sm="3"
             label-cols-lg="3"
             id="typeOfPost-input"
-            label="Type of post *"
+            label="Categoría *"
             label-for="typeOfPost-input"
           >
           <b-form-select
@@ -288,7 +288,7 @@
           </b-form-group>
           <!-- Image End -->
           <div class="text-center">
-            <b-button type="submit" size="lg" variant="primary"
+            <b-button type="submit" style="color:white" size="lg" variant="primary"
               >{{selectedLan == 'es'
               ? $Submit_es
               : selectedLan == 'pt'

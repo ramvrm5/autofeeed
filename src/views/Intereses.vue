@@ -74,7 +74,7 @@
         </div> -->
         <input
           id="addedTag"
-          placeholder="Type here to add tag"
+          placeholder="Escribe un tag"
           class="form-control"
           type="text"
           v-model="addedTag"
@@ -227,7 +227,7 @@ export default {
       typeOfTrend:"Neutral",
       addedTag: null,
       fields: [
-        { key: "action", label: "Delete tag"},
+        { key: "action", label: "Borrar tag"},
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: "Type of tag" },
         { key: "typeOfTrend", label: "Trend" },
@@ -369,12 +369,12 @@ export default {
       alarma: [],
       alarmas: "0",
       name: this.addedTag,
-      typeOfTag: "Leisure",
+      typeOfTag: "Ocio",
       typeOfTrend: this.typeOfTrend,
       });
       var addedTag = this.addedTag;
       var emptyArray = []
-      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag+';Leisure;'+this.typeOfTrend
+      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag+';Ocio;'+this.typeOfTrend
       var alertTemp = this.alerta;
       if(alertTemp && alertTemp.length > 0){
       alertTemp += alertAppend;
@@ -443,14 +443,14 @@ export default {
       let btnvalue = $("#button_" + index)
         .text()
         .trim();
-      if (btnvalue == "Leisure") {
-        btnvalue = "Business";
-        value = "Business";
-        $("#button_" + index).text("Business");
-      } else if (btnvalue == "Business") {
-        btnvalue = "Leisure";
-        value = "Leisure";
-        $("#button_" + index).text("Leisure");
+      if (btnvalue == "Ocio") {
+        btnvalue = "Profesional";
+        value = "Profesional";
+        $("#button_" + index).text("Profesional");
+      } else if (btnvalue == "Profesional") {
+        btnvalue = "Ocio";
+        value = "Ocio";
+        $("#button_" + index).text("Ocio");
       }
     },
     onToggleTrend(value, index) {
