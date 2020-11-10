@@ -605,7 +605,7 @@ export default new Vuex.Store({
               var yeaterdayTemp = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
               let tags_filtrar = this.state.tags
-              let firts10tags = tags.slice(0, 9);
+              let firts10tags = tags;//tags.slice(0, 9);
               let querryRef
               if (objectdata.selectedTag == 'selected') {
                 db.collection('noticias').where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).get().then(snapshot => {
@@ -1054,9 +1054,9 @@ export default new Vuex.Store({
 
       }).then(() => {
         Swal.fire({
-          position: 'top-end',
+          position: 'center',
           icon: 'success',
-          title: 'Your data has been updated',
+          title: 'Your data has been updated',//this.state.selectedLan == "es"? this.$Yourdata_es: this.state.selectedLan == "pt"? this.$Yourdata_pt: this.state.selectedLan == "ar"? this.$Yourdata_ar: this.$Yourdata_en,
           showConfirmButton: false,
           timer: 1500
         })
@@ -1111,3 +1111,7 @@ export default new Vuex.Store({
   modules: {
   }
 })
+Vue.prototype.$Yourdata_es = "Tus datos han sido actualizados";
+Vue.prototype.$Yourdata_pt = "Seus dados foram atualizados";
+Vue.prototype.$Yourdata_en = "Your data has been updated";
+Vue.prototype.$Yourdata_ar = "تم تحديث بياناتك";

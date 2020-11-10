@@ -238,16 +238,15 @@
     <b-button id="botonmodal" style="display: none" v-b-modal.modal-1
       >Launch demo modal</b-button
     >
-    <b-modal id="modal-1" title="Tomo nota!" hide-footer>
+    <b-modal id="modal-1" :title="selectedLan == 'es'? $TakeNote_es: selectedLan == 'pt'? $TakeNote_pt: selectedLan == 'ar'? $TakeNote_ar: $TakeNote_en" hide-footer>
       <p class="my-4">
-        Actualmente no hay noticias registradas relacionadas con tu interés en:
+        {{selectedLan == "es"? $ThereAreCurrently_es: selectedLan == "pt"? $ThereAreCurrently_pt: selectedLan == "ar"? $ThereAreCurrently_ar: $ThereAreCurrently_en}}
       </p>
       <p id="keywordsid" class="my-4">
         <b>{{ keywordactual }}</b>
       </p>
       <p class="my-4">
-        Pero ya hemos empezado a buscarlas para ti, mañana las tendrás
-        disponibles en tu feed!
+        {{selectedLan == "es"? $AlreadyStarted_es: selectedLan == "pt"? $AlreadyStarted_pt: selectedLan == "ar"? $AlreadyStarted_ar: $AlreadyStarted_en}}
       </p>
       <b-button
         class="mt-3"
@@ -278,8 +277,8 @@
         Preparando tus noticias personalizadas
       </h4>
     </center>
-	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button">&lt;</button>
-    <button @click="next" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;right: 20px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button">&gt;</button>
+	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+    <button @click="next" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;right: 20px;width: 50px;height: 50px;border-radius: 25px;color: white;" type="button"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 
 	<div
       v-if="noticias.length > 0"
@@ -791,6 +790,18 @@ Vue.prototype.$searchUser_es = "Buscar...";
 Vue.prototype.$searchUser_pt = "Pesquisar...";
 Vue.prototype.$searchUser_en = "Search...";
 Vue.prototype.$searchUser_ar = "مستخدم البحث";
+Vue.prototype.$ThereAreCurrently_es = "Actualmente no hay noticias registradas relacionadas con tu interés en:";
+Vue.prototype.$ThereAreCurrently_pt = "No momento, não há notícias registradas relacionadas ao seu interesse em:";
+Vue.prototype.$ThereAreCurrently_en = "There are currently no registered news related to your interest in:";
+Vue.prototype.$ThereAreCurrently_ar = "لا يوجد حاليًا أي أخبار مسجلة تتعلق باهتمامك بـ:";
+Vue.prototype.$AlreadyStarted_es = "Pero ya hemos empezado a buscarlas para ti, mañana las tendrás disponibles en tu feed!";
+Vue.prototype.$AlreadyStarted_pt = "Mas já começamos a procurá-los para você, amanhã você os terá disponível no seu feed!";
+Vue.prototype.$AlreadyStarted_en = "But we have already started looking for them for you, tomorrow you will have them available in your feed!";
+Vue.prototype.$AlreadyStarted_ar = "لكننا بدأنا بالفعل في البحث عنهم من أجلك ، وستجدهم غدًا متوفر في خلاصتك!";
+Vue.prototype.$TakeNote_es = "Tomo nota!";
+Vue.prototype.$TakeNote_pt = "Tomo nota!";
+Vue.prototype.$TakeNote_en = "Take note!";
+Vue.prototype.$TakeNote_ar = "خذ ملاحظة!";
 </script>
 <style>
 .loading-indicator {

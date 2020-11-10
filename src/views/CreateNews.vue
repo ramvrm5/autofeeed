@@ -3,13 +3,13 @@
     <b-row style="height: 90vh !important" class="bg-light align-items-center">
       
         <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
-            <router-link to="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{selectedLan == 'es'
+            <a style="color: #007bff;cursor: pointer;" @click="$router.go(-1)"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{selectedLan == 'es'
               ? $Back_es
               : selectedLan == 'pt'
               ? $Back_pt
               : selectedLan == 'ar'
               ? $Back_ar
-              : $Back_en}}</router-link>
+              : $Back_en}}</a>
         </div>
       <b-col cols="8 mx-auto h-75">
         <form @submit.stop.prevent="handleSubmit">

@@ -308,13 +308,14 @@ export default {
     }, */
     deleteTag(array,index){
     sweetAlert.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: this.selectedLan == 'es' ? this.$Areyousure_es : this.selectedLan == 'pt'? this.$Areyousure_pt : this.selectedLan == 'ar'? this.$Areyousure_ar : this.$Areyousure_en,
+      text: this.selectedLan == 'es' ? this.$AbleToRevert_es : this.selectedLan == 'pt'? this.$AbleToRevert_pt : this.selectedLan == 'ar'? this.$AbleToRevert_ar : this.$AbleToRevert_en,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete it!'
+      cancelButtonText:this.selectedLan == 'es' ? this.$cancel_es : this.selectedLan == 'pt'? this.$cancel_pt : this.selectedLan == 'ar'? this.$cancel_ar : this.$cancel_en,
+      confirmButtonText: this.selectedLan == 'es' ? this.$YouDelet_es : this.selectedLan == 'pt'? this.$YouDelet_pt : this.selectedLan == 'ar'? this.$YouDelet_ar : this.$YouDelet_en
     }).then((result) => {
       if (result.value) {
         var alerta = this.alerta.split("//");
@@ -352,8 +353,8 @@ export default {
       }).then(() => {
         this.items2.splice(index, 1);
          sweetAlert.fire(
-              'Deleted!',
-              `This Tag (${tags}) is deleted.`,
+              this.selectedLan == 'es' ? this.$Delete_es : this.selectedLan == 'pt'? this.$Delete_pt : this.selectedLan == 'ar'? this.$Delete_ar : this.$Delete_en,
+              this.selectedLan == 'es' ? this.$ThisTag_es : this.selectedLan == 'pt'? this.$ThisTag_pt : this.selectedLan == 'ar'? this.$ThisTag_ar : this.$ThisTag_en+" "+`(${tags})`+" "+this.selectedLan == 'es' ? this.$IsDeleted_es : this.selectedLan == 'pt'? this.$IsDeleted_pt : this.selectedLan == 'ar'? this.$IsDeleted_ar : this.$IsDeleted_en,
               'success'
             )
       }).catch((error) => {
@@ -621,4 +622,32 @@ Vue.prototype.$Trend_ar = [
   { text: "فوق", value: "Up" },
   { text: "أسفل", value: "Down" },
 ];
+Vue.prototype.$Areyousure_es = "Estas segura";
+Vue.prototype.$Areyousure_pt = "Você tem certeza?";
+Vue.prototype.$Areyousure_en = "Are you sure?";
+Vue.prototype.$Areyousure_ar = "هل أنت واثق؟";
+Vue.prototype.$AbleToRevert_es = "¡No podrás revertir esto!";
+Vue.prototype.$AbleToRevert_pt = "Você não poderá reverter isso!";
+Vue.prototype.$AbleToRevert_en = "You won't be able to revert this!";
+Vue.prototype.$AbleToRevert_ar = "لن تتمكن من التراجع عن هذا!";
+Vue.prototype.$YouDelet_es = "¡Sí, bórralo!";
+Vue.prototype.$YouDelet_pt = "Sim, exclua!";
+Vue.prototype.$YouDelet_en = "Yes, Delete it!";
+Vue.prototype.$YouDelet_ar = "نعم ، احذفها!";
+Vue.prototype.$Delete_es = "¡Eliminada!";
+Vue.prototype.$Delete_pt = "Excluída!";
+Vue.prototype.$Delete_en = "Deleted!";
+Vue.prototype.$Delete_ar = "تم الحذف!";
+Vue.prototype.$ThisTag_es = "Esta etiqueta";
+Vue.prototype.$ThisTag_pt = "Esta etiqueta";
+Vue.prototype.$ThisTag_en = "This Tag";
+Vue.prototype.$ThisTag_ar = "هذه العلامة";
+Vue.prototype.$IsDeleted_es = "esta borrado.";
+Vue.prototype.$IsDeleted_pt = "esta deletado.";
+Vue.prototype.$IsDeleted_en = "is deleted.";
+Vue.prototype.$IsDeleted_ar = "يتم حذف.";
+Vue.prototype.$cancel_es = "cancelar";
+Vue.prototype.$cancel_pt = "cancelar";
+Vue.prototype.$cancel_en = "cancel";
+Vue.prototype.$cancel_ar = "إلغاء";
 </script>

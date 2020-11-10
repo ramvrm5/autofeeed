@@ -7,7 +7,7 @@
           class="bg-light align-items-center"
         >
           <div style="left: 25px; top: 60px; position: absolute; z-index: 9999">
-            <router-link to="/"
+            <a style="color: #007bff;cursor: pointer;"   @click="$router.go(-1)"
               ><i class="fa fa-chevron-left" aria-hidden="true"></i>
               {{
                 selectedLan == "es"
@@ -18,7 +18,7 @@
                   ? $Back_ar
                   : $Back_en
               }}
-            </router-link>
+            </a>
           </div>
           <b-col
             class="col-lg-8 mx-auto pt-0 pb-0"
@@ -113,7 +113,7 @@
                 style="padding: 0px"
               >
                 <b-row
-                  class="m-0 w-100 d-sm-none"
+                  class="m-0 w-100"
                   style="border-bottom: 2px solid rgb(223 223 223); height: 20%"
                 >
                   <b-col
