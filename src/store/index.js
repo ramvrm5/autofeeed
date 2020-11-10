@@ -605,7 +605,7 @@ export default new Vuex.Store({
               var yeaterdayTemp = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
               let tags_filtrar = this.state.tags
-              let firts10tags = tags;//tags.slice(0, 9);
+              let firts10tags = tags.slice(0, 9);
               let querryRef
               if (objectdata.selectedTag == 'selected') {
                 db.collection('noticias').where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).get().then(snapshot => {

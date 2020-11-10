@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
-    <b-row style="height: 90vh !important" class="bg-light align-items-center">
+    <b-row style="height: 90vh !important" class="align-items-center">
       
-        <div style="left: 25px;top: 60px;position: absolute;z-index: 9999;">
+        <div style="left: 25px;top: 113px;position: absolute;z-index: 9999;">
             <a style="color: #007bff;cursor: pointer;" @click="$router.go(-1)"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{selectedLan == 'es'
               ? $Back_es
               : selectedLan == 'pt'
@@ -288,7 +288,7 @@
           </b-form-group>
           <!-- Image End -->
           <div class="text-center">
-            <b-button type="submit" style="color:white" size="lg" variant="primary"
+            <b-button type="submit" class="mb-2" style="color:white" size="lg" variant="primary"
               >{{selectedLan == 'es'
               ? $Submit_es
               : selectedLan == 'pt'

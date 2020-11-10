@@ -358,7 +358,13 @@ export default {
           ? this.$Comment_ar
           : this.$Comment_en;
       } else if (routeNmae == "CreateNews") {
-        return "CreateNews";
+         return this.selectedLan == "es"
+          ? this.$Create_news_es
+          : this.selectedLan == "pt"
+          ? this.$Create_news_pt
+          : this.selectedLan == "ar"
+          ? this.$Create_news_ar
+          : this.$Create_news_en;
       } else if (routeNmae == "Nosotros") {
         return this.selectedLan == "es"
           ? this.$We_es
