@@ -607,6 +607,9 @@ export default new Vuex.Store({
               let tags_filtrar = this.state.tags
               let firts10tags = tags.slice(0, 9);
               let querryRef
+              let querryRef2
+
+
               if (objectdata.selectedTag == 'selected') {
                 db.collection('noticias').where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).get().then(snapshot => {
                   lengthOfDocument = snapshot.size;
@@ -616,7 +619,35 @@ export default new Vuex.Store({
                 } else {
                   querryRef = db.collection("noticias").where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
                 }
-              } else if(objectdata.selectedTag == 'Notselected'){
+              } else if(objectdata.selectedTag == 'Notselected')
+              {
+
+//start if tags>10
+if (tags.length>10)
+{
+  let firts10tags = tags.slice(0, 9);
+  let from10to20tags = tags.slice(10, 20);
+
+  db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+    lengthOfDocument = snapshot.size;
+  })
+  if (objectdata.type == "next") {
+    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(20).get()
+    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", from10to20tags).where("fecha", ">", dateStartOEnd).limit(20).get()
+  } else {
+    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+  }
+
+}
+///end if tags>10
+//Convertir esto o lo de abajo en una funcion qeu acabe sin commits y que luego llame a una funcion solo con commits o a una funcion2 que tenga ota query mas los commits
+//y si llamamos a una funcion externa en lugar de seguir por aqui? 
+
+
+///start else tags<10
+else
+{
                 db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
                   lengthOfDocument = snapshot.size;
                 })
@@ -625,8 +656,141 @@ export default new Vuex.Store({
                 } else {
                   querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
                 }
+}
+//else tags<10
+
+
+
+
               }
 
+               /////START FUNCTION 20 TAGS
+              if (tags.length>10)
+              {
+
+
+                querryRef.then(res => {
+                  res.forEach(doc => {
+                    let noticia_leida = doc.data()
+                    let titulo = noticia_leida.titulo;
+                    let correos_like = noticia_leida.correos_like3;
+                    let cuerpo = noticia_leida.cuerpo;
+                    let texto_noticia = titulo + cuerpo;
+                    let idioma = noticia_leida.idioma;
+                    let url = noticia_leida.tags;
+                    let img = noticia_leida.img;
+                    let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+                    noticias_compuestas.push(noticia_leida)
+
+                    if (alerta_usuario) {
+                      if (texto_noticia.includes(alerta_usuario)) {
+                        noticias_alerta.push(noticia_leida)
+                      }
+                    }
+
+
+                    if (typeof correos_like != "undefined") {
+                      if (correos_like.includes(user.email)) {
+                        noticias_like.push(noticia_leida)
+                      }
+                    }
+
+
+                  })
+
+
+
+
+                  querryRef2.then(res => {
+                    res.forEach(doc => {
+                      let noticia_leida = doc.data()
+                      let titulo = noticia_leida.titulo;
+                      let correos_like = noticia_leida.correos_like3;
+                      let cuerpo = noticia_leida.cuerpo;
+                      let texto_noticia = titulo + cuerpo;
+                      let idioma = noticia_leida.idioma;
+                      let url = noticia_leida.tags;
+                      let img = noticia_leida.img;
+                      let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+                      noticias_compuestas.push(noticia_leida)
+  
+                      if (alerta_usuario) {
+                        if (texto_noticia.includes(alerta_usuario)) {
+                          noticias_alerta.push(noticia_leida)
+                        }
+                      }
+  
+  
+                      if (typeof correos_like != "undefined") {
+                        if (correos_like.includes(user.email)) {
+                          noticias_like.push(noticia_leida)
+                        }
+                      }
+  
+
+                      let c2 = noticias_compuestas
+                      let c_filtradas = noticias_compuestas.reverse()
+                      commit('setNoticias', c_filtradas)
+                      commit('setNoticiasTemp', c_filtradas)
+                      commit('setNoticiasLength', lengthOfDocument)
+                      commit('setNoticiasBackupES', c_filtradas)
+                      commit('setNoticiasLikes', noticias_like)
+                      /*fin de poner solo en español*/
+    
+    
+                      //para poner todos los idiomas a la vez commit('setNoticias', noticias_compuestas)
+                      commit('setNoticiasBackup', noticias_compuestas)
+    
+    
+                      document.getElementById("cargandoid").style.display = "none";
+                      if (c_filtradas.length < 1) {
+                        document.getElementById("noticiasid").innerHTML = "Aún no hay noticias registradas para tus intereses, pero en unas horas las tendremos preparadas para ti"
+                      }
+                      else {
+    
+                        alerta_usuario = this.state.alerta;
+                        var aviso_alarma = (c_filtradas.indexOf(alerta_usuario));
+                        var aviso_alarma2 = c_filtradas.find(element => (element.cuerpo).includes(alerta_usuario))
+                        if (aviso_alarma2 != null) {
+                          noticias_alerta_2.push(aviso_alarma2)
+                          document.getElementById("alarmatexto").textContent = "¡Hay alarmas!"
+                          document.getElementById("alarmatexto").style.color = "rgb(255 255 255)"
+                          document.getElementById("alarmaid").style.color = "rgba(255,255,255,1)"
+                          document.getElementById("alarmaid1").style.color = "rgba(255,255,255,1)"
+    
+    
+                          //alert("Alerta! Se ha detectado tu texto en la siguiente noticia: \n" + aviso_alarma2.titulo + "\n" +aviso_alarma2.cuerpo +"\nURL: " + aviso_alarma2.url);
+                        }
+                        //document.getElementById("noticiasid").innerHTML = "Hasta aquí por ahora, regresa en unas horas a por más noticias"
+                      }
+    
+                      commit('setNoticiasAlerta', noticias_alerta_2)
+
+
+
+  
+                    })
+            
+
+                 
+
+
+                })
+
+
+
+
+
+
+
+
+              })
+
+              }
+              /////END FUNCTION 20 TAGS
+              else
+{
+/////START FUNCTION 10 TAGS
               querryRef.then(res => {
                   res.forEach(doc => {
                     let noticia_leida = doc.data()
@@ -654,48 +818,10 @@ export default new Vuex.Store({
                     }
 
 
-
-
                   })
 
 
-                  //console.log(JSON.stringify(noticias_compuestas));
-
-
-
-
-
-
-
-
-                  /*ponemos solo en español de base aunque leemos todas*/
-                  //.slice(0, 100)
-                  /*antiguos filtros
-                          let noticias_compuestas2 = noticias_compuestas;
-                          const ordered = {}
-                          const b = ['es']
-                          const c2 = noticias_compuestas2.filter(({ idioma }) => b.includes(idioma))
-                            .sort(({ idioma: r }, { idioma: t }) => b.indexOf(r) - b.indexOf(t));
-        
-        
-                  
-                          let tags_filtrar = this.state.tags
-        
-                          let c_filtradas = [];
-        
-                          c2.forEach(function (valor1, indice1, array1) {
-        
-                            for (let index = 0; index < tags_filtrar.length; ++index) {
-                              if (typeof valor1.tags != "undefined") {
-                                if (JSON.stringify(valor1.tags).includes(tags_filtrar[index])) {
-                                  c_filtradas.push(valor1);
-                                }
-                              }
-        
-                            }
-        
-                          });
-                  */
+            
 
                   let c2 = noticias_compuestas
                   let c_filtradas = noticias_compuestas.reverse()
@@ -737,6 +863,14 @@ export default new Vuex.Store({
 
 
                 })
+
+//END FUNCTIONS 10 TAGS
+
+
+              }
+
+
+
 
 
             })
