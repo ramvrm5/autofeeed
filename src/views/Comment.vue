@@ -4,9 +4,9 @@
       <b-container fluid style="padding: 0px">
         <b-row
           style="height: 90vh !important; width: 100%"
-          class="bg-light align-items-center"
+          class="align-items-center"
         >
-          <div style="left: 25px; top: 60px; position: absolute; z-index: 9999">
+<!--           <div style="left: 25px; top: 60px; position: absolute; z-index: 9999">
             <a style="color: #007bff;cursor: pointer;"   @click="$router.go(-1)"
               ><i class="fa fa-chevron-left" aria-hidden="true"></i>
               {{
@@ -19,9 +19,9 @@
                   : $Back_en
               }}
             </a>
-          </div>
+          </div> -->
           <b-col
-            class="col-lg-8 mx-auto pt-0 pb-0"
+            class="col-lg-8 mx-auto pt-0 pb-0 size-padding"
             style="height: 90%; border: 1px solid #cac5c5"
           >
             <b-row class="h-100">
@@ -114,10 +114,10 @@
               >
                 <b-row
                   class="m-0 w-100"
-                  style="border-bottom: 2px solid rgb(223 223 223); height: 20%"
+                  style="border-bottom: 2px solid rgb(223 223 223); height: 16%"
                 >
                   <b-col
-                    cols="4 h-100 d-block d-sm-block d-md-block d-lg-block"
+                    class="col-3 col-sm-3 col-md-2 col-lg-2 h-100 d-block d-sm-block d-md-block d-lg-block"
                   >
                     <img
                       id="profilepic"
@@ -127,6 +127,7 @@
                       style="
                         border: 2px solid #c5c1c140;
                         height: 100% !important;
+                        width: 100% !important;
                       "
                     />
                   </b-col>
@@ -136,7 +137,7 @@
                 </b-row>
                 <b-row
                   v-if="item.comentarios && item.comentarios.length > 0"
-                  style="height: 68%; overflow-y: scroll"
+                  style="height: 72%; overflow-y: scroll"
                   class="comments-scrollBar m-0 w-100"
                   id="commentSection"
                 >
@@ -191,7 +192,7 @@
                 </b-row>
                 <b-row
                   v-if="!item.comentarios || item.comentarios.length == 0"
-                  style="height: 68%; overflow-y: scroll; color: #afaeae"
+                  style="height: 72%; overflow-y: scroll; color: #afaeae"
                   class="comments-scrollBar ml-0 mr-1 pt-5 text-center"
                   id="commentSection"
                 >
@@ -203,7 +204,7 @@
                       id="addComment"
                       v-model="addComent"
                       class="form-control"
-                      style="border-radius: 0"
+                      style="border-radius:0;height: 100%;"
                       placeholder="Añadir comentarios"
                     ></b-form-textarea>
                     <b-button
@@ -494,4 +495,9 @@ Vue.prototype.$Interests_ar = "الإهتمامات";
 /* article.card{
     height:100%;
 } */
+@media screen and (max-width: 788px) {
+    .size-padding {
+      padding-right:0px;
+    }
+}
 </style>

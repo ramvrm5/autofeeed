@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
-    <b-row style="height: 90vh !important" class="align-items-center">
+    <b-row  style="height: 90vh" class="align-items-center height-Removing">
       
-        <div style="left: 25px;top: 113px;position: absolute;z-index: 9999;">
+<!--         <div style="left: 25px;top: 113px;position: absolute;z-index: 9999;">
             <a style="color: #007bff;cursor: pointer;" @click="$router.go(-1)"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{selectedLan == 'es'
               ? $Back_es
               : selectedLan == 'pt'
@@ -10,8 +10,8 @@
               : selectedLan == 'ar'
               ? $Back_ar
               : $Back_en}}</a>
-        </div>
-      <b-col cols="8 mx-auto h-75">
+        </div> -->
+      <b-col class="col-11 col-sm-10 col-md-8 col-lg-8 mx-auto h-75">
         <form @submit.stop.prevent="handleSubmit">
           <!-- Title Start -->
           <b-form-group
@@ -288,6 +288,13 @@
           </b-form-group>
           <!-- Image End -->
           <div class="text-center">
+            <b-button class="mb-2 mr-4" style="color:white" size="lg" variant="primary" @click="$router.go(-1)">{{selectedLan == 'es'
+              ? $Back_es
+              : selectedLan == 'pt'
+              ? $Back_pt
+              : selectedLan == 'ar'
+              ? $Back_ar
+              : $Back_en}}</b-button>
             <b-button type="submit" class="mb-2" style="color:white" size="lg" variant="primary"
               >{{selectedLan == 'es'
               ? $Submit_es
@@ -540,3 +547,11 @@ Vue.prototype.$typeOfPost_ar = [
   { text: "أخبار", value: "News" },
 ];
 </script>
+<style>
+
+@media screen and (max-width: 680px) {
+    .height-Removing {
+      height:0px !important;
+    }
+}
+</style>
