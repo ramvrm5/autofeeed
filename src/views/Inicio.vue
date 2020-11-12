@@ -18,7 +18,7 @@
                 : $searchUser_en
             "
              @search="searchUserText" :loading="loading" item-text="firstName" v-model="selectedUser" :items="searchUseritems">      
-            <template v-if="loading" #input-end>
+            <template style="ox-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);" v-if="loading" #input-end>
             <img src="https://i.imgur.com/mTNe6tr.gif" class="loading-indicator">
             </template>
           </cool-select>

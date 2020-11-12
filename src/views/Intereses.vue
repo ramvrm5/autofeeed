@@ -227,7 +227,7 @@ export default {
       typeOfTrend:"Neutral",
       addedTag: null,
       fields: [
-        { key: "action", label: this.selectedLan == 'es' ? "Borrar" : "Delte"},
+        { key: "action", label: this.selectedLan == 'es' ? "Borrar" : "Delete"},
         { key: "name", label: "Intereses" },
         { key: "typeOfTag", label: this.selectedLan == 'es' ? "Tipo" : "Type" },
         { key: "typeOfTrend", label: "Trend" },
