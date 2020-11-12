@@ -193,14 +193,14 @@
       ></b-spinner>
     </div>
 
-    <p>
+<!--     <p>
           {{selectedLan == 'es'
               ? $SessionStartedAs_es
               : selectedLan == 'pt'
               ? $SessionStartedAs_pt
               : selectedLan == 'ar'
               ? $SessionStartedAs_ar
-              : $SessionStartedAs_en}}: {{ usuario.email }}</p>
+              : $SessionStartedAs_en}}: {{ usuario.email }}</p> -->
   </div>
 </template>
 
@@ -227,9 +227,9 @@ export default {
       typeOfTrend:"Neutral",
       addedTag: null,
       fields: [
-        { key: "action", label: "Borrar tag"},
+        { key: "action", label: this.selectedLan == 'es' ? "Borrar" : "Delte"},
         { key: "name", label: "Intereses" },
-        { key: "typeOfTag", label: "Type of tag" },
+        { key: "typeOfTag", label: this.selectedLan == 'es' ? "Tipo" : "Type" },
         { key: "typeOfTrend", label: "Trend" },
         { key: "alarma", label: "Texto alarma" },
       ],

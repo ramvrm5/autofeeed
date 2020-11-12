@@ -201,7 +201,7 @@
                   }}
                 </div></b-dropdown-item
               >
-              <b-dropdown-item
+              <!-- <b-dropdown-item
                 ><div
                   style="color: #212529"
                   @click="filtrarporLikes()"
@@ -216,8 +216,7 @@
                       ? $Bookmarks_ar
                       : $Bookmarks_en
                   }}
-                </div></b-dropdown-item
-              >
+                </div></b-dropdown-item> -->
               <b-dropdown-item
                 ><router-link
                   style="color: #212529"
@@ -455,3 +454,9 @@ Vue.prototype.$Sign_off_pt = "Fechar Sessão";
 Vue.prototype.$Sign_off_en = "Sign off";
 Vue.prototype.$Sign_off_ar = "تسجيل خروج";
 </script>
+<style>
+.dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show{
+max-height: 200px;
+overflow: scroll;
+}
+</style>

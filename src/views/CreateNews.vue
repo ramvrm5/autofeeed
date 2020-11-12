@@ -148,7 +148,7 @@
               : $Add_tag_en"
             ></b-form-tags>
             <b-form-text id="tags-remove-on-delete-help" class="mt-2">
-              {{selectedLan == 'es'
+             <!--  {{selectedLan == 'es'
               ? $Tags1_es
               : selectedLan == 'pt'
               ? $Tags1_pt
@@ -180,7 +180,7 @@
               ? $Tags5_pt
               : selectedLan == 'ar'
               ? $Tags5_ar
-              : $Tags5_en}}
+              : $Tags5_en}} -->
             </b-form-text>
             <b-form-invalid-feedback id="Tags-input-live-feedback-2">{{
               veeErrors.first("Tags-input")

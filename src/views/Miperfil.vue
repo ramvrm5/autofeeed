@@ -18,6 +18,7 @@
               email: email,
               firstName: firstName,
               surname: surname,
+              modalMessage: selectedLan == 'es'? $Yourdata_es: selectedLan == 'pt'? $Yourdata_pt: selectedLan == 'ar'? $Yourdata_ar:$Yourdata_en
             })
           "
         >
@@ -812,4 +813,8 @@ Vue.prototype.$password_es = "Cambiar contraseña";
 Vue.prototype.$password_pt = "Cambiar contrasinal";
 Vue.prototype.$password_en = "Change password";
 Vue.prototype.$password_ar = "غير كلمة السر";
+Vue.prototype.$Yourdata_es = "Tus datos han sido actualizados";
+Vue.prototype.$Yourdata_pt = "Seus dados foram atualizados";
+Vue.prototype.$Yourdata_en = "Your data has been updated";
+Vue.prototype.$Yourdata_ar = "تم تحديث بياناتك";
 </script>
