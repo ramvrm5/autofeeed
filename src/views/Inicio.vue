@@ -676,10 +676,33 @@ export default {
           });
         });
     },
-    checkTranslateButton(item) {
-      if (item.idioma == "en") {
+  async  checkTranslateButton(item) {
+      if (item.idioma == this.selectedLan) {
+        let tlt = item.titulo;
+        let dsr = item.cuerpo;
+        let translatedTitleText = [];
+        let translationArray = [tlt, dsr];
+        for (let object of translationArray) {
+          let settings = {
+            async: true,
+            crossDomain: true,
+            url:
+              "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs&q=" +
+              object +
+              "&target=" +
+              item.idioma,
+            method: "POST",
+          };
+          await $.ajax(settings).done(function (response) {
+            translatedTitleText.push(
+              response.data.translations[0].translatedText
+            );
+          });
+        }
+        item.titulo = translatedTitleText[0];
+        item.cuerpo = translatedTitleText[1];
         return true;
-      } else if (item.idioma !== "en") {
+      } else if (item.idioma !== this.selectedLan) {
         return false;
       }
     },
@@ -808,5 +831,8 @@ Vue.prototype.$TakeNote_ar = "خذ ملاحظة!";
   width: 22px;
   margin-right: 9px;
   margin-bottom: 6px;
+}
+.IZ-select .IZ-select__input-wrap .IZ-select__input{
+  box-shadow: unset !important;
 }
 </style>

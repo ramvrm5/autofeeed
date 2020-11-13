@@ -18,7 +18,8 @@
               email: email,
               firstName: firstName,
               surname: surname,
-              modalMessage: selectedLan == 'es'? $Yourdata_es: selectedLan == 'pt'? $Yourdata_pt: selectedLan == 'ar'? $Yourdata_ar:$Yourdata_en
+              modalMessage: selectedLan == 'es'? $Yourdata_es: selectedLan == 'pt'? $Yourdata_pt: selectedLan == 'ar'? $Yourdata_ar:$Yourdata_en,
+              NickAlready: selectedLan == 'es'? $NickAlready_es: selectedLan == 'pt'? $NickAlready_pt: selectedLan == 'ar'? $NickAlready_ar:$NickAlready_en
             })
           "
         >
@@ -817,4 +818,8 @@ Vue.prototype.$Yourdata_es = "Tus datos han sido actualizados";
 Vue.prototype.$Yourdata_pt = "Seus dados foram atualizados";
 Vue.prototype.$Yourdata_en = "Your data has been updated";
 Vue.prototype.$Yourdata_ar = "تم تحديث بياناتك";
+Vue.prototype.$NickAlready_es = "Este sobre nombre ya existe";
+Vue.prototype.$NickAlready_pt = "Este apelido já existe";
+Vue.prototype.$NickAlready_en = "This nick name already exists";
+Vue.prototype.$NickAlready_ar = "هذا الاسم المستعار يتواجد أصلا";
 </script>

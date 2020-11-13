@@ -1171,31 +1171,44 @@ else
       })
 
     },
-
-
-    editarTarea2({ commit }, objeto_recibido) {
+  async editarTarea2({ commit }, objeto_recibido) {
       db.collection('usuarios').doc(this.state.usuario.email).update({
-        nombre: objeto_recibido.nombre?objeto_recibido.nombre:"",
-        firstName: objeto_recibido.firstName?objeto_recibido.firstName:"",
-        surname: objeto_recibido.surname?objeto_recibido.surname:"",
-        apellidos: objeto_recibido.apellidos?objeto_recibido.apellidos:"",
-        address: objeto_recibido.address?objeto_recibido.address:"",
-        city: objeto_recibido.city?objeto_recibido.city:"",
-        teléfono: objeto_recibido.teléfono?objeto_recibido.teléfono:"",
-        psCode: objeto_recibido.psCode?objeto_recibido.psCode:"",
-        email: objeto_recibido.email?objeto_recibido.email:"",
-        default_language: objeto_recibido.selectedLan?objeto_recibido.selectedLan:"",
-
-      }).then(() => {
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: objeto_recibido.modalMessage,//'Your data has been updated',
-          showConfirmButton: false,
-          timer: 1500
-        })
+      nombre: "",
+      }).then(async() => {
+        const noticiasRef = db.collection("usuarios");
+        const snapshot = await noticiasRef.where("nombre", "==", objeto_recibido.nombre).get();
+        if (snapshot.empty) {
+          db.collection('usuarios').doc(this.state.usuario.email).update({
+            nombre: objeto_recibido.nombre ? objeto_recibido.nombre : "",
+            firstName: objeto_recibido.firstName ? objeto_recibido.firstName : "",
+            surname: objeto_recibido.surname ? objeto_recibido.surname : "",
+            apellidos: objeto_recibido.apellidos ? objeto_recibido.apellidos : "",
+            address: objeto_recibido.address ? objeto_recibido.address : "",
+            city: objeto_recibido.city ? objeto_recibido.city : "",
+            teléfono: objeto_recibido.teléfono ? objeto_recibido.teléfono : "",
+            psCode: objeto_recibido.psCode ? objeto_recibido.psCode : "",
+            email: objeto_recibido.email ? objeto_recibido.email : "",
+            default_language: objeto_recibido.selectedLan ? objeto_recibido.selectedLan : "",
+  
+          }).then(() => {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: objeto_recibido.modalMessage,//'Your data has been updated',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          })
+        } else {
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: objeto_recibido.NickAlready,//'Your data has been updated',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
       })
-
     },
 
 
