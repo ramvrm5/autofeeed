@@ -95,7 +95,7 @@
             "
           ></b-form-select>
       </div>
-      <button type="submit" :disabled="!addedTag" class="btn btn-primary mb-2">Añadir etiqueta</button>
+      <button type="submit" :disabled="!addedTag" class="btn btn-primary mb-2">Añadir interés</button>
       
     </form>
     
@@ -639,7 +639,7 @@ Vue.prototype.$Delete_es = "¡Eliminada!";
 Vue.prototype.$Delete_pt = "Excluída!";
 Vue.prototype.$Delete_en = "Deleted!";
 Vue.prototype.$Delete_ar = "تم الحذف!";
-Vue.prototype.$ThisTag_es = "Esta etiqueta";
+Vue.prototype.$ThisTag_es = "Este interés";
 Vue.prototype.$ThisTag_pt = "Esta etiqueta";
 Vue.prototype.$ThisTag_en = "This Tag";
 Vue.prototype.$ThisTag_ar = "هذه العلامة";
