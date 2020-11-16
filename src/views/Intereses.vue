@@ -369,13 +369,13 @@ export default {
       Publicaciones: "25",
       alarma: [],
       alarmas: "0",
-      name: this.addedTag,
+      name: this.addedTag.trim(),
       typeOfTag: "Ocio",
       typeOfTrend: this.typeOfTrend,
       });
-      var addedTag = this.addedTag;
+      var addedTag = this.addedTag.trim();
       var emptyArray = []
-      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag+';Ocio;'+this.typeOfTrend
+      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag.trim()+';Ocio;'+this.typeOfTrend
       var alertTemp = this.alerta;
       if(alertTemp && alertTemp.length > 0){
       alertTemp += alertAppend;
