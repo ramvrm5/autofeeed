@@ -15,11 +15,11 @@ export default new Vuex.Store({
     usuario: null,
     nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
-    firstName:null,
-    surname:null,
+    firstName: null,
+    surname: null,
     apellidos: null,
     teléfono: null,
-    selectedTag:'Notselected',
+    selectedTag: 'Notselected',
     address: null,
     city: null,
     email: null,
@@ -275,7 +275,7 @@ export default new Vuex.Store({
 
                     if (alarmas_lista3[1] == entry) {
                       //alarmaponer = alarmas_lista3[0]
-                      alarmaponer = alarmas_lista3[0] && alarmas_lista3[0].length > 0?JSON.parse(alarmas_lista3[0]):alarmas_lista3[0]
+                      alarmaponer = alarmas_lista3[0] && alarmas_lista3[0].length > 0 ? JSON.parse(alarmas_lista3[0]) : alarmas_lista3[0]
                       typeOfTag = alarmas_lista3[2] ? alarmas_lista3[2] : "Ocio";
                       typeOfTrend = alarmas_lista3[3] ? alarmas_lista3[3] : "Neutral";
                     }
@@ -431,7 +431,7 @@ export default new Vuex.Store({
 
     filtrarporKeyword({ commit }, keyword) {
       //router.push('/')
-      commit('setPaginationCount',0 )
+      commit('setPaginationCount', 0)
       if (keyword == "todos") {
         let ChangeRangeDate = null;
         let noticias_compuestas = this.state.noticias_backupES
@@ -478,7 +478,7 @@ export default new Vuex.Store({
             }, 1000);
           }
         })
-       }
+      }
       else {
         let noticias_compuestas = this.state.noticias_backup
 
@@ -555,8 +555,8 @@ export default new Vuex.Store({
 
 
 
-    getNoticias({ commit }, objectdata) {
-      
+   async getNoticias({ commit }, objectdata) {
+
       commit('setPaginationCount', null)
       const noticias_compuestas = []
       var noticias_alerta = []
@@ -598,7 +598,7 @@ export default new Vuex.Store({
                 yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
               } else if (objectdata.rangedateChoosen == "2 days ago") {
                 yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 2)).getTime() / 1000)
-              }else if (objectdata.rangedateChoosen == "last week") {
+              } else if (objectdata.rangedateChoosen == "last week") {
                 yesterday = Math.round(new Date(new Date().setDate(new Date().getDate() - 7)).getTime() / 1000)
               }
               var dateStartOEnd = objectdata.yesterdayDate ? objectdata.yesterdayDate : yesterday;
@@ -619,55 +619,45 @@ export default new Vuex.Store({
                 } else {
                   querryRef = db.collection("noticias").where("tags", "array-contains", this.state.keywordactual).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
                 }
-              } else if(objectdata.selectedTag == 'Notselected')
-              {
+              } else if (objectdata.selectedTag == 'Notselected') {
 
-//start if tags>10
-if (tags.length>10)
-{
-  let firts10tags = tags.slice(0, 9);
-  let from10to20tags = tags.slice(10, 20);
+                //start if tags>10
+                if (tags.length > 10) {
+                  let firts10tags = tags.slice(0, 9);
+                  let from10to20tags = tags.slice(10, 20);
 
-  db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
-    lengthOfDocument = snapshot.size;
-  })
-  if (objectdata.type == "next") {
-    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(20).get()
-    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", from10to20tags).where("fecha", ">", dateStartOEnd).limit(20).get()
-  } else {
-    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
-    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
-  }
+                  db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+                    lengthOfDocument = snapshot.size;
+                  })
+                  if (objectdata.type == "next") {
+                    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(20).get()
+                    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", from10to20tags).where("fecha", ">", dateStartOEnd).limit(20).get()
+                  } else {
+                    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+                    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+                  }
 
-}
-///end if tags>10
-//Convertir esto o lo de abajo en una funcion qeu acabe sin commits y que luego llame a una funcion solo con commits o a una funcion2 que tenga ota query mas los commits
-//y si llamamos a una funcion externa en lugar de seguir por aqui? 
-
-
-///start else tags<10
-else
-{
-                db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
-                  lengthOfDocument = snapshot.size;
-                })
-                if (objectdata.type == "next") {
-                  querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(20).get()
-                } else {
-                  querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
                 }
-}
-//else tags<10
+                ///end if tags>10
+                //Convertir esto o lo de abajo en una funcion qeu acabe sin commits y que luego llame a una funcion solo con commits o a una funcion2 que tenga ota query mas los commits
+                //y si llamamos a una funcion externa en lugar de seguir por aqui? 
 
 
-
-
+                ///start else tags<10
+                else {
+                  db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+                    lengthOfDocument = snapshot.size;
+                  })
+                  if (objectdata.type == "next") {
+                    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", dateStartOEnd).limit(20).get()
+                  } else {
+                    querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+                  }
+                }
+                //else tags<10
               }
-
-               /////START FUNCTION 20 TAGS
-              if (tags.length>10)
-              {
-
+              /////START FUNCTION 20 TAGS
+              if (tags.length > 10) {
 
                 querryRef.then(res => {
                   res.forEach(doc => {
@@ -713,20 +703,20 @@ else
                       let img = noticia_leida.img;
                       let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
                       noticias_compuestas.push(noticia_leida)
-  
+
                       if (alerta_usuario) {
                         if (texto_noticia.includes(alerta_usuario)) {
                           noticias_alerta.push(noticia_leida)
                         }
                       }
-  
-  
+
+
                       if (typeof correos_like != "undefined") {
                         if (correos_like.includes(user.email)) {
                           noticias_like.push(noticia_leida)
                         }
                       }
-  
+
 
                       let c2 = noticias_compuestas
                       let c_filtradas = noticias_compuestas.reverse()
@@ -736,18 +726,18 @@ else
                       commit('setNoticiasBackupES', c_filtradas)
                       commit('setNoticiasLikes', noticias_like)
                       /*fin de poner solo en español*/
-    
-    
+
+
                       //para poner todos los idiomas a la vez commit('setNoticias', noticias_compuestas)
                       commit('setNoticiasBackup', noticias_compuestas)
-    
-    
+
+
                       document.getElementById("cargandoid").style.display = "none";
                       if (c_filtradas.length < 1) {
                         document.getElementById("noticiasid").innerHTML = "Aún no hay noticias registradas para tus intereses, pero en unas horas las tendremos preparadas para ti"
                       }
                       else {
-    
+
                         alerta_usuario = this.state.alerta;
                         var aviso_alarma = (c_filtradas.indexOf(alerta_usuario));
                         var aviso_alarma2 = c_filtradas.find(element => (element.cuerpo).includes(alerta_usuario))
@@ -757,42 +747,24 @@ else
                           document.getElementById("alarmatexto").style.color = "rgb(255 255 255)"
                           document.getElementById("alarmaid").style.color = "rgba(255,255,255,1)"
                           document.getElementById("alarmaid1").style.color = "rgba(255,255,255,1)"
-    
-    
+
+
                           //alert("Alerta! Se ha detectado tu texto en la siguiente noticia: \n" + aviso_alarma2.titulo + "\n" +aviso_alarma2.cuerpo +"\nURL: " + aviso_alarma2.url);
                         }
                         //document.getElementById("noticiasid").innerHTML = "Hasta aquí por ahora, regresa en unas horas a por más noticias"
                       }
-    
                       commit('setNoticiasAlerta', noticias_alerta_2)
 
-
-
-  
                     })
-            
-
-                 
-
+                  })
 
                 })
-
-
-
-
-
-
-
-
-              })
-
               }
               /////END FUNCTION 20 TAGS
-              else
-{
-/////START FUNCTION 10 TAGS
-              querryRef.then(res => {
-                  res.forEach(doc => {
+              else {
+                /////START FUNCTION 10 TAGS
+                querryRef.then(res => {
+                   res.forEach(doc => {
                     let noticia_leida = doc.data()
                     let titulo = noticia_leida.titulo;
                     let correos_like = noticia_leida.correos_like3;
@@ -816,13 +788,7 @@ else
                         noticias_like.push(noticia_leida)
                       }
                     }
-
-
                   })
-
-
-            
-
                   let c2 = noticias_compuestas
                   let c_filtradas = noticias_compuestas.reverse()
                   commit('setNoticias', c_filtradas)
@@ -831,18 +797,13 @@ else
                   commit('setNoticiasBackupES', c_filtradas)
                   commit('setNoticiasLikes', noticias_like)
                   /*fin de poner solo en español*/
-
-
                   //para poner todos los idiomas a la vez commit('setNoticias', noticias_compuestas)
                   commit('setNoticiasBackup', noticias_compuestas)
-
-
                   document.getElementById("cargandoid").style.display = "none";
                   if (c_filtradas.length < 1) {
                     document.getElementById("noticiasid").innerHTML = "Aún no hay noticias registradas para tus intereses, pero en unas horas las tendremos preparadas para ti"
                   }
                   else {
-
                     alerta_usuario = this.state.alerta;
                     var aviso_alarma = (c_filtradas.indexOf(alerta_usuario));
                     var aviso_alarma2 = c_filtradas.find(element => (element.cuerpo).includes(alerta_usuario))
@@ -852,27 +813,14 @@ else
                       document.getElementById("alarmatexto").style.color = "rgb(255 255 255)"
                       document.getElementById("alarmaid").style.color = "rgba(255,255,255,1)"
                       document.getElementById("alarmaid1").style.color = "rgba(255,255,255,1)"
-
-
                       //alert("Alerta! Se ha detectado tu texto en la siguiente noticia: \n" + aviso_alarma2.titulo + "\n" +aviso_alarma2.cuerpo +"\nURL: " + aviso_alarma2.url);
                     }
                     //document.getElementById("noticiasid").innerHTML = "Hasta aquí por ahora, regresa en unas horas a por más noticias"
                   }
-
                   commit('setNoticiasAlerta', noticias_alerta_2)
-
-
                 })
-
-//END FUNCTIONS 10 TAGS
-
-
+                //END FUNCTIONS 10 TAGS
               }
-
-
-
-
-
             })
         }
         /* else {
@@ -925,12 +873,12 @@ else
       let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
       let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
       var tags = []
-      if(this.state.rawTags && this.state.rawTags.length > 0){
+      if (this.state.rawTags && this.state.rawTags.length > 0) {
         this.state.rawTags += ';' + objeto_tags.addedTag;
-      }else{
+      } else {
         this.state.rawTags = objeto_tags.addedTag;
       }
-      commit("setRawTags",this.state.rawTags)
+      commit("setRawTags", this.state.rawTags)
       tags.push(this.state.rawTags)
       db.collection('usuarios').doc(this.state.email).update({
         tags: tags
@@ -1081,30 +1029,30 @@ else
                       document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
 
                       //aqui llama al economista
-/*                       fetch(urlec, { mode: 'no-cors' })
-                        .then(response => {
-                        })
-                        .then((data) => {
-                          fetch(urlbaidu, { mode: 'no-cors' })
-                            .then(response => {
-                            })
-                            .then((data) => {
-
-                              pcg = 100;
-                              document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
-                              document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
-                              document.getElementById("barraid").style.display = "none";
-                              location.reload();
-
-                            })
-                            .catch((error) => {
-                              console.log(error)
-                            })
-
-                        })
-                        .catch((error) => {
-                          console.log(error)
-                        }) */
+                      /*                       fetch(urlec, { mode: 'no-cors' })
+                                              .then(response => {
+                                              })
+                                              .then((data) => {
+                                                fetch(urlbaidu, { mode: 'no-cors' })
+                                                  .then(response => {
+                                                  })
+                                                  .then((data) => {
+                      
+                                                    pcg = 100;
+                                                    document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
+                                                    document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
+                                                    document.getElementById("barraid").style.display = "none";
+                                                    location.reload();
+                      
+                                                  })
+                                                  .catch((error) => {
+                                                    console.log(error)
+                                                  })
+                      
+                                              })
+                                              .catch((error) => {
+                                                console.log(error)
+                                              }) */
                     })
                     .catch((error) => {
                       console.log(error)
@@ -1171,10 +1119,10 @@ else
       })
 
     },
-  async editarTarea2({ commit }, objeto_recibido) {
+    async editarTarea2({ commit }, objeto_recibido) {
       db.collection('usuarios').doc(this.state.usuario.email).update({
-      nombre: "",
-      }).then(async() => {
+        nombre: "",
+      }).then(async () => {
         const noticiasRef = db.collection("usuarios");
         const snapshot = await noticiasRef.where("nombre", "==", objeto_recibido.nombre).get();
         if (snapshot.empty) {
@@ -1189,7 +1137,7 @@ else
             psCode: objeto_recibido.psCode ? objeto_recibido.psCode : "",
             email: objeto_recibido.email ? objeto_recibido.email : "",
             default_language: objeto_recibido.selectedLan ? objeto_recibido.selectedLan : "",
-  
+
           }).then(() => {
             Swal.fire({
               position: 'center',

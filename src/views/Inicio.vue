@@ -57,7 +57,7 @@
             @error.native="error(index)"
           />
           <b-card-body :key="index" :id="index" :title="item.titulo">
-            <b-button
+            <button
               :id="'translate_' + index"
               style="
                 position: absolute;
@@ -70,16 +70,14 @@
                 background-color: #ffffff00;
               "
               @click="toggleTranslate(item, index)"
-              aria-disabled="true"
-              variant="primary"
-              :disabled="checkTranslateButton(item)"
-              ><!-- :class="translate_lan" -->
+              type="button" class="btn btn-lg btn-primary"
+              :aria-disabled="checkTranslateButton(item,index)">
               <i
-                style="color: #007bff; font-size: 35px"
+                style="color: #007bff; font-size: 35px;background-color: rgb(245 245 245);"
                 class="fa fa-language"
                 aria-hidden="true"
               ></i>
-            </b-button>
+            </button>
             <b-card-text>{{ item.cuerpo }}</b-card-text>
             <div class="row">
               <div class="col-5">
@@ -118,7 +116,7 @@
                 </router-link>
               </div>
               <div class="col-7 text-center">
-                <b-button target="_blank" :href="item.url" variant="primary">{{
+                <b-button  variant="primary"><a target="_blank" :href="item.url?item.url:''" style="color: white;text-decoration: none;">{{
                   selectedLan == "es"
                     ? $see_more_es
                     : selectedLan == "pt"
@@ -126,7 +124,7 @@
                     : selectedLan == "ar"
                     ? $see_more_ar
                     : $see_more_en
-                }}</b-button>
+                }}</a></b-button>
               </div>
             </div>
 
@@ -273,8 +271,15 @@
         v-if="noticias.length == noticiasLength"
         style="margin-left: auto; margin-right: auto; width: 80%"
         id="noticiasid"
-      >
-        Preparando tus noticias personalizadas
+      >{{
+        selectedLan == "es"
+          ? $PreparingNewsText_es
+          : selectedLan == "pt"
+          ? $PreparingNewsText_pt
+          : selectedLan == "ar"
+          ? $PreparingNewsText_ar
+          : $PreparingNewsText_en
+      }}
       </h4>
     </center>
 	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;z-index: 99999999999999;" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
@@ -676,10 +681,14 @@ export default {
           });
         });
     },
-  async  checkTranslateButton(item) {
-      if (item.idioma == this.selectedLan) {
-        let tlt = item.titulo;
-        let dsr = item.cuerpo;
+  async  checkTranslateButton(item,index) {
+    let tlt = null;
+    let dsr = null;
+    let defaultLanguageOfuser = this.selectedLan;
+      if (item.idioma == defaultLanguageOfuser) {
+        $('#translate_'+index).prop('disabled', true);
+        tlt = item.titulo;
+        dsr = item.cuerpo;
         let translatedTitleText = [];
         let translationArray = [tlt, dsr];
         for (let object of translationArray) {
@@ -701,9 +710,8 @@ export default {
         }
         item.titulo = translatedTitleText[0];
         item.cuerpo = translatedTitleText[1];
-        return true;
       } else if (item.idioma !== this.selectedLan) {
-        return false;
+        $('#translate_'+index).prop('disabled', false);
       }
     },
     async toggleTranslate(item, index) {
@@ -716,6 +724,29 @@ export default {
         $("#translate_" + index).addClass(languageTemp);
         target = languageTemp;
       }
+      if(item.fuente == "twitter"){
+      let dsr = item.cuerpo;
+      let translatedTitleText = [];
+      let translationArray = [dsr];
+      for (let object of translationArray) {
+        let settings = {
+          async: true,
+          crossDomain: true,
+          url:
+            "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs&q=" +
+            object +
+            "&target=" +
+            target,
+          method: "POST",
+        };
+        await $.ajax(settings).done(function (response) {
+          translatedTitleText.push(
+            response.data.translations[0].translatedText
+          );
+        });
+      }
+      item.cuerpo = translatedTitleText[0];
+      }else{
       let tlt = item.titulo;
       let dsr = item.cuerpo;
       let translatedTitleText = [];
@@ -739,6 +770,7 @@ export default {
       }
       item.titulo = translatedTitleText[0];
       item.cuerpo = translatedTitleText[1];
+      }
     },
   },
   computed: {
@@ -825,6 +857,10 @@ Vue.prototype.$TakeNote_es = "Tomo nota!";
 Vue.prototype.$TakeNote_pt = "Tomo nota!";
 Vue.prototype.$TakeNote_en = "Take note!";
 Vue.prototype.$TakeNote_ar = "خذ ملاحظة!";
+Vue.prototype.$PreparingNewsText_es = "Preparando tus noticias personalizadas";
+Vue.prototype.$PreparingNewsText_pt = "Preparando suas notícias personalizadas";
+Vue.prototype.$PreparingNewsText_en = "Preparing your personalized news";
+Vue.prototype.$PreparingNewsText_ar = "اعداد اخبارك الشخصية";
 </script>
 <style>
 .loading-indicator {

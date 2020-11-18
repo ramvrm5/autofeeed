@@ -457,6 +457,25 @@ Vue.prototype.$Sign_off_ar = "تسجيل خروج";
 <style>
 .dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show{
 max-height: 200px;
-overflow: scroll;
+overflow-y: scroll;
+}
+/* width */
+.dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+.dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
