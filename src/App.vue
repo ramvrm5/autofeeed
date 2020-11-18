@@ -156,7 +156,7 @@
                   ><img
                     id="imgmenu"
                     :src="imgurl3"
-                    onerror="this.onerror=null;this.src='./assets/avatar-01.png';"
+                    onerror="this.onerror=null;this.src='https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2Favatar-01.png?alt=media&token=296aa880-816b-429a-bc08-b88197e6934f';"
                 /></em>
               </template>
               <!-- <span id="nombreUsuario"></span> -->
@@ -445,9 +445,9 @@ Vue.prototype.$Bookmarks_es = "Marcadores";
 Vue.prototype.$Bookmarks_pt = "Favoritos";
 Vue.prototype.$Bookmarks_en = "Bookmarks";
 Vue.prototype.$Bookmarks_ar = "إشارات مرجعية";
-Vue.prototype.$Interests_and_Alerts_es = "Intereses y Alertas";
-Vue.prototype.$Interests_and_Alerts_en = "Interesses e alertas";
-Vue.prototype.$Interests_and_Alerts_pt = "Interests and Alerts";
+Vue.prototype.$Interests_and_Alerts_es = "Intereses y alarmas";
+Vue.prototype.$Interests_and_Alerts_en = "Interests & alarms";
+Vue.prototype.$Interests_and_Alerts_pt = "Interesses e alarmes";
 Vue.prototype.$Interests_and_Alerts_ar = "الاهتمامات والتنبيهات";
 Vue.prototype.$Sign_off_es = "Cerrar sesión";
 Vue.prototype.$Sign_off_pt = "Fechar Sessão";
