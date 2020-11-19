@@ -39,7 +39,7 @@
             <b-nav-item v-if="existeUsuario && this.$route.name != 'Timeline'"
               ><router-link
                 :to="{ name: 'Timeline', params: { email: emailId } }"
-                style="text-decoration: none; color: unset"
+                style="text-decoration: none; color: white"
                 >{{
                   selectedLan == "es"
                     ? $Timeline_es
@@ -51,29 +51,33 @@
                 }}</router-link
               ></b-nav-item
             >
-            <b-nav-item
-              v-if="this.$route.name != 'Nosotros'"
-              :to="{ name: 'Nosotros' }"
-              >{{
-                selectedLan == "es"
-                  ? $We_es
-                  : selectedLan == "pt"
-                  ? $We_pt
-                  : selectedLan == "ar"
-                  ? $We_ar
-                  : $We_en
-              }}</b-nav-item
-            >
-            <b-nav-item :to="{ name: 'Nosotros' }">v 1.07r</b-nav-item>
+
+ <b-nav-item v-if="existeUsuario && this.$route.name != 'Timeline'">
+                  <router-link
+                  style="color: white"
+                  to="/intereses"
+                  v-if="existeUsuario"
+                  >{{
+                    selectedLan == "es"
+                      ? $Interests_and_Alerts_es
+                      : selectedLan == "pt"
+                      ? $Interests_and_Alerts_pt
+                      : selectedLan == "ar"
+                      ? $Interests_and_Alerts_ar
+                      : $Interests_and_Alerts_en
+                  }}</router-link>
+</b-nav-item >
+   
+         
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
-            <b-nav-item @click="mostrarAlarmas()" id="alarmaid1">
+          <b-navbar-nav  class="ml-auto">
+            <b-nav-item style="display:none" @click="mostrarAlarmas()" id="alarmaid1">
               <font-awesome-icon id="alarmaid" icon="bell"
             /></b-nav-item>
 
-            <b-nav-item @click="mostrarAlarmas()">
+            <b-nav-item style="display:none" @click="mostrarAlarmas()">
               <span id="alarmatexto">{{
                 selectedLan == "es"
                   ? $No_alarms_es
@@ -217,21 +221,28 @@
                       : $Bookmarks_en
                   }}
                 </div></b-dropdown-item> -->
-              <b-dropdown-item
-                ><router-link
-                  style="color: #212529"
-                  to="/intereses"
-                  v-if="existeUsuario"
-                  >{{
-                    selectedLan == "es"
-                      ? $Interests_and_Alerts_es
-                      : selectedLan == "pt"
-                      ? $Interests_and_Alerts_pt
-                      : selectedLan == "ar"
-                      ? $Interests_and_Alerts_ar
-                      : $Interests_and_Alerts_en
-                  }}</router-link
-                ></b-dropdown-item
+              <b-dropdown-item>
+
+
+                         <router-link
+                         style="color: #212529"
+              v-if="this.$route.name != 'Nosotros'"
+              :to="{ name: 'Nosotros' }"
+              >{{
+                selectedLan == "es"
+                  ? $We_es
+                  : selectedLan == "pt"
+                  ? $We_pt
+                  : selectedLan == "ar"
+                  ? $We_ar
+                  : $We_en
+              }}</router-link >
+
+          
+                  
+                  
+                  
+                  </b-dropdown-item
               >
               <b-dropdown-item @click="logout" v-if="existeUsuario">{{
                 selectedLan == "es"
