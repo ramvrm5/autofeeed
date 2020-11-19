@@ -20,7 +20,7 @@ const routes = [
     path: '/',
     name: 'Mi Mundo',
     component: () => import(/* webpackChunkName: "Mundo" */ '../views/Inicio.vue'),
-    meta: { requiresAuth: true, title: 'Youddly.com - Tu propio internet' }
+    meta: { requiresAuth: true, title: 'Fauno.ai - Tu propio internet' }
   },
   {
     path: '/miperfil',

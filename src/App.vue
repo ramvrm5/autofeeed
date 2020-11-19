@@ -283,7 +283,7 @@ export default {
     $route: {
       immediate: true,
       handler(to, from) {
-        document.title = to.meta.title || "Youddly.com - Tu propio internet";
+        document.title = to.meta.title || "Fauno.ai - Tu propio internet";
         //aqui se puede poner to.meta.title para poner diferentes
         //segun los metas del archivo de router
       },
