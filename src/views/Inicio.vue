@@ -360,10 +360,10 @@ import Swal from "sweetalert2";
 import $ from "jquery";
 import { CoolSelect } from 'vue-cool-select'
 
-const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
+/* const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
 const { Translate } = require("@google-cloud/translate").v2;
 
-const translate = new Translate({ projectId });
+const translate = new Translate({ projectId }); */
 export default {
   components: { CoolSelect },
   data() {
@@ -684,6 +684,9 @@ export default {
   async  checkTranslateButton(item,index) {
     let tlt = null;
     let dsr = null;
+      let projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
+      let { Translate } = require("@google-cloud/translate").v2;
+      let translate = new Translate({ projectId });
     let defaultLanguageOfuser = this.selectedLan;
       if (item.idioma == defaultLanguageOfuser) {
         $('#translate_'+index).prop('disabled', true);
@@ -715,6 +718,9 @@ export default {
       }
     },
     async toggleTranslate(item, index) {
+      let projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
+      let { Translate } = require("@google-cloud/translate").v2;
+      let translate = new Translate({ projectId });
       let target = "";
       let languageTemp = this.selectedLan;
       if ($("#translate_" + index).hasClass(languageTemp)) {

@@ -121,7 +121,8 @@
               >
                 <template v-slot:icon>
                   <v-avatar>
-                    <img :src="getImage(timelineItem,timelineItem.tag)" 
+                    <img 
+                    :src="getImage(timelineItem,timelineItem.tag)" 
                     onerror="this.onerror=null;this.src='https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01';"/>
                   </v-avatar>
                 </template>
@@ -451,11 +452,24 @@ export default {
             } else {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
+/*           for (let i = 0; tagsArray.length > 0; i++) {
+            if (tagsArray[i].length > 0) {
+              return (
+                "http://35.195.38.33/img_tag/default_img/" +
+                tagsArray[i] +
+                ".png"
+              );
+            } else if (tagsArray.length == i + 1) {
+              return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+            }
+          } */
         } else {
           return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
         }
-      } else {
-        return item.img?item.img:"https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
+      } else if(item.image !== null){
+        return item.img;
+      } else if(item.image == null){
+        return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
       }
     },
   },
