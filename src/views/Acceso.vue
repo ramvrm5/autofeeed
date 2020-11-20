@@ -59,10 +59,11 @@
                 placeholder="Ingrese contraseña"
                 v-model="pass"
             >-->
-          <b-button type="submit" variant="primary" style="color:white" :disabled="!desactivar"
-            >Acceder</b-button
+          <b-button type="submit" variant="primary" @click="onClick" style="color:white" :disabled="!desactivar"
+            >Acceder <b-spinner v-if="emailloader" small  label="Spinning"></b-spinner></b-button
           >
           <b-button
+          :disabled="registerDisable"
             type="reset"
             style="
               color: white;
@@ -70,7 +71,9 @@
               border-color: green;
               background-color: green;
             "
-            ><router-link style="color: white" to="/registro"
+            ><router-link 
+            id="register"
+          :disabled="registerDisable" style="color: white" to="/registro"
               >Registrarse</router-link
             ></b-button
           >
@@ -104,6 +107,7 @@
 </template>
 
 <script>
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import { mapActions, mapState, mapGetters } from "vuex";
 import image1 from "../assets/fondoc1.jpg";
 import image2 from "../assets/fondoc2.jpg";
@@ -111,10 +115,13 @@ import image3 from "../assets/fondoc3.jpg";
 import image4 from "../assets/fondoc4.jpg";
 import image5 from "../assets/fondoc5.jpg";
 import image6 from "../assets/fondoc6.jpg";
+import $ from "jquery";
 export default {
   name: "Acceso",
   data() {
     return {
+      emailloader:false,
+      registerDisable:false,
       email: "",
       pass: "",
     };
@@ -128,24 +135,26 @@ export default {
     if (numerofondo == 4) document.getElementById("fondoid").src = image4;
     if (numerofondo == 5) document.getElementById("fondoid").src = image5;
     if (numerofondo == 6) document.getElementById("fondoid").src = image6;
-
-    /*UTIL PARA LLAMAR SCRITPS ON READY
-      let recaptchaScript = document.createElement('script')
-      recaptchaScript.setAttribute('src', 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/js%2Ffondo1.min.js?alt=media')
-      document.head.appendChild(recaptchaScript)
-
-         let recaptchaScript2 = document.createElement('script')
-      recaptchaScript2.setAttribute('src', 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/js%2Ffondo2.min.js?alt=media')
-      document.head.appendChild(recaptchaScript2)
-
-
-         let recaptchaScript3 = document.createElement('script')
-      recaptchaScript3.setAttribute('src', 'https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/js%2Ffondo3.min.js?alt=media')
-      document.head.appendChild(recaptchaScript3)
-      */
   },
   methods: {
     ...mapActions(["ingresoUsuario", "cambiarcontraseña"]),
+    onClick(){
+      if(this.email && this.pass){
+        this.emailloader = true;
+        this.registerDisable = true;
+        $("#register").css("cursor", "no-drop");
+      }
+      setTimeout(() => {
+      var error = this.error.message;
+        if(error){
+          this.emailloader = false;
+          this.registerDisable = false;
+        }else{
+          this.emailloader = true;
+          this.registerDisable = true;
+        }
+      }, 1000);
+    },
   },
   computed: {
     ...mapState(["error", "usuario"]),
