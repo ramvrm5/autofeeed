@@ -644,7 +644,6 @@ export default {
     },
     darlike(id) {
       let contador_veces = 0;
-
       let user = firebase.auth().currentUser;
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
