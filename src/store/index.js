@@ -438,6 +438,7 @@ export default new Vuex.Store({
         commit('setNoticias', noticias_compuestas)
         commit('setChangeRangeDate', ChangeRangeDate)
         commit('setSelectedTag', 'Notselected')
+        return false
       }
       else if (keyword !== "todos") {
         commit('setKeywordactual', keyword)
@@ -463,11 +464,11 @@ export default new Vuex.Store({
             noticias_compuestas.push(noticia_leida)
           })
           if (noticias_compuestas.length < 1) {
-            router.push('/') //volver a inicio
+            //router.push('/') //volver a inicio
             commit('setKeywordactual', keyword)
             document.getElementById("botonmodal").click()
           } else {
-            router.push('/')
+            //router.push('/')
             setTimeout(() => {
               let c_filtradas = noticias_compuestas.reverse()
               commit('setNoticias', c_filtradas)
@@ -663,6 +664,7 @@ export default new Vuex.Store({
                   res.forEach(doc => {
                     let noticia_leida = doc.data()
                     let titulo = noticia_leida.titulo;
+                    let documentId = doc.id;
                     let correos_like = noticia_leida.correos_like3;
                     let cuerpo = noticia_leida.cuerpo;
                     let texto_noticia = titulo + cuerpo;
@@ -670,6 +672,7 @@ export default new Vuex.Store({
                     let url = noticia_leida.tags;
                     let img = noticia_leida.img;
                     let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+                    noticia_leida["documentId"] =  doc.id;
                     noticias_compuestas.push(noticia_leida)
 
                     if (alerta_usuario) {
@@ -695,6 +698,7 @@ export default new Vuex.Store({
                     res.forEach(doc => {
                       let noticia_leida = doc.data()
                       let titulo = noticia_leida.titulo;
+                      let documentId =  doc.id;
                       let correos_like = noticia_leida.correos_like3;
                       let cuerpo = noticia_leida.cuerpo;
                       let texto_noticia = titulo + cuerpo;
@@ -702,6 +706,7 @@ export default new Vuex.Store({
                       let url = noticia_leida.tags;
                       let img = noticia_leida.img;
                       let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+                      noticia_leida["documentId"] =  doc.id;
                       noticias_compuestas.push(noticia_leida)
 
                       if (alerta_usuario) {
@@ -774,6 +779,7 @@ export default new Vuex.Store({
                     let url = noticia_leida.tags;
                     let img = noticia_leida.img;
                     let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+                    noticia_leida["documentId"] =  doc.id;
                     noticias_compuestas.push(noticia_leida)
 
                     if (alerta_usuario) {

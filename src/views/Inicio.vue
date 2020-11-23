@@ -1,13 +1,8 @@
 <template>
   <div class="home">
-    <!-- <router-link to="/agregar">
-       <button class="btn btn-success btn-block">Actualizar</button>
-    </router-link>-->
-
-    <!--columns or deck-->
     <div>
       <div class="row mt-4 w-100">
-        <div class="col-6 col-sm-6 col-md-4 col-lg-4 pl-4">
+        <div class="col-4 col-sm-4 col-md-3 col-lg-3 pl-4 pr-0">
           <cool-select  :value="selectedUserInfo()" :placeholder="
               selectedLan == 'es'
                 ? $searchUser_es
@@ -22,9 +17,26 @@
             <img src="https://i.imgur.com/mTNe6tr.gif" class="loading-indicator">
             </template>
           </cool-select>
+        </div>        
+        <div class="col-3 col-sm-3 col-md-1 col-lg-1 pr-1 pl-0">
+          <b-form-select
+            id="input-3"
+            v-model="searchType"
+            :options="
+              selectedLan == 'es'
+                ? $searchType_es
+                : selectedLan == 'pt'
+                ? $searchType_pt
+                : selectedLan == 'ar'
+                ? $searchType_ar
+                : $searchType_en
+            "
+            required
+            @change="seacrhInputChange"
+          ></b-form-select>
         </div>
         <div class="d-none d-sm-none d-md-block d-lg-block col-md-4 col-lg-4"></div>
-        <div class="col-6 col-sm-6 col-md-4 col-lg-4 pr-2">
+        <div class="col-5 col-sm-5 col-md-4 col-lg-4 pr-2">
           <b-form-select
             id="input-3"
             :value="getCurrentFilter()"
@@ -368,7 +380,9 @@ export default {
   components: { CoolSelect },
   data() {
     return {
+      searchType: "user",
       loading: false,
+      firstTimeTagSelected: false,
       searchUseritems:[],
       selectedUser: null,
       searchUserValue:false,
@@ -550,16 +564,20 @@ export default {
       });
     },
     selectedUserInfo(){
-      this.selectedUser
-      if(this.selectedUser){
+      if(this.selectedUser && this.searchType == "user"){
         this.$router.push('/timeline/'+this.selectedUser.email);
+      }else if(this.selectedUser && !this.firstTimeTagSelected && this.searchType == "tag"){
+        this.firstTimeTagSelected = true;
+        this.filtrarporKeyword(this.selectedUser);
       }
     },
-    searchUserText(searchtext){
+   searchUserText(searchtext){
       this.searchUseritems = []
       var items = []
       this.loading = searchtext.length > 0?true:false
-      const noticiasRef = db.collection("usuarios").orderBy("firstName").startAt(searchtext).get();
+      let noticiasRef 
+      if(this.searchType == "user"){
+        noticiasRef = db.collection("usuarios").orderBy("firstName").startAt(searchtext).get();
         noticiasRef.then(function (querySnapshot) {
           querySnapshot.forEach((doc) => {
             var dataTemp = doc.data();
@@ -568,6 +586,30 @@ export default {
           this.loading = false
           this.searchUseritems = searchtext.length > 0?items:[];
         }.bind(this));
+      }else if(this.searchType == "tag"){
+        noticiasRef = db.collection("noticias").where("tags", "array-contains", searchtext).orderBy("tags").startAt(searchtext).limit(1).get();
+        noticiasRef.then(function (querySnapshot) {
+          querySnapshot.forEach((doc) => {
+            var dataTemp = doc.data();
+            var tags
+            if(dataTemp.tags.length == 0){
+              tags = dataTemp.tags; 
+            }else{
+              tags = dataTemp.tags.filter(object => object == searchtext);
+            }
+            items.push({"firstName":tags[0]})
+          });
+          this.loading = false
+          this.searchUseritems = searchtext.length > 0?items:[];
+        }.bind(this));
+      }if((searchtext.length == 0) && this.firstTimeTagSelected && this.searchType == "tag"){
+        this.firstTimeTagSelected = false;
+        this.selectedUser = null;
+        this.filtrarporKeyword("todos");
+      }
+    },
+    seacrhInputChange(){
+      this.searchUseritems = [];
     },
     getImage(item, tagsArray) {
       if (item.fuente === "Google" || item.fuente === "seekingalpha") {
@@ -684,9 +726,6 @@ export default {
   async  checkTranslateButton(item,index) {
     let tlt = null;
     let dsr = null;
-      let projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
-      let { Translate } = require("@google-cloud/translate").v2;
-      let translate = new Translate({ projectId });
     let defaultLanguageOfuser = this.selectedLan;
       if (item.idioma == defaultLanguageOfuser) {
         $('#translate_'+index).prop('disabled', true);
@@ -699,7 +738,7 @@ export default {
             async: true,
             crossDomain: true,
             url:
-              "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs&q=" +
+              "https://translation.googleapis.com/language/translate/v2?key=AIzaSyAueQieUyTZkOgW_IHJwCp80awHTzXaP6M&q=" +
               object +
               "&target=" +
               item.idioma,
@@ -717,12 +756,12 @@ export default {
         $('#translate_'+index).prop('disabled', false);
       }
     },
+
     async toggleTranslate(item, index) {
-      let projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
-      let { Translate } = require("@google-cloud/translate").v2;
-      let translate = new Translate({ projectId });
       let target = "";
       let languageTemp = this.selectedLan;
+      const noticiasRef = db.collection("noticias");
+      const snapshot = await noticiasRef.where("languageCheck", "array-contains", {title: item.titulo}).get();
       if ($("#translate_" + index).hasClass(languageTemp)) {
         $("#translate_" + index).removeClass(languageTemp);
         target = item.idioma;
@@ -731,53 +770,153 @@ export default {
         target = languageTemp;
       }
       if(item.fuente == "twitter"){
-      let dsr = item.cuerpo;
-      let translatedTitleText = [];
-      let translationArray = [dsr];
-      for (let object of translationArray) {
-        let settings = {
-          async: true,
-          crossDomain: true,
-          url:
-            "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs&q=" +
-            object +
-            "&target=" +
-            target,
-          method: "POST",
-        };
-        await $.ajax(settings).done(function (response) {
-          translatedTitleText.push(
-            response.data.translations[0].translatedText
-          );
-        });
-      }
-      item.cuerpo = translatedTitleText[0];
+        const noticiasRef = db.collection("noticias");
+        const snapshot = await noticiasRef.where("languageCheck", "array-contains", {language: target}).get();
+          if (snapshot.empty) {
+            let dsr = item.cuerpo;
+            let translatedTitleText = [];
+            let translationArray = [dsr];
+            for (let object of translationArray) {
+              let settings = {
+                async: true,
+                crossDomain: true,
+                url:
+                  "https://translation.googleapis.com/language/translate/v2?key=AIzaSyAueQieUyTZkOgW_IHJwCp80awHTzXaP6M&q=" +
+                  object +
+                  "&target=" +
+                  target,
+                method: "POST",
+              };
+              await $.ajax(settings).done(function (response) {
+                translatedTitleText.push(
+                  response.data.translations[0].translatedText
+                );
+              });
+            }
+            item.cuerpo = translatedTitleText[0];
+            if(item.languageCheck && item.languageCheck.length > 0){
+              item.languageCheck.push({
+                language: target,
+                title:translatedTitleText[0],
+                decription:translatedTitleText[1],
+              })
+              db.collection("noticias").doc(item.documentId).update({
+                languageCheck: item.languageCheck,
+              })
+              .then(() => {
+                console.log("updated");
+              });
+          }else{
+            item["languageCheck"] = {
+              language: target,
+              decription:translatedTitleText[1],
+            }
+            db.collection("noticias").doc(item.documentId).update({
+                languageCheck: item.languageCheck,
+              })
+              .then(() => {
+                console.log("added translated values");
+              }).catch((error) => {
+                console.log("error in updating translating values")
+            })
+          }
+        }else{
+         var querryRef1 = db.collection("noticias").where("id", "==", item.id).get();
+          querryRef1.then(res => {
+            res.forEach(doc => {
+              let dataTemp = doc.data();
+              if(dataTemp.languageCheck.length > 0){
+                for(let i=0;dataTemp.languageCheck.length > i;i++){
+                  if(dataTemp.languageCheck[i].language == target){
+                      item.cuerpo = dataTemp.languageCheck[i].decription;
+                  }
+                }
+              }else{
+                      item.cuerpo = dataTemp.languageCheck[0].decription;
+              }
+            })
+          })
+        }
       }else{
-      let tlt = item.titulo;
-      let dsr = item.cuerpo;
-      let translatedTitleText = [];
-      let translationArray = [tlt, dsr];
-      for (let object of translationArray) {
-        let settings = {
-          async: true,
-          crossDomain: true,
-          url:
-            "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs&q=" +
-            object +
-            "&target=" +
-            target,
-          method: "POST",
-        };
-        await $.ajax(settings).done(function (response) {
-          translatedTitleText.push(
-            response.data.translations[0].translatedText
-          );
-        });
-      }
-      item.titulo = translatedTitleText[0];
-      item.cuerpo = translatedTitleText[1];
+        let languageExist = false;
+        if(item.languageCheck && item.languageCheck.length > 0){
+           languageExist = item.languageCheck.some(object => object.language == target);
+        }else{
+           languageExist = false;
+        }
+        if (!languageExist) {
+          let tlt = item.titulo;
+          let dsr = item.cuerpo;
+          let translatedTitleText = [];
+          let translationArray = [tlt, dsr];
+          for (let object of translationArray) {
+            let settings = {
+              async: true,
+              crossDomain: true,
+              url:
+                "https://translation.googleapis.com/language/translate/v2?key=AIzaSyAueQieUyTZkOgW_IHJwCp80awHTzXaP6M&q=" +
+                object +
+                "&target=" +
+                target,
+              method: "POST",
+            };
+            await $.ajax(settings).done(function (response) {
+              translatedTitleText.push(
+                response.data.translations[0].translatedText
+              );
+            });
+          }
+          item.titulo = translatedTitleText[0];
+          item.cuerpo = translatedTitleText[1];
+            if(item.languageCheck && item.languageCheck.length > 0){
+              item.languageCheck.push({
+                language: target,
+                title:item.titulo,
+                decription:item.cuerpo,
+              })
+              db.collection("noticias").doc(item.documentId).update({
+                  languageCheck: item.languageCheck,
+                })
+                .then(() => {
+                  console.log("updated");
+                });
+          }else if(!item.languageCheck){
+            item["languageCheck"] = [{
+              language: target,
+              title:item.titulo,
+              decription:item.cuerpo,
+            }]
+            db.collection("noticias").doc(item.documentId).update({
+                languageCheck: item.languageCheck,
+              })
+              .then(() => {
+                console.log("added translated values");
+              }).catch((error) => {
+                console.log("error in updating translating values")
+            })
+          }
+        }else{
+         var querryRef = db.collection("noticias").where("id", "==", item.id).get();
+          querryRef.then(res => {
+            res.forEach(doc => {
+              let dataTemp = doc.data();
+              if(dataTemp.languageCheck.length > 0){
+                for(let i=0;dataTemp.languageCheck.length > i;i++){
+                  if(dataTemp.languageCheck[i].language == target){
+                    item.titulo = dataTemp.languageCheck[i].title;
+                    item.cuerpo = dataTemp.languageCheck[i].decription;
+                  }
+                }
+              }else{
+                item.titulo = dataTemp.languageCheck[0].title;
+                item.cuerpo = dataTemp.languageCheck[0].decription;
+              }
+            })
+          })
+        }
       }
     },
+
   },
   computed: {
     ...mapState([
@@ -814,6 +953,24 @@ Vue.prototype.$rangeDateOptions_ar = [
   { text: "اليوم", value: "today" },
   { text: "2 منذ أيام", value: "2 days ago" },
   { text: "الاسبوع الماضي", value: "last week" },
+];
+
+
+Vue.prototype.$searchType_es = [
+  { text: "Usuaria", value: "user" },
+  { text: "Etiqueta", value: "tag" }
+];
+Vue.prototype.$searchType_pt = [
+  { text: "Do utilizador", value: "user" },
+  { text: "Tag", value: "tag" }
+];
+Vue.prototype.$searchType_en = [
+  { text: "User", value: "user" },
+  { text: "Tag", value: "tag" }
+];
+Vue.prototype.$searchType_ar = [
+  { text: "المستعمل", value: "user" },
+  { text: "بطاقة شعار", value: "tag" }
 ];
 Vue.prototype.$searchUser_es = "Buscar...";
 Vue.prototype.$searchUser_pt = "Pesquisar...";
