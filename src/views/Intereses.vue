@@ -95,7 +95,7 @@
             "
           ></b-form-select>
       </div>
-      <button type="submit" :disabled="!addedTag" class="btn btn-primary mb-2">Añadir interés</button>
+      <button type="submit" :disabled="!addedTag" class="btn btn-primary text-light mb-2">Añadir interés</button>
       
     </form>
     
@@ -181,6 +181,18 @@
              @click=" deleteTag(data.item,data.index)"></i>
           </template>
         </b-table>
+      </div>
+    </div>
+
+    <div v-if="items2.length == 0 || !items2" class="row">
+      <div class="col-8 mx-auto text-center mt-5">
+          <h4 style="color: #cacacab0;">{{selectedLan == 'es'
+              ? $noTags_es
+              : selectedLan == 'pt'
+              ? $noTags_pt
+              : selectedLan == 'ar'
+              ? $noTags_ar
+              : $noTags_en}}</h4>
       </div>
     </div>
     <!-- FIN DE COLUMNA NUEVA CON INTERESES Y ALARMAS -->
@@ -651,4 +663,8 @@ Vue.prototype.$cancel_es = "cancelar";
 Vue.prototype.$cancel_pt = "cancelar";
 Vue.prototype.$cancel_en = "cancel";
 Vue.prototype.$cancel_ar = "إلغاء";
+Vue.prototype.$noTags_es = "Aún no se agregaron etiquetas";
+Vue.prototype.$noTags_pt = "Nenhuma tag adicionada ainda";
+Vue.prototype.$noTags_en = "No Tags Added Yet";
+Vue.prototype.$noTags_ar = "لم تتم إضافة أي علامات حتى الآن";
 </script>

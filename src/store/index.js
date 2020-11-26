@@ -430,7 +430,7 @@ export default new Vuex.Store({
 
 
     filtrarporKeyword({ commit }, keyword) {
-      //router.push('/')
+      var route = window.location.pathname;
       commit('setPaginationCount', 0)
       if (keyword == "todos") {
         let ChangeRangeDate = null;
@@ -464,11 +464,15 @@ export default new Vuex.Store({
             noticias_compuestas.push(noticia_leida)
           })
           if (noticias_compuestas.length < 1) {
-            //router.push('/') //volver a inicio
+            if(route !== "/"){
+              router.push('/') //volver a inicio
+            }
             commit('setKeywordactual', keyword)
             document.getElementById("botonmodal").click()
           } else {
-            //router.push('/')
+            if(route !== "/"){
+              router.push('/') //volver a inicio
+            }
             setTimeout(() => {
               let c_filtradas = noticias_compuestas.reverse()
               commit('setNoticias', c_filtradas)
@@ -876,7 +880,7 @@ export default new Vuex.Store({
         })
     },
     addTags({ commit }, objeto_tags) {
-      let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
+      //let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
       let url3 = 'https://bit4block.es/autofeed/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
       var tags = []
       if (this.state.rawTags && this.state.rawTags.length > 0) {
@@ -890,30 +894,29 @@ export default new Vuex.Store({
         tags: tags
       }).then(() => {
         console.log("update")
-        var pcg = 30;
+        var pcg = 35;
         document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
         document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
-
-        fetch(url2, { mode: 'no-cors' })
-          .then(response => {
-            pcg = 50;
-            document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
-            document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
+/*         fetch(url2, { mode: 'no-cors' })
+          .then(response => { */
             if (objeto_tags.addedTag) {
-
               fetch(url3, { mode: 'no-cors' })
                 .then(response => {
                 })
                 .then((data) => {
-                  pcg = 75;
+                  pcg = 100;
                   document.getElementsByClassName('progress-bar').item(0).setAttribute('aria-valuenow', pcg);
-                  document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');
+                  document.getElementsByClassName('progress-bar').item(0).setAttribute('style', 'width:' + Number(pcg) + '%');           
+                  setTimeout(() => {
+                    document.getElementById("barraid").style.display = "none";
+                    location.reload();
+                  }, 3000);
                 })
                 .catch((error) => {
                   console.log(error)
                 })
             }
-          })
+         /*  }) */
       }).catch((error) => {
         console.log(error)
       })
