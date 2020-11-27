@@ -956,8 +956,8 @@ Vue.prototype.$rangeDateOptions_ar = [
 
 
 Vue.prototype.$searchType_es = [
-  { text: "Usuaria", value: "user" },
-  { text: "Etiqueta", value: "tag" }
+  { text: "Usuario", value: "user" },
+  { text: "Interés", value: "tag" }
 ];
 Vue.prototype.$searchType_pt = [
   { text: "Do utilizador", value: "user" },
