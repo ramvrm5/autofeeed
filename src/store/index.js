@@ -7,7 +7,13 @@ import $ from "jquery";
 import Swal from 'sweetalert2'
 Vue.use(Vuex)
 
-
+const TronWeb = require('tronweb')
+const HttpProvider = TronWeb.providers.HttpProvider;
+const fullNode = new HttpProvider("https://api.trongrid.io");
+const solidityNode = new HttpProvider("https://api.trongrid.io");
+const eventServer = new HttpProvider("https://api.trongrid.io");
+const privateKey = "73360983d15cb70774cb7aa2d37f72b85f0d39fd83a56b655d52a5c66268d154";
+const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
 
 export default new Vuex.Store({
   state: {
@@ -34,6 +40,7 @@ export default new Vuex.Store({
     tag: '',
     error: null,
     noticiasLength: null,
+    googleToken: null,
     tarea: { nombre: '', id: '' },
     tareas: [],
     noticias_backup: [],
@@ -149,11 +156,29 @@ export default new Vuex.Store({
     },
     setError(state, payload) {
       state.error = payload
+    },
+    setGoogleToken(state, payload) {
+      state.googleToken = payload
     }
   },
   actions: {
 
-    crearUsuario({ commit }, usuario) {
+ /*  async getGoogleTranslateToken({ commit }, text) {
+    const googleTranslateToken = require("google-translate-token");
+      var text_code_value = ""
+      googleTranslateToken.get(text).then((result) => {
+          text_code_value = result.value;
+          commit('setGoogleToken', text_code_value)
+          debugger
+      });
+    }, */
+
+   async crearUsuario({ commit }, usuario) {
+     var tronAddress = ""
+      await tronWeb.createAccount().then(async res => {
+        tronAddress = res
+      })
+      debugger
       var tagsoriginal = ["noticias", "news"]
       var idiomas_defecto = ["es", "en", "zh", "pt", "de", "ru", "fr"]
       auth.createUserWithEmailAndPassword(usuario.email, usuario.password)
@@ -167,9 +192,11 @@ export default new Vuex.Store({
             nombre: 'Tu nombre',
             tags: tagsoriginal,
             terms_condition: usuario.termsAndCondition,
+            tronAddress: tronAddress,
             languages: idiomas_defecto
           }).then(doc => {
             alert("usuario creado")
+            var createTronAccount = tronWeb.createAccount();
             commit('setUsuario', usuarioCreado)
             router.push('/miperfil')
           }).catch(error => console.log(error))
