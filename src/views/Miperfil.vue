@@ -359,6 +359,25 @@
                   />
                 </div>
               </div>
+              <hr class="w-100 text-light" />
+              <h6 class="heading-small text-muted mb-4 ml-3">
+                {{
+                  selectedLan == "es"
+                    ? $faunoWallet_es
+                    : selectedLan == "pt"
+                    ? $faunoWallet_pt
+                    : selectedLan == "ar"
+                    ? $faunoWallet_ar
+                    : $faunoWallet_es
+                }}
+              </h6>
+              <b-row class="mt-1 mb-2">
+                <b-col class="col-lg-10 mx-auto text-center">
+                  <div>
+                    <qrcode-vue :value="tronValue" :size="size" level="H"></qrcode-vue>
+                  </div>
+                </b-col>
+              </b-row>
               <div class="row mx-auto">
                 <div
                   class="input-group mt-2 col-0 col-sm-0 col-md-0 col-lg-5"
@@ -419,12 +438,13 @@
           </div>
         </form>
       </b-col>
-    </b-row>
+    </b-row>  
   </div>
 </template>
 
 <script>
 import Vue from "vue";
+import QrcodeVue from 'qrcode.vue'
 import { mapActions, mapState, mapGetters } from "vuex";
 import store from "../store";
 import VueTagsInput from "@johmun/vue-tags-input";
@@ -434,12 +454,16 @@ import firebase from "firebase/app";
 import "firebase/storage";
 
 export default {
-  components: {},
+  components: {
+    QrcodeVue,
+  },
   name: "Miperfil",
   imgurl3: "",
   data() {
     return {
       /* email: "", */
+      tronValue: 'https://example.com',
+      size: 300,
       email_password: "",
       name_card_id: null,
       fields: [
@@ -507,7 +531,6 @@ export default {
     this.email = this.usuario.email;
     }, 1000);
     this.getDatos(this.usuario.email);
-
     let fecha2 = new Date();
     var imgurl2 =
       "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
@@ -634,6 +657,8 @@ export default {
     ValidateSize(file) {},
   },
   mounted: function () {
+    this.$store.state.tronAddress;
+    debugger
     this.email_password = this.usuario.email;
     this.cambiarimagen(this.imgurl3); //method1 will execute at pageload
   },
@@ -822,4 +847,8 @@ Vue.prototype.$NickAlready_es = "Este sobre nombre ya existe";
 Vue.prototype.$NickAlready_pt = "Este apelido já existe";
 Vue.prototype.$NickAlready_en = "This nick name already exists";
 Vue.prototype.$NickAlready_ar = "هذا الاسم المستعار يتواجد أصلا";
+Vue.prototype.$faunoWallet_es = "CARTERA FAUNO.AI";
+Vue.prototype.$faunoWallet_pt = "FAUNO.AI WALLET";
+Vue.prototype.$faunoWallet_en = "FAUNO.AI WALLET";
+Vue.prototype.$faunoWallet_ar = "FAUNO.AI المحفظة";
 </script>

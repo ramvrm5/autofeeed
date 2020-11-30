@@ -14,11 +14,13 @@ const solidityNode = new HttpProvider("https://api.trongrid.io");
 const eventServer = new HttpProvider("https://api.trongrid.io");
 const privateKey = "73360983d15cb70774cb7aa2d37f72b85f0d39fd83a56b655d52a5c66268d154";
 const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
+/* const token = require("google-translate-token"); */
 
 export default new Vuex.Store({
   state: {
     paginationCount: null,
     usuario: null,
+    tronAddress: null,
     nombre_y_apellidos: { nombre: '', apellidos: '', selectedLan: '' },
     nombre: null,
     firstName: null,
@@ -40,7 +42,6 @@ export default new Vuex.Store({
     tag: '',
     error: null,
     noticiasLength: null,
-    googleToken: null,
     tarea: { nombre: '', id: '' },
     tareas: [],
     noticias_backup: [],
@@ -157,21 +158,11 @@ export default new Vuex.Store({
     setError(state, payload) {
       state.error = payload
     },
-    setGoogleToken(state, payload) {
-      state.googleToken = payload
+    setTronAddress(state, payload) {
+      state.tronAddress = payload
     }
   },
   actions: {
-
- /*  async getGoogleTranslateToken({ commit }, text) {
-    const googleTranslateToken = require("google-translate-token");
-      var text_code_value = ""
-      googleTranslateToken.get(text).then((result) => {
-          text_code_value = result.value;
-          commit('setGoogleToken', text_code_value)
-          debugger
-      });
-    }, */
 
    async crearUsuario({ commit }, usuario) {
      var tronAddress = ""
@@ -266,6 +257,8 @@ export default new Vuex.Store({
               commit('setRawTags', datos.tags[0])
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
+              commit('setTronAddress', datos.tronAddress)
+              debugger
             }
             else {
               commit('setNombre', "Escribe tu nombre")
@@ -488,6 +481,7 @@ export default new Vuex.Store({
             let url = noticia_leida.tags;
             let img = noticia_leida.img;
             let noticia_compuesta = "<h3>" + titulo + "</h3><p>" + cuerpo + "</p>";
+            noticia_leida["documentId"] =  doc.id;
             noticias_compuestas.push(noticia_leida)
           })
           if (noticias_compuestas.length < 1) {
@@ -611,7 +605,7 @@ export default new Vuex.Store({
           document.getElementById("cargandoid").style.display = "block";
 
           db.collection('usuarios').doc(user.email).get()
-            .then(doc => {
+            .then(async doc => {
               let lengthOfDocument = 0
               let datos = doc.data()
               let objeto_tags = datos.tags;
@@ -637,7 +631,7 @@ export default new Vuex.Store({
               var yeaterdayTemp = Math.round(new Date(new Date().setDate(new Date().getDate() - 1)).getTime() / 1000)
               var monthago = Math.round(new Date(new Date().setDate(new Date().getDate() - 20)).getTime() / 1000);
               let tags_filtrar = this.state.tags
-              let firts10tags = tags.slice(0, 9);
+              let firts10tags = tags.slice(0, 1);
               let querryRef
               let querryRef2
 
@@ -677,7 +671,7 @@ export default new Vuex.Store({
 
                 ///start else tags<10
                 else {
-                  db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
+                 await db.collection('noticias').where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).get().then(snapshot => {
                     lengthOfDocument = snapshot.size;
                   })
                   if (objectdata.type == "next") {

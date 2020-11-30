@@ -441,7 +441,7 @@ export default {
     },
     getImage(item, tagsArray) {
       if (item.fuente === "Google" || item.fuente === "seekingalpha") {
-        if (tagsArray.length > 0) {
+/*         if (tagsArray.length > 0) {
          let tagIndex = tagsArray.findIndex(element => element.length > 0)
           if (tagIndex >= 0) {
               return (
@@ -452,7 +452,7 @@ export default {
             } else {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-/*           for (let i = 0; tagsArray.length > 0; i++) {
+          for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
                 "http://35.195.38.33/img_tag/default_img/" +
@@ -462,10 +462,10 @@ export default {
             } else if (tagsArray.length == i + 1) {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-          } */
-        } else {
+          } 
+        } else {*/
           return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
-        }
+       /*  } */
       } else if(item.image !== null){
         return item.img;
       } else if(item.image == null){
