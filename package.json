@@ -24,6 +24,8 @@
     "cordova-serve-osx": "cross-env CORDOVA_PLATFORM=osx vue-cli-service cordova-serve-osx"
   },
   "dependencies": {
+    "@azure/cognitiveservices-translatortext": "^1.0.1",
+    "@azure/ms-rest-azure-js": "^2.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-brands-svg-icons": "^5.14.0",
     "@fortawesome/free-regular-svg-icons": "^5.14.0",

@@ -18,6 +18,8 @@ const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
 
 export default new Vuex.Store({
   state: {
+    totalChars: null,
+    totalRequest: null,
     paginationCount: null,
     usuario: null,
     tronAddress: null,
@@ -160,6 +162,12 @@ export default new Vuex.Store({
     },
     setTronAddress(state, payload) {
       state.tronAddress = payload
+    },
+    setTotalChars(state, payload) {
+      state.totalChars = payload
+    },
+    setTotalRequest(state, payload) {
+      state.totalRequest = payload
     }
   },
   actions: {
@@ -258,7 +266,12 @@ export default new Vuex.Store({
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
               commit('setTronAddress', datos.tronAddress)
-              debugger
+              db.collection('translationLogs').doc("totalRequestLog").get()
+              .then(doc => {
+                let translationData = doc.data()
+                commit('setTotalChars', translationData.totalChars)
+                commit('setTotalRequest', translationData.totalRequests)
+              })
             }
             else {
               commit('setNombre', "Escribe tu nombre")

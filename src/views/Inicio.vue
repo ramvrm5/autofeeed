@@ -337,7 +337,9 @@ import SPANISH_LANGUAGE from "../contants/language.js";
 import "firebase/storage";
 import Swal from "sweetalert2";
 import $ from "jquery";
-import { CoolSelect } from 'vue-cool-select'
+import { CoolSelect } from 'vue-cool-select';
+import { TranslatorTextClient, TranslatorTextModels} from "@azure/cognitiveservices-translatortext";
+import { CognitiveServicesCredentials } from "@azure/ms-rest-azure-js";
 
 /* const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
 const { Translate } = require("@google-cloud/translate").v2;
@@ -347,8 +349,8 @@ export default {
   components: { CoolSelect },
   data() {
     return {
-      urlHeroku:"https://autofeed-translate.herokuapp.com/translate/getText?text=",
-      urlLocalMachine:"http://localhost:3000/getText?text=",
+      //urlHeroku:"https://autofeed-translate.herokuapp.com/translate/getText?text=",
+      urlHeroku:"http://localhost:3000/translate/getText?text=",
       searchType: "user",
       loading: false,
       firstTimeTagSelected: false,
@@ -583,33 +585,35 @@ export default {
     },
     getImage(item, tagsArray) {
       if (item.fuente === "Google" || item.fuente === "seekingalpha") {
-/*        if (tagsArray.length > 0) {
-         let tagIndex = tagsArray.findIndex(element => element.length > 0)
+       if (tagsArray.length > 0) {
+         let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "http://35.195.38.33/img_tag/default_img/" +
+                "http://40.69.2.143/autofeedImages/default_img/" +
                 tagsArray[tagIndex] +
                 ".png"
               );
             } else {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-           for (let i = 0; tagsArray.length > 0; i++) {
+/*            for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
-                "http://35.195.38.33/img_tag/default_img/" +
+                "http://40.69.2.143/autofeedImages/default_img/" +
                 tagsArray[i] +
                 ".png"
               );
             } else if (tagsArray.length == i + 1) {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-          } 
-        } else {*/
+          } */ 
+        } else {
           return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
-        /* } */
-      } else {
+        }
+      } else if(item.image !== null){
         return item.img;
+      } else if(item.image == null){
+        return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
       }
     },
     darlike(id) {
@@ -692,39 +696,98 @@ export default {
           });
         });
     },
-  async  checkTranslateButton(item,index) {
+  async checkTranslateButton(item,index) {
     let tlt = null;
     let dsr = null;
     let defaultLanguageOfuser = this.selectedLan;
-      if (item.idioma == defaultLanguageOfuser) {
-        $('#translate_'+index).prop('disabled', true);
-        tlt = item.titulo;
-        dsr = item.cuerpo;
-        let translatedTitleText = [];
-        let translationArray = [tlt, dsr];
-        for (let object of translationArray) {
-              let settings = {
-                async: true,
-                crossDomain: true,
-                url:this.urlHeroku + object+"&target="+item.idioma,
-                method: "Get",
-            };
-            await $.ajax(settings).done(function (response) {
-              translatedTitleText.push(response);
-            });
-        }
-        item.titulo = translatedTitleText[0];
-        item.cuerpo = translatedTitleText[1];
-      } else if (item.idioma !== this.selectedLan) {
-        $('#translate_'+index).prop('disabled', false);
+      if(! $('#translate_'+index).hasClass( "verified" )){
+        if (item.idioma == defaultLanguageOfuser) {
+                $('#translate_'+index).addClass('verified');
+                $('#translate_'+index).prop('disabled', true);
+                tlt = item.titulo;
+                dsr = item.cuerpo;
+                let translatedTitleText = [];
+                //let translationArray = [tlt, dsr];
+                if(item.fuente == "twitter"){
+                  const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
+                  const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
+                  const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
+                  const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
+                  const text = [{
+                      text: dsr
+                  }];
+                  client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+                    'Ocp-Apim-Subscription-Region': 'northeurope',
+                    'Content-type': 'application/json',
+                    'X-ClientTraceId': uuidv4().toString()}
+                  client.translator.translate([item.idioma], text).then(result => {
+                  console.log("The result is: ");
+                  console.log(result);
+                  var titleTranslate = result[0].translations[0].text;
+                  translatedTitleText.push(titleTranslate);
+                  this.$store.state.totalRequest += 1
+                  this.$store.state.totalChars += translatedTitleText[0].length
+                  db.collection('translationLogs').doc("totalRequestLog").update({
+                    totalChars: this.$store.state.totalChars,
+                    totalRequests: this.$store.state.totalRequest,
+                  }).then(() => {
+                    console.log("translated character updated")
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                  item.cuerpo = translatedTitleText[0];
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                }else{          
+                  const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
+                  const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
+                  const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
+                  const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
+                  const text = [{
+                        text: tlt
+                      },
+                      {
+                        text: dsr
+                      }];
+                  client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+                    'Ocp-Apim-Subscription-Region': 'northeurope',
+                    'Content-type': 'application/json',
+                    'X-ClientTraceId': uuidv4().toString()}
+                  client.translator.translate([item.idioma], text).then(result => {
+                  console.log("The result is: ");
+                  console.log(result);
+                  var titleTranslate = result[0].translations[0].text;
+                  translatedTitleText.push(titleTranslate);
+                  var descTranslate = result[1].translations[0].text;
+                  translatedTitleText.push(descTranslate);
+                  this.$store.state.totalRequest +=1
+                  this.$store.state.totalChars += translatedTitleText[0].length
+                  this.$store.state.totalChars += translatedTitleText[1].length
+                  db.collection('translationLogs').doc("totalRequestLog").update({
+                    totalChars: this.$store.state.totalChars,
+                    totalRequests: this.$store.state.totalRequest,
+                  }).then(() => {
+                    console.log("translated character updated")
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                  item.titulo = translatedTitleText[0];
+                  item.cuerpo = translatedTitleText[1];
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                }
+              } else if (item.idioma !== this.selectedLan) {
+                $('#translate_'+index).addClass('verified');
+                $('#translate_'+index).prop('disabled', false);
+              }
       }
     },
 
     async toggleTranslate(item, index) {
       let target = "";
       let languageTemp = this.selectedLan;
-      const noticiasRef = db.collection("noticias");
-      const snapshot = await noticiasRef.where("languageCheck", "array-contains", {title: item.titulo}).get();
       if ($("#translate_" + index).hasClass(languageTemp)) {
         $("#translate_" + index).removeClass(languageTemp);
         target = item.idioma;
@@ -733,36 +796,55 @@ export default {
         target = languageTemp;
       }
       if(item.fuente == "twitter"){
-        const noticiasRef = db.collection("noticias");
-        const snapshot = await noticiasRef.where("languageCheck", "array-contains", {language: target}).get();
-          if (snapshot.empty) {
+        let languageExistTW = false;
+        if(item.languageCheck && item.languageCheck.length > 0){
+           languageExistTW = item.languageCheck.some(object => object.language == target);
+        }else{
+           languageExistTW = false;
+        }
+        if (!languageExistTW) {
             let dsr = item.cuerpo;
             let translatedTitleText = [];
             let translationArray = [dsr];
-            for (let object of translationArray) {
-                let settings = {
-                  async: true,
-                  crossDomain: true,
-                  url:this.urlHeroku + object+"&target="+target,
-                  method: "Get",
-              };
-              await $.ajax(settings).done(function (response) {
-                translatedTitleText.push(response);
-              });
-            }
-            item.cuerpo = translatedTitleText[0];
-            if(item.languageCheck && item.languageCheck.length > 0){
-              item.languageCheck.push({
-                language: target,
-                title:translatedTitleText[0],
-                decription:translatedTitleText[1],
-              })
-              db.collection("noticias").doc(item.documentId).update({
-                languageCheck: item.languageCheck,
-              })
-              .then(() => {
-                console.log("updated");
-              });
+          const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
+          const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
+          const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
+          const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
+          const text = [{
+                text: dsr
+              }];
+        client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+                'Ocp-Apim-Subscription-Region': 'northeurope',
+                'Content-type': 'application/json',
+                'X-ClientTraceId': uuidv4().toString() }
+          client.translator.translate([target], text).then(result => {
+          console.log("The result is: ");
+          console.log(result);
+          var titleTranslate = result[0].translations[0].text;
+          translatedTitleText.push(titleTranslate);
+          this.$store.state.totalRequest +=1
+          this.$store.state.totalChars += translatedTitleText[0].length
+          db.collection('translationLogs').doc("totalRequestLog").update({
+            totalChars: this.$store.state.totalChars,
+            totalRequests: this.$store.state.totalRequest,
+          }).then(() => {
+            console.log("translated character updated")
+          }).catch((error) => {
+            console.log(error)
+          })
+          item.cuerpo = translatedTitleText[0];
+          if(item.languageCheck && item.languageCheck.length > 0){
+            item.languageCheck.push({
+              language: target,
+              title:translatedTitleText[0],
+              decription:translatedTitleText[1],
+            })
+            db.collection("noticias").doc(item.documentId).update({
+              languageCheck: item.languageCheck,
+            })
+            .then(() => {
+              console.log("updated");
+            });
           }else{
             item["languageCheck"] = {
               language: target,
@@ -777,6 +859,10 @@ export default {
                 console.log("error in updating translating values")
             })
           }
+          }).catch(err => {
+          console.log("An error occurred:");
+          console.error(err);
+          });
         }else{
          var querryRef1 = db.collection("noticias").where("id", "==", item.id).get();
           querryRef1.then(res => {
@@ -806,46 +892,71 @@ export default {
           let dsr = item.cuerpo;
           let translatedTitleText = [];
           let translationArray = [tlt, dsr];
-          for (let object of translationArray) {
-              let settings = {
-                async: true,
-                crossDomain: true,
-                url:this.urlHeroku + object+"&target="+target,
-                method: "Get",
-            };
-            await $.ajax(settings).done(function (response) {
-              translatedTitleText.push(response);
-            });
-          }
-          item.titulo = translatedTitleText[0];
-          item.cuerpo = translatedTitleText[1];
-            if(item.languageCheck && item.languageCheck.length > 0){
-              item.languageCheck.push({
-                language: target,
-                title:item.titulo,
-                decription:item.cuerpo,
-              })
-              db.collection("noticias").doc(item.documentId).update({
-                  languageCheck: item.languageCheck,
-                })
-                .then(() => {
-                  console.log("updated");
-                });
-          }else if(!item.languageCheck){
-            item["languageCheck"] = [{
-              language: target,
-              title:item.titulo,
-              decription:item.cuerpo,
-            }]
-            db.collection("noticias").doc(item.documentId).update({
-                languageCheck: item.languageCheck,
-              })
-              .then(() => {
-                console.log("added translated values");
+          const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
+          const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
+          const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
+          const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
+          const text = [{
+                text: tlt
+              },
+              {
+                text: dsr
+              }];
+            client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+                    'Ocp-Apim-Subscription-Region': 'northeurope',
+                    'Content-type': 'application/json',
+                    'X-ClientTraceId': uuidv4().toString() }
+            client.translator.translate([target], text).then(result => {
+              console.log("The result is: ");
+              console.log(result);
+              var titleTranslate = result[0].translations[0].text;
+              translatedTitleText.push(titleTranslate);
+              var descTranslate = result[1].translations[0].text;
+              translatedTitleText.push(descTranslate);
+              this.$store.state.totalRequest +=1
+              this.$store.state.totalChars += translatedTitleText[0].length
+              this.$store.state.totalChars += translatedTitleText[1].length
+              db.collection('translationLogs').doc("totalRequestLog").update({
+                totalChars: this.$store.state.totalChars,
+                totalRequests: this.$store.state.totalRequest,
+              }).then(() => {
+                console.log("translated character updated")
               }).catch((error) => {
-                console.log("error in updating translating values")
-            })
-          }
+                console.log(error)
+              })
+              item.titulo = translatedTitleText[0];
+              item.cuerpo = translatedTitleText[1];
+                if(item.languageCheck && item.languageCheck.length > 0){
+                  item.languageCheck.push({
+                    language: target,
+                    title:item.titulo,
+                    decription:item.cuerpo,
+                  })
+                  db.collection("noticias").doc(item.documentId).update({
+                      languageCheck: item.languageCheck,
+                    })
+                    .then(() => {
+                      console.log("updated");
+                    });
+              }else if(!item.languageCheck){
+                item["languageCheck"] = [{
+                  language: target,
+                  title:item.titulo,
+                  decription:item.cuerpo,
+                }]
+                db.collection("noticias").doc(item.documentId).update({
+                    languageCheck: item.languageCheck,
+                  })
+                  .then(() => {
+                    console.log("added translated values");
+                  }).catch((error) => {
+                    console.log("error in updating translating values")
+                })
+              }
+          }).catch(err => {
+            console.log("An error occurred:");
+            console.error(err);
+          });
         }else{
          var querryRef = db.collection("noticias").where("id", "==", item.id).get();
           querryRef.then(res => {
