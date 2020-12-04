@@ -424,7 +424,7 @@ export default {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "http://40.69.2.143/autofeedImages/default_img/" +
+                "https://40.69.2.143/autofeedImages/default_img/tesla.png" +
                 tagsArray[tagIndex] +
                 ".png"
               );

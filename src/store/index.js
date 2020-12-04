@@ -265,7 +265,7 @@ export default new Vuex.Store({
               commit('setRawTags', datos.tags[0])
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
-              commit('setTronAddress', datos.tronAddress)
+              commit('setTronAddress', datos.tronAddress?datos.tronAddress.address.base58:null)
               db.collection('translationLogs').doc("totalRequestLog").get()
               .then(doc => {
                 let translationData = doc.data()

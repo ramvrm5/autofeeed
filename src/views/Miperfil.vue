@@ -374,6 +374,7 @@
               <b-row class="mt-1 mb-2">
                 <b-col class="col-lg-10 mx-auto text-center">
                   <div>
+                    {{$store.state.tronAddress}}
                     <qrcode-vue :value="$store.state.tronAddress?$store.state.tronAddress:tronValue" :size="size" level="H"></qrcode-vue>
                   </div>
                 </b-col>

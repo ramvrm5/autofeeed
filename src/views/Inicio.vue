@@ -589,7 +589,7 @@ export default {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "http://40.69.2.143/autofeedImages/default_img/" +
+                "https://40.69.2.143/autofeedImages/default_img/tesla.png" +
                 tagsArray[tagIndex] +
                 ".png"
               );
@@ -599,7 +599,7 @@ export default {
 /*            for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
-                "http://40.69.2.143/autofeedImages/default_img/" +
+                "https://40.69.2.143/autofeedImages/default_img/tesla.png" +
                 tagsArray[i] +
                 ".png"
               );
@@ -699,7 +699,7 @@ export default {
   async checkTranslateButton(item,index) {
     let tlt = null;
     let dsr = null;
-    let defaultLanguageOfuser = this.selectedLan;
+    let defaultLanguageOfuser = this.selectedLan?this.selectedLan:"en";
       if(! $('#translate_'+index).hasClass( "verified" )){
         if (item.idioma == defaultLanguageOfuser) {
                 $('#translate_'+index).addClass('verified');
@@ -787,7 +787,7 @@ export default {
 
     async toggleTranslate(item, index) {
       let target = "";
-      let languageTemp = this.selectedLan;
+      let languageTemp = this.selectedLan?this.selectedLan:"en";
       if ($("#translate_" + index).hasClass(languageTemp)) {
         $("#translate_" + index).removeClass(languageTemp);
         target = item.idioma;
@@ -861,7 +861,7 @@ export default {
           }
           }).catch(err => {
           console.log("An error occurred:");
-          console.error(err);
+          //console.error(err);
           });
         }else{
          var querryRef1 = db.collection("noticias").where("id", "==", item.id).get();
