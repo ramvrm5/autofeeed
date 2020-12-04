@@ -419,12 +419,12 @@ export default {
 
 
         getImage(item, tagsArray) {
-      if (item.fuente === "Google" || item.fuente === "seekingalpha") {
+      if (item.fuente === "Google" || item.fuente === "seekingalpha"  || item.fuente === "twitter") {
        if (tagsArray.length > 0) {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "https://40.69.2.143/autofeedImages/default_img/tesla.png" +
+                "https://40.69.2.143/autofeedImages/default_img/" +
                 tagsArray[tagIndex] +
                 ".png"
               );
