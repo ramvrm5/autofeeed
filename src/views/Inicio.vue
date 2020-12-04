@@ -85,12 +85,12 @@
               type="button" class="btn btn-lg btn-primary"
               :aria-disabled="checkTranslateButton(item,index)">
               <i
-                style="color: #007bff; font-size: 35px;background-color: rgb(245 245 245);"
+                style="color: #007bff; font-size: 25px;background-color: rgb(245 245 245);"
                 class="fa fa-language"
                 aria-hidden="true"
               ></i>
             </button>
-            <b-card-text>{{ item.cuerpo.substring(0, 120)+'......' }}</b-card-text>
+            <b-card-text>{{ item.cuerpo.substring(0, 140)+'...' }}</b-card-text>
             <div class="row">
               <div class="col-5">
                 <router-link

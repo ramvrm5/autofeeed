@@ -11,7 +11,7 @@
       <b-navbar toggleable="lg" type="dark" variant="info">
         <router-link to="/"
           ><img 
-          style="width: 50px; max-height: 41.89px" 
+          style="width: 50px; max-height: 41.89px;background-color: white;border-radius: 15px;" 
           src="./assets/logoblanco.png"
           onerror="this.onerror=null;this.src='./assets/logoblanco.png';"
         /></router-link>
