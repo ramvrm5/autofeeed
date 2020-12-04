@@ -499,13 +499,13 @@ export default new Vuex.Store({
             noticias_compuestas.push(noticia_leida)
           })
           if (noticias_compuestas.length < 1) {
-            if(route !== "/"){
+            if(route.length  > 2){
               router.push('/') //volver a inicio
             }
             commit('setKeywordactual', keyword)
             document.getElementById("botonmodal").click()
           } else {
-            if(route !== "/"){
+            if(route.length  > 2){
               router.push('/') //volver a inicio
             }
             setTimeout(() => {
