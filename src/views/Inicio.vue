@@ -101,6 +101,7 @@
                     :id="'comment-' + index"
                     style="float: right; margin-right: 3%"
                     target="_blank"
+                    class="btn-primary2"
                     variant="primary"
                   >
                     <span
@@ -128,7 +129,7 @@
                 </router-link>
               </div>
               <div class="col-7 text-center">
-                <b-button  variant="primary"><a target="_blank" :href="item.url?item.url:''" style="color: white;text-decoration: none;">{{
+                <b-button  class="btn-primary2" variant="primary"><a target="_blank" :href="item.url?item.url:''" style="color: white;text-decoration: none;">{{
                   selectedLan == "es"
                     ? $see_more_es
                     : selectedLan == "pt"
@@ -261,8 +262,8 @@
       }}
       </h4>
     </center>
-	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;z-index: 99999999999999;" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-    <button @click="next" class="btn pmd-btn-fab pmd-ripple-effect btn-primary" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;right: 20px;width: 50px;height: 50px;border-radius: 25px;color: white;z-index: 99999999999999;" type="button"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+	<button @click="previous" class="btn pmd-btn-fab pmd-ripple-effect btn-primary btn-primary2" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;left: 10px;width: 50px;height: 50px;border-radius: 25px;color: white;z-index: 99999999999999;" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+    <button @click="next" class="btn pmd-btn-fab pmd-ripple-effect btn-primary btn-primary2" style="      font-weight: 900;font-size: larger;line-height: 0px;  position: fixed;display: block;bottom: 30px;right: 20px;width: 50px;height: 50px;border-radius: 25px;color: white;z-index: 99999999999999;" type="button"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 
 	<div
       v-if="noticias.length > 0"
