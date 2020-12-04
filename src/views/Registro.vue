@@ -3,7 +3,7 @@
     <div class="loginpc">
       <h2 style="margin-top: 1em">Formulario de registro</h2>
       <p>Introduzca una contraseña de 6 o más caracteres</p>
-      <form @submit.prevent="crearUsuario({ email: email, password: pass1,termsAndCondition:status })">
+      <form @submit.prevent="crearUsuario({ nombre: name,email: email, password: pass1,termsAndCondition:status })">
         <b-form-group
           id="input-group-1"
           label="Correo electrónico"
@@ -15,6 +15,20 @@
             type="email"
             required
             placeholder="Introduce tu correo"
+          ></b-form-input>
+        </b-form-group>   
+
+        <b-form-group
+          id="input-group-1"
+          label="nombre"
+          label-for="input-1"
+        >
+          <b-form-input
+            id="input-1"
+            v-model="name"
+            type="text"
+            required
+            placeholder="Nombre"
           ></b-form-input>
         </b-form-group>
 
@@ -84,6 +98,7 @@ export default {
     return {
     status: 'not_accepted',
       email: "",
+      name: "",
       pass1: "",
       pass2: "",
     };

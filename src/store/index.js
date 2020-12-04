@@ -188,7 +188,7 @@ export default new Vuex.Store({
             uid: res.user.uid
           }
           db.collection('usuarios').doc(res.user.email).set({
-            nombre: 'Tu nombre',
+            nombre: usuario.nombre,
             tags: tagsoriginal,
             terms_condition: usuario.termsAndCondition,
             tronAddress: tronAddress,

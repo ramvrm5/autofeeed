@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="bg-light">
+    <b-row class="bg-light vh-100">
       <b-col
         class="col-12 col-sm-12 col-md-4 col-lg-3 border comments-scrollBar"
         style="overflow-y: scroll"
@@ -144,11 +144,11 @@
             </v-timeline>
           </v-app>
         </div>
+        <div v-if="!showTimelineItems">
+        <h5 class="text-secondary mt-5 text-center">No post to show</h5>
+      </div>
       </b-col>
     </b-row>
-    <div v-if="!showTimelineItems">
-      <h5 class="text-secondary mt-5 text-center">No post to show</h5>
-    </div>
   </b-container>
 </template>
 
@@ -234,7 +234,7 @@ export default {
           .get()
           .then((doc) => {
             let datos = doc.data();
-            this.name = datos.firstName + " " + datos.surname;
+            this.name = datos.firstName?datos.firstName + " " + datos.surname:null;
             this.country = datos.apellidos;
             this.language = datos.default_language;
             FollowersArray = datos.FollowersArray ? datos.FollowersArray : [];
