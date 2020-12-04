@@ -431,7 +431,7 @@ export default {
             } else {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
-/*            for (let i = 0; tagsArray.length > 0; i++) {
+/*           for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
                 "http://35.195.38.33/img_tag/default_img/" +
