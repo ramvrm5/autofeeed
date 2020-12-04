@@ -188,6 +188,7 @@ export default new Vuex.Store({
             uid: res.user.uid
           }
           db.collection('usuarios').doc(res.user.email).set({
+            email: usuario.email,
             nombre: usuario.nombre,
             tags: tagsoriginal,
             terms_condition: usuario.termsAndCondition,
@@ -262,7 +263,7 @@ export default new Vuex.Store({
               commit('setPsCode', datos.psCode)
               commit('setEmail', datos.email)
               commit('setSelectedLan', datos.default_language)
-              commit('setRawTags', datos.tags[0])
+              commit('setRawTags', datos.tags?datos.tags[0]:"")
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
               commit('setTronAddress', datos.tronAddress?datos.tronAddress.address.base58:null)
@@ -463,7 +464,7 @@ export default new Vuex.Store({
 
 
     filtrarporKeyword({ commit }, keyword) {
-      var route = window.location.pathname;
+      var route = window.location.hash.replace("#/","");
       commit('setPaginationCount', 0)
       if (keyword == "todos") {
         let ChangeRangeDate = null;
