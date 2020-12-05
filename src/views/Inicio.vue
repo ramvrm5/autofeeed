@@ -83,7 +83,7 @@
               "
               @click="toggleTranslate(item, index)"
               type="button" class="btn btn-lg btn-primary"
-              :aria-disabled="checkTranslateButton(item,index)">
+              ><!-- :aria-disabled="checkTranslateButton(item,index)" -->
               <i
                 style="color: #007bff; font-size: 25px;background-color: rgb(245 245 245);"
                 class="fa fa-language"
@@ -341,7 +341,7 @@ import $ from "jquery";
 import { CoolSelect } from 'vue-cool-select';
 import { TranslatorTextClient, TranslatorTextModels} from "@azure/cognitiveservices-translatortext";
 import { CognitiveServicesCredentials } from "@azure/ms-rest-azure-js";
-
+const translatorTextKey = '712c5c2b2f874b5cbf7003731524a83b';
 /* const projectId = "AIzaSyBXtt9PQb2FR3yGFn4pDwLIS3LJ0cZ5qHs";
 const { Translate } = require("@google-cloud/translate").v2;
 
@@ -810,62 +810,82 @@ export default {
             let dsr = item.cuerpo;
             let translatedTitleText = [];
             let translationArray = [dsr];
-          const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
+          
           const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
           const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
           const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
           const text = [{
                 text: dsr
               }];
-        client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+        client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': translatorTextKey,
                 'Ocp-Apim-Subscription-Region': 'northeurope',
                 'Content-type': 'application/json',
                 'X-ClientTraceId': uuidv4().toString() }
-          client.translator.translate([target], text).then(result => {
-          console.log("The result is: ");
-          console.log(result);
-          var titleTranslate = result[0].translations[0].text;
-          translatedTitleText.push(titleTranslate);
-          this.$store.state.totalRequest +=1
-          this.$store.state.totalChars += translatedTitleText[0].length
-          db.collection('translationLogs').doc("totalRequestLog").update({
-            totalChars: this.$store.state.totalChars,
-            totalRequests: this.$store.state.totalRequest,
-          }).then(() => {
-            console.log("translated character updated")
-          }).catch((error) => {
-            console.log(error)
-          })
-          item.cuerpo = translatedTitleText[0];
-          if(item.languageCheck && item.languageCheck.length > 0){
-            item.languageCheck.push({
-              language: target,
-              title:translatedTitleText[0],
-              decription:translatedTitleText[1],
-            })
-            db.collection("noticias").doc(item.documentId).update({
-              languageCheck: item.languageCheck,
-            })
-            .then(() => {
-              console.log("updated");
-            });
-          }else{
-            item["languageCheck"] = {
-              language: target,
-              decription:translatedTitleText[1],
-            }
-            db.collection("noticias").doc(item.documentId).update({
-                languageCheck: item.languageCheck,
-              })
-              .then(() => {
-                console.log("added translated values");
+          
+          client.translator.detect(text).then(resultOfdetect => {
+              var descTranslate = text[0].text;
+              translatedTitleText.push(descTranslate);
+              this.$store.state.totalRequest +=1
+              this.$store.state.totalChars += translatedTitleText[0].length                   
+              db.collection('translationLogs').doc("totalRequestLog").update({
+                totalChars: this.$store.state.totalChars,
+                totalRequests: this.$store.state.totalRequest,
+              }).then(() => {
+                console.log("translated character updated")
               }).catch((error) => {
-                console.log("error in updating translating values")
-            })
-          }
+                console.log(error)
+              })
+              if(resultOfdetect[0].language !== target){
+                  client.translator.translate([target], text).then(result => {
+                  console.log("The result is: ");
+                  console.log(result);
+                  var titleTranslate = result[0].translations[0].text;
+                  translatedTitleText.push(titleTranslate);
+                  this.$store.state.totalRequest +=1
+                  this.$store.state.totalChars += translatedTitleText[0].length
+                  db.collection('translationLogs').doc("totalRequestLog").update({
+                    totalChars: this.$store.state.totalChars,
+                    totalRequests: this.$store.state.totalRequest,
+                  }).then(() => {
+                    console.log("translated character updated")
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                  item.cuerpo = translatedTitleText[0];
+                  if(item.languageCheck && item.languageCheck.length > 0){
+                    item.languageCheck.push({
+                      language: target,
+                      title:translatedTitleText[0],
+                      decription:translatedTitleText[1],
+                    })
+                    db.collection("noticias").doc(item.documentId).update({
+                      languageCheck: item.languageCheck,
+                    })
+                    .then(() => {
+                      console.log("updated");
+                    });
+                  }else{
+                    item["languageCheck"] = {
+                      language: target,
+                      decription:translatedTitleText[1],
+                    }
+                    db.collection("noticias").doc(item.documentId).update({
+                        languageCheck: item.languageCheck,
+                      })
+                      .then(() => {
+                        console.log("added translated values");
+                      }).catch((error) => {
+                        console.log("error in updating translating values")
+                    })
+                  }
+                  }).catch(err => {
+                  console.log("An error occurred:");
+                  //console.error(err);
+                  });
+              }
           }).catch(err => {
           console.log("An error occurred:");
-          //console.error(err);
+          console.error(err);
           });
         }else{
          var querryRef1 = db.collection("noticias").where("id", "==", item.id).get();
@@ -896,30 +916,21 @@ export default {
           let dsr = item.cuerpo;
           let translatedTitleText = [];
           let translationArray = [tlt, dsr];
-          const translatorTextKey = '083901d0e39f47a0a92c4d09e554cc6c';
           const translatorTextEndPoint = "https://api.cognitive.microsofttranslator.com";
           const cognitiveServiceCredentials = new CognitiveServicesCredentials(translatorTextKey);
           const client = new TranslatorTextClient(cognitiveServiceCredentials,translatorTextEndPoint);
-          const text = [{
-                text: tlt
-              },
-              {
+            let text = [{
                 text: dsr
               }];
-            client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': '083901d0e39f47a0a92c4d09e554cc6c',
+            client.credentials.inHeader = {'Ocp-Apim-Subscription-Key': translatorTextKey,
                     'Ocp-Apim-Subscription-Region': 'northeurope',
                     'Content-type': 'application/json',
                     'X-ClientTraceId': uuidv4().toString() }
-            client.translator.translate([target], text).then(result => {
-              console.log("The result is: ");
-              console.log(result);
-              var titleTranslate = result[0].translations[0].text;
-              translatedTitleText.push(titleTranslate);
-              var descTranslate = result[1].translations[0].text;
+            client.translator.detect(text).then(resultOfdetect => {
+              var descTranslate = text[0].text;
               translatedTitleText.push(descTranslate);
               this.$store.state.totalRequest +=1
-              this.$store.state.totalChars += translatedTitleText[0].length
-              this.$store.state.totalChars += translatedTitleText[1].length
+              this.$store.state.totalChars += translatedTitleText[0].length                   
               db.collection('translationLogs').doc("totalRequestLog").update({
                 totalChars: this.$store.state.totalChars,
                 totalRequests: this.$store.state.totalRequest,
@@ -928,36 +939,66 @@ export default {
               }).catch((error) => {
                 console.log(error)
               })
-              item.titulo = translatedTitleText[0];
-              item.cuerpo = translatedTitleText[1];
-                if(item.languageCheck && item.languageCheck.length > 0){
-                  item.languageCheck.push({
-                    language: target,
-                    title:item.titulo,
-                    decription:item.cuerpo,
-                  })
-                  db.collection("noticias").doc(item.documentId).update({
-                      languageCheck: item.languageCheck,
+              text = [{
+                text: tlt
+              },
+              {
+                text: dsr
+              }];
+              if(resultOfdetect[0].language !== target){
+                    client.translator.translate([target], text).then(result => {
+                    console.log("The result is: ");
+                    console.log(result);
+                    var titleTranslate = result[0].translations[0].text;
+                    translatedTitleText.push(titleTranslate);
+                    var descTranslate = result[1].translations[0].text;
+                    translatedTitleText.push(descTranslate);
+                    this.$store.state.totalRequest +=1
+                    this.$store.state.totalChars += translatedTitleText[0].length
+                    this.$store.state.totalChars += translatedTitleText[1].length
+                    db.collection('translationLogs').doc("totalRequestLog").update({
+                      totalChars: this.$store.state.totalChars,
+                      totalRequests: this.$store.state.totalRequest,
+                    }).then(() => {
+                      console.log("translated character updated")
+                    }).catch((error) => {
+                      console.log(error)
                     })
-                    .then(() => {
-                      console.log("updated");
-                    });
-              }else if(!item.languageCheck){
-                item["languageCheck"] = [{
-                  language: target,
-                  title:item.titulo,
-                  decription:item.cuerpo,
-                }]
-                db.collection("noticias").doc(item.documentId).update({
-                    languageCheck: item.languageCheck,
-                  })
-                  .then(() => {
-                    console.log("added translated values");
-                  }).catch((error) => {
-                    console.log("error in updating translating values")
-                })
+                    item.titulo = translatedTitleText[0];
+                    item.cuerpo = translatedTitleText[1];
+                      if(item.languageCheck && item.languageCheck.length > 0){
+                        item.languageCheck.push({
+                          language: target,
+                          title:item.titulo,
+                          decription:item.cuerpo,
+                        })
+                        db.collection("noticias").doc(item.documentId).update({
+                            languageCheck: item.languageCheck,
+                          })
+                          .then(() => {
+                            console.log("updated");
+                          });
+                    }else if(!item.languageCheck){
+                      item["languageCheck"] = [{
+                        language: target,
+                        title:item.titulo,
+                        decription:item.cuerpo,
+                      }]
+                      db.collection("noticias").doc(item.documentId).update({
+                          languageCheck: item.languageCheck,
+                        })
+                        .then(() => {
+                          console.log("added translated values");
+                        }).catch((error) => {
+                          console.log("error in updating translating values")
+                      })
+                    }
+                }).catch(err => {
+                  console.log("An error occurred:");
+                  console.error(err);
+                });
               }
-          }).catch(err => {
+            }).catch(err => {
             console.log("An error occurred:");
             console.error(err);
           });
