@@ -636,7 +636,7 @@ Vue.prototype.$Trend_ar = [
   { text: "فوق", value: "Up" },
   { text: "أسفل", value: "Down" },
 ];
-Vue.prototype.$Areyousure_es = "Estas segura";
+Vue.prototype.$Areyousure_es = "Estas seguro";
 Vue.prototype.$Areyousure_pt = "Você tem certeza?";
 Vue.prototype.$Areyousure_en = "Are you sure?";
 Vue.prototype.$Areyousure_ar = "هل أنت واثق؟";
@@ -648,7 +648,7 @@ Vue.prototype.$YouDelet_es = "¡Sí, bórralo!";
 Vue.prototype.$YouDelet_pt = "Sim, exclua!";
 Vue.prototype.$YouDelet_en = "Yes, Delete it!";
 Vue.prototype.$YouDelet_ar = "نعم ، احذفها!";
-Vue.prototype.$Delete_es = "¡Eliminada!";
+Vue.prototype.$Delete_es = "¡Eliminado!";
 Vue.prototype.$Delete_pt = "Excluída!";
 Vue.prototype.$Delete_en = "Deleted!";
 Vue.prototype.$Delete_ar = "تم الحذف!";
