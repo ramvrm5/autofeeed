@@ -235,7 +235,6 @@
       >
     </b-modal>
 
-
     <div class="text-center">
       <center>
         <b-spinner
@@ -706,7 +705,7 @@ export default {
         if (item.idioma == defaultLanguageOfuser) {
                 $('#translate_'+index).addClass('verified');
                 $('#translate_'+index).prop('disabled', true);
-                $('#translate_'+index).attr('style', "opacity: 0.5  !important;position: absolute;z-index: 999;top: 2px;right: 1px;background-color: rgba(255, 255, 255, 0);border: none;box-shadow: none;");
+                //$('#translate_'+index).css('opacity','0.5 !important');
                 tlt = item.titulo;
                 dsr = item.cuerpo;
                 let translatedTitleText = [];
