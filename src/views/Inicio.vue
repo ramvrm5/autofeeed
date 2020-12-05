@@ -90,6 +90,9 @@
                 aria-hidden="true"
               ></i>
             </button>
+            <b>{{"Idioma :- " + item.idioma}}</b><br>
+            <b>{{"Default-Language :- " +selectedLan}}</b><br>
+            <b>Detected-Language :- <span :id="'detect_'+index"></span></b>
             <b-card-text>{{ item.cuerpo.substring(0, 140)+'...' }}</b-card-text>
             <div class="row">
               <div class="col-5">
@@ -838,6 +841,7 @@ export default {
               if(resultOfdetect[0].language !== target){
                   client.translator.translate([target], text).then(result => {
                   console.log("The result is: ");
+                  translatedTitleText = [];
                   console.log(result);
                   var titleTranslate = result[0].translations[0].text;
                   translatedTitleText.push(titleTranslate);
@@ -939,20 +943,24 @@ export default {
               }).catch((error) => {
                 console.log(error)
               })
-              text = [{
+             let textnew = [{
                 text: tlt
               },
               {
                 text: dsr
               }];
+              $("#detect_"+index).text(resultOfdetect[0].language)
               if(resultOfdetect[0].language !== target){
-                    client.translator.translate([target], text).then(result => {
+                    client.translator.translate([target], textnew).then(result => {
                     console.log("The result is: ");
-                    console.log(result);
+                    translatedTitleText = [];
+                    console.log(translatedTitleText)
                     var titleTranslate = result[0].translations[0].text;
                     translatedTitleText.push(titleTranslate);
+                    console.log(translatedTitleText)
                     var descTranslate = result[1].translations[0].text;
                     translatedTitleText.push(descTranslate);
+                    console.log(translatedTitleText)
                     this.$store.state.totalRequest +=1
                     this.$store.state.totalChars += translatedTitleText[0].length
                     this.$store.state.totalChars += translatedTitleText[1].length
@@ -964,6 +972,7 @@ export default {
                     }).catch((error) => {
                       console.log(error)
                     })
+                    console.log(translatedTitleText)
                     item.titulo = translatedTitleText[0];
                     item.cuerpo = translatedTitleText[1];
                       if(item.languageCheck && item.languageCheck.length > 0){
