@@ -14,7 +14,6 @@ const solidityNode = new HttpProvider("https://api.trongrid.io");
 const eventServer = new HttpProvider("https://api.trongrid.io");
 const privateKey = "73360983d15cb70774cb7aa2d37f72b85f0d39fd83a56b655d52a5c66268d154";
 const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
-/* const token = require("google-translate-token"); */
 
 export default new Vuex.Store({
   state: {
@@ -189,6 +188,7 @@ export default new Vuex.Store({
           }
           db.collection('usuarios').doc(res.user.email).set({
             email: usuario.email,
+            default_language: usuario.selectedLan,
             nombre: usuario.nombre,
             tags: tagsoriginal,
             terms_condition: usuario.termsAndCondition,

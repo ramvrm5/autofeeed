@@ -259,7 +259,7 @@
       </b-navbar>
     </div>
 
-    <router-view />
+    <router-view v-if = "renderComponent"/>
   </div>
 </template>
 
@@ -277,6 +277,7 @@ export default {
     return {
       imgurl3: 'img/avatar-01.6b36b5f2.png',
       emailId: null,
+      renderComponent: true,
     };
   },
   watch: {
@@ -302,12 +303,20 @@ export default {
       this.cerrarSesion();
     },
     filterOnAllNewsSelected(value){
+        this.renderComponent = false;
+        this. $nextTick (() => {
+          this.renderComponent = true;
+        });
       this.$store.state.tags.forEach(function (object, index, array) {
         $("#item_" + index).css("background-color", "unset");
       });
       this.filtrarporKeyword(value);
     },
     filterOnTagsSellected(value, index, array) {
+      this.renderComponent = false;
+        this. $nextTick (() => {
+          this.renderComponent = true;
+        });
       this.$store.state.tags.forEach(function (object, index, array) {
         $("#item_" + index).css("background-color", "unset");
       });

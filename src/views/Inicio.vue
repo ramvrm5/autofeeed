@@ -705,6 +705,7 @@ export default {
         if (item.idioma == defaultLanguageOfuser) {
                 $('#translate_'+index).addClass('verified');
                 $('#translate_'+index).prop('disabled', true);
+                //$('#translate_'+index).css('opacity','0.5 !important');
                 tlt = item.titulo;
                 dsr = item.cuerpo;
                 let translatedTitleText = [];
