@@ -704,6 +704,8 @@ export default {
       if(! $('#translate_'+index).hasClass( "verified" )){
         if (item.idioma == defaultLanguageOfuser) {
                 $('#translate_'+index).addClass('verified');
+                $('#translate_'+index).addClass('disabled');
+                $('#translate_'+index).addClass('d-none');
                 $('#translate_'+index).prop('disabled', true);
                 //$('#translate_'+index).css('opacity','0.5 !important');
                 tlt = item.titulo;
@@ -1098,4 +1100,5 @@ Vue.prototype.$PreparingNewsText_ar = "اعداد اخبارك الشخصية";
 .IZ-select .IZ-select__input-wrap .IZ-select__input{
   box-shadow: unset !important;
 }
+
 </style>
