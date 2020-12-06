@@ -916,7 +916,7 @@ export default new Vuex.Store({
     },
     addTags({ commit }, objeto_tags) {
       //let url2 = 'https://bit4block.es/autofeed/autofeed_translate_tags.php'
-      let url3 = 'https://bit4block.es/autofeed3/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
+      let url3 = 'https://server.fauno.ai/autofeedPHP/autofeed_news_factory.php?tags=' + encodeURIComponent(objeto_tags.addedTag)
       var tags = []
       if (this.state.rawTags && this.state.rawTags.length > 0) {
         this.state.rawTags += ';' + objeto_tags.addedTag;

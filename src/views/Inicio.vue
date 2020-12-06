@@ -90,9 +90,9 @@
                 aria-hidden="true"
               ></i>
             </button>
-            <b>{{"Idioma :- " + item.idioma}}</b><br>
+            <!--<b>{{"Idioma :- " + item.idioma}}</b><br>
             <b>{{"Default-Language :- " +selectedLan}}</b><br>
-            <b>Detected-Language :- <span :id="'detect_'+index"></span></b>
+            <b>Detected-Language :- <span :id="'detect_'+index"></span></b>-->
             <b-card-text>{{ item.cuerpo.substring(0, 140)+'...' }}</b-card-text>
             <div class="row">
               <div class="col-5">
@@ -593,7 +593,7 @@ export default {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "https://40.69.2.143/autofeedImages/default_img/" +
+                "https://server.fauno.ai/autofeedImages/default_img/" +
                 tagsArray[tagIndex] +
                 ".png"
               );
@@ -603,7 +603,7 @@ export default {
 /*            for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
-                "https://40.69.2.143/autofeedImages/default_img/" +
+                "https://server.fauno.ai/autofeedImages/default_img/" +
                 tagsArray[i] +
                 ".png"
               );

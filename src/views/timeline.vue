@@ -445,7 +445,7 @@ export default {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
-                "https://40.69.2.143/autofeedImages/default_img/" +
+                "https://server.fauno.ai/autofeedImages/default_img/" +
                 tagsArray[tagIndex] +
                 ".png"
               );
@@ -455,7 +455,7 @@ export default {
 /*           for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
-                "https://40.69.2.143/autofeedImages/default_img/" +
+                "https://server.fauno.ai/autofeedImages/default_img/" +
                 tagsArray[i] +
                 ".png"
               );
