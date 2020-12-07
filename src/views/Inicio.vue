@@ -589,7 +589,7 @@ export default {
     },
     getImage(item, tagsArray) {
       if (item.fuente === "Google" || item.fuente === "seekingalpha"  || item.fuente === "twitter") {
-       if (tagsArray.length > 0) {
+/*        if (tagsArray.length > 0) {
          let tagIndex = tagsArray.findIndex(element => element.length > 1)
           if (tagIndex >= 0) {
               return (
@@ -599,7 +599,7 @@ export default {
               );
             } else {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
-            }
+            } */
 /*            for (let i = 0; tagsArray.length > 0; i++) {
             if (tagsArray[i].length > 0) {
               return (
@@ -611,9 +611,9 @@ export default {
               return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
             }
           } */ 
-        } else {
+        /* } else { */
           return "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/img%2Fwhitelogo.png?alt=media&token=e9002688-358a-4997-94b0-31b460635c01";
-        }
+        /* } */
       } else if(item.image !== null){
         return item.img;
       } else if(item.image == null){

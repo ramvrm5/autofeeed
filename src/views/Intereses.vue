@@ -331,7 +331,6 @@ export default {
       confirmButtonText: this.selectedLan == 'es' ? this.$YouDelet_es : this.selectedLan == 'pt'? this.$YouDelet_pt : this.selectedLan == 'ar'? this.$YouDelet_ar : this.$YouDelet_en
     }).then((result) => {
       if (result.value) {
-        debugger
         var alerta = this.alerta.split("//");
         var alertaObject = this.alertaObject;
         var tags = this.rawTags.split(";");
