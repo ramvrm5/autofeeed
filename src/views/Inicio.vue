@@ -641,7 +641,6 @@ export default {
                   let likes_elemento = document
                     .getElementById(id)
                     .getElementsByTagName("span")[0].innerText;
-                  //alert(likes_elemento)
                   document.getElementById(id).classList.remove("likepulsado");
                   document.getElementById(id).style.color = "#ffffff";
                   document.getElementById(id).style.backgroundColor = "#007bff";
