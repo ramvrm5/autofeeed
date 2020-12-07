@@ -674,7 +674,7 @@ export default new Vuex.Store({
                     querryRef2 = db.collection("noticias").where("tags", "array-contains-any", from10to20tags).where("fecha", ">", dateStartOEnd).limit(20).get()
                   } else {
                     querryRef = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
-                    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", firts10tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
+                    querryRef2 = db.collection("noticias").where("tags", "array-contains-any", firts20tags).where("fecha", ">", yesterday).where("fecha", "<", dateStartOEnd).limit(20).get()
                   }
 
                 }
