@@ -257,6 +257,20 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
+      <div>
+      <!-- <b-button id="botonmodal" v-b-modal.modal-1>Launch demo modal</b-button> -->
+<!--         <b-modal id="modal-1" title="verma" hide-footer>
+            <p class="my-4">
+              ram
+            </p>
+            <b-button
+            class="mt-3"
+            block
+            style="color: #fff; background-color: #28a745; border-color: #28a745"
+            @click="$bvModal.hide('modal-1')"
+            >Genial</b-button>
+        </b-modal> -->
+      </div>
     </div>
 
     <router-view v-if = "renderComponent"/>
@@ -270,6 +284,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { auth } from "../firebase";
 import firebase from "firebase/app";
+import { db } from "./firebase";
 import $ from "jquery";
 library.add(faBell);
 export default {
@@ -278,6 +293,8 @@ export default {
       imgurl3: 'img/avatar-01.6b36b5f2.png',
       emailId: null,
       renderComponent: true,
+      showModal: true,
+      dialog: false,
     };
   },
   watch: {
@@ -412,6 +429,20 @@ export default {
         //this.cambiarimagen(imgurl2) //method1 will execute at pageload
       }
     }, 400);
+          db.collection('config').doc('app_info').get()
+          .then(doc => {
+            let datos = doc.data();
+            datos.version
+            setTimeout(() => {
+              if(datos.version <= this.$store.state.appVersion){
+                var result = confirm("Your app version is less please update it");
+                if (result) {
+                    window.open("https://play.google.com/store/apps/details?id=fauno.ai.com");
+                }
+              }
+
+            }, 500);
+            })
   },
   computed: {
     ...mapGetters(["existeUsuario"]),
