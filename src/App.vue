@@ -435,12 +435,17 @@ export default {
             var version = datos.version
             setTimeout(() => {
               if(datos.version != this.$store.state.appVersion && datos.version > this.$store.state.appVersion){
-                var result = confirm("Your app version is less please update it");
+                var result = confirm("Por favor debe actualizar la aplicación para disfrutar de todas las características");
                 if (result) {
+                  if ($(window).width() > 850) {
+                    location.reload(true);
+                    //window.open("https://play.google.com/store/apps/details?id=fauno.ai.com");
+                  }else{
                     window.open("https://play.google.com/store/apps/details?id=fauno.ai.com");
+                  }
                 }
               }
-            }, 500);
+            }, 200);
             })
   },
   computed: {
