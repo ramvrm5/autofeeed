@@ -17,6 +17,7 @@ const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
 
 export default new Vuex.Store({
   state: {
+    appVersion: 125,
     totalChars: null,
     totalRequest: null,
     paginationCount: null,
