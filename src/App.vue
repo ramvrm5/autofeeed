@@ -432,15 +432,14 @@ export default {
           db.collection('config').doc('app_info').get()
           .then(doc => {
             let datos = doc.data();
-            datos.version
+            var version = datos.version
             setTimeout(() => {
-              if(datos.version <= this.$store.state.appVersion){
+              if(datos.version != this.$store.state.appVersion && datos.version > this.$store.state.appVersion){
                 var result = confirm("Your app version is less please update it");
                 if (result) {
                     window.open("https://play.google.com/store/apps/details?id=fauno.ai.com");
                 }
               }
-
             }, 500);
             })
   },
