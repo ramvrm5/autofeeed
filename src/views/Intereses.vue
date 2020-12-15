@@ -96,7 +96,8 @@
           ></b-form-select>
       </div>
       <button type="submit" :disabled="!addedTag" class="btn btn-primary text-light mb-2">Añadir interés</button>
-      
+      <h5 id="addTagUnsubcribe" class="text-danger ml-3 mt-1 d-none"><b>Please subscribe to add more tags  
+        <router-link style="text-decoration:underline" to="/miperfil"> click here</router-link></b></h5>
     </form>
     
 
@@ -376,39 +377,47 @@ export default {
       }
     })
     },
-    addTagsTemp(){
-      this.items2.push({
-      Publicaciones: "25",
-      alarma: [],
-      alarmas: "0",
-      name: this.addedTag.trim(),
-      typeOfTag: "Ocio",
-      typeOfTrend: this.typeOfTrend,
-      });
-      var addedTag = this.addedTag.trim();
-      var emptyArray = []
-      var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag.trim()+';Ocio;'+this.typeOfTrend
-      var alertTemp = this.alerta;
-      if(alertTemp && alertTemp.length > 0){
-      alertTemp += alertAppend;
+    addTagsTemp(){ 
+      var aa = this.$store.state.subscribe
+      if(this.$store.state.subscribe == "fail" && this.$store.state.tags.length >= 10){
+        $("#addTagUnsubcribe").removeClass("d-none")
+        setTimeout(() => {
+        $("#addTagUnsubcribe").addClass("d-none")
+        }, 2500);
       }else{
-      alertTemp = alertAppend;
+        this.items2.push({
+        Publicaciones: "25",
+        alarma: [],
+        alarmas: "0",
+        name: this.addedTag.trim(),
+        typeOfTag: "Ocio",
+        typeOfTrend: this.typeOfTrend,
+        });
+        var addedTag = this.addedTag.trim();
+        var emptyArray = []
+        var alertAppend = '//'+JSON.stringify(emptyArray)+';'+this.addedTag.trim()+';Ocio;'+this.typeOfTrend
+        var alertTemp = this.alerta;
+        if(alertTemp && alertTemp.length > 0){
+        alertTemp += alertAppend;
+        }else{
+        alertTemp = alertAppend;
+        }
+        store.commit("setAlerta", alertTemp);
+        this.addedTag = null;
+        this.typeOfTrend = "Neutral"
+        Vue.set(this.items2)
+        db.collection("usuarios")
+          .doc(this.usuario.email)
+          .update({
+            alerta: alertTemp,
+          })
+          .then(() => {
+          console.log("updated")
+        this.addTags({ addedTag: addedTag })
+          }).catch((error) => {
+          console.log(error)
+        });
       }
-      store.commit("setAlerta", alertTemp);
-      this.addedTag = null;
-      this.typeOfTrend = "Neutral"
-      Vue.set(this.items2)
-      db.collection("usuarios")
-        .doc(this.usuario.email)
-        .update({
-          alerta: alertTemp,
-        })
-        .then(() => {
-        console.log("updated")
-      this.addTags({ addedTag: addedTag })
-        }).catch((error) => {
-        console.log(error)
-      });
     },
     subiravatar(file1) {
       //var file = $('#inputavatar').prop('files')[0];
@@ -600,6 +609,7 @@ export default {
       "nombre",
       "apellidos",
       "tags",
+      "tags_array",
       "rawTags",
       "alerta",
       "alertaObject",

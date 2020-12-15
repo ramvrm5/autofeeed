@@ -358,7 +358,61 @@
                     v-model="psCode"
                   />
                 </div>
-              </div>
+              </div>   
+
+
+
+              <hr class="w-100 text-light" />
+              <h6 class="heading-small text-muted mb-4 ml-3">
+                {{
+                  selectedLan == "es"
+                    ? $subscription_es
+                    : selectedLan == "pt"
+                    ? $subscription_pt
+                    : selectedLan == "ar"
+                    ? $subscription_ar
+                    : $subscription_es
+                }}
+              </h6>
+              <b-row>
+                <b-col class="col-11 col-sm-11 col-md-4 col-lg-2">
+                      <router-link
+                      style="color: white"
+                      to="/subscription">
+                        <button v-if="$store.state.subscribe == 'fail'"  type="button" class="btn btn-sm btn-primary ml-3 mt-n1 w-100">
+                        {{
+                          selectedLan == "es"
+                            ? $subscription_es
+                            : selectedLan == "pt"
+                            ? $subscription_pt
+                            : selectedLan == "ar"
+                            ? $subscription_ar
+                            : $subscription_en
+                        }}
+                        </button>
+                      </router-link>
+<!--                     <i  v-if="$store.state.subscribe == 'done'" class="fa fa-check-circle text-success" style="font-size:20px" aria-hidden="true"></i> -->
+                    <button 
+                    v-if="$store.state.subscribe == 'done'" 
+                    style="color: white;" 
+                    type="button" 
+                    class="btn btn-sm btn-primary ml-3 mt-n1"
+                    @click="unSubscribe">
+                    {{
+                      selectedLan == "es"
+                        ? $unSubscribe_es
+                        : selectedLan == "pt"
+                        ? $unSubscribe_pt
+                        : selectedLan == "ar"
+                        ? $unSubscribe_ar
+                        : $unSubscribe_en
+                    }}
+                    </button> 
+                </b-col>
+              </b-row>
+
+
+
               <hr class="w-100 text-light" />
               <h6 class="heading-small text-muted mb-4 ml-3">
                 {{
@@ -550,6 +604,16 @@ export default {
       "editarAlertas",
       "cambiarcontraseña"
     ]),
+    unSubscribe(){
+      db.collection('usuarios').doc(this.usuario.email).update({
+        subscribeStatus: false,
+        subscribeObject:{}
+      }).then(() => {
+        store.commit("setSubscription", "fail");
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     cambiarimagen(imagen) {
       setTimeout(() => {
         document.getElementById("imguser").src = imagen;
@@ -668,6 +732,7 @@ export default {
       });
     },
     ...mapState([
+      "subscribe",
       "usuario",
       "nombre",
       "firstName",
@@ -850,4 +915,16 @@ Vue.prototype.$faunoWallet_es = "CARTERA FAUNO.AI";
 Vue.prototype.$faunoWallet_pt = "FAUNO.AI WALLET";
 Vue.prototype.$faunoWallet_en = "FAUNO.AI WALLET";
 Vue.prototype.$faunoWallet_ar = "FAUNO.AI المحفظة";
+Vue.prototype.$subscription_es = "Suscribir";
+Vue.prototype.$subscription_pt = "Se inscrever";
+Vue.prototype.$subscription_en = "Subscribe";
+Vue.prototype.$subscription_ar = "الإشتراك";
+Vue.prototype.$alSubscription_es = "Ya suscrito";
+Vue.prototype.$alSubscription_pt = "Já inscrevi";
+Vue.prototype.$alSubscription_en = "Already subscribed";
+Vue.prototype.$alSubscription_ar = "مشترك بالفعل";
+Vue.prototype.$unSubscribe_es = "Darse de baja";
+Vue.prototype.$unSubscribe_pt = "Cancelar subscrição";
+Vue.prototype.$unSubscribe_en = "Unsubscribe";
+Vue.prototype.$unSubscribe_ar = "إلغاء الاشتراك";
 </script>

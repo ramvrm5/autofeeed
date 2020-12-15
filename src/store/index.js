@@ -17,7 +17,8 @@ const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
 
 export default new Vuex.Store({
   state: {
-    appVersion: 125,
+    subscribe: "fail",
+    appVersion: 126,
     totalChars: null,
     totalRequest: null,
     paginationCount: null,
@@ -168,6 +169,9 @@ export default new Vuex.Store({
     },
     setTotalRequest(state, payload) {
       state.totalRequest = payload
+    },
+    setSubscription(state, payload) {
+      state.subscribe = payload
     }
   },
   actions: {
@@ -268,6 +272,7 @@ export default new Vuex.Store({
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
               commit('setTronAddress', datos.tronAddress?datos.tronAddress.address.base58:null)
+              commit('setSubscription', datos.subscribeStatus?"done":"fail")
               db.collection('translationLogs').doc("totalRequestLog").get()
               .then(doc => {
                 let translationData = doc.data()

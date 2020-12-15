@@ -153,6 +153,15 @@
                 >Crear cuenta</router-link
               ></b-nav-item
             >
+            
+            <!-- <b-nav-item>
+              <router-link
+                style="color: white"
+                to="/subscription"
+                
+                >Subscription</router-link
+              ></b-nav-item> -->
+
             <b-nav-item-dropdown id="loginid" right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
