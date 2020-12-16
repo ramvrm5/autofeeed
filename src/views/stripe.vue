@@ -1,7 +1,12 @@
  <template>
-  <b-row style="height: 93.56vh;background-color: #212D63!important;" class="align-items-center">
+ <b-overlay 
+    :show="show"           
+    variant="dark"
+    opacity="0.64"
+    rounded="lg">
+  <b-row style="height: 93.56vh;background-color: rgb(223 226 243) !important;" class="align-items-center">
     <b-col class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto">    
-      <div class="ml-1">
+<!--       <div class="ml-1">
     <a style="color:white;text-decoration:underline;cursor:pointer" @click="$router.go(-1)">{{selectedLan == 'es'
   ? $Back_es
   : selectedLan == 'pt'
@@ -9,7 +14,7 @@
   : selectedLan == 'ar'
   ? $Back_ar
   : $Back_en}}</a>
-    </div>
+    </div> -->
       <div class="wrapper ">
           <stripe-elements
             ref="elementsRef"
@@ -20,10 +25,12 @@
             @loading="loading = $event"
         >
         </stripe-elements>
-        <button @click="submit"><span id="stripe_pay_button">Pay €{{amount / 100}}</span><span id="stripe_spinner" class="d-none"><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
+        <button @click="submit" id="stripe_pay_button"><span>Pay €{{amount / 100}}</span></button>
+        <button id="stripe_spinner" class="d-none"><span><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
       </div>
     </b-col>
   </b-row>
+ </b-overlay>
 </template> 
 
 <script>
@@ -41,9 +48,10 @@ export default {
   },
   data() {
     return {
+    show: false,
     loading: false,
     amount: 1000,
-    publishableKey: 'pk_test_lyuqxKSznf3JwIHkQNJCAT1b00miGKGAdj',
+    publishableKey: 'pk_test_51HyrzRFlz3SmLkoJ33hQ8bfmWYWnJwUWPSO6MMrNlT33fJunFmsZ29wsn0LvBIXqtN77SKS4DBgmwhz5n5yLOxwS00BhdG3IRP',
     token:null,
     charge:null,
     };
@@ -54,11 +62,11 @@ export default {
 /*       "cerrarSesion", */
     ]),
      submit () {
-       $("#stripe_pay_button").addClass("d-none");
-        $("#stripe_spinner").removeClass("d-none");
       this.$refs.elementsRef.submit();
     },
     tokenCreated (token) {
+      $("#stripe_pay_button").addClass("d-none");
+      $("#stripe_spinner").removeClass("d-none");
       this.token = token;
       // for additional charge objects go to https://stripe.com/docs/api/charges/object
       this.charge = {
@@ -78,11 +86,11 @@ export default {
         dataType: "json",
         data: {
         amount: this.charge.amount,
-        currency: 'inr',
+        currency: 'eur',
         source: this.charge.source,
         description: 'My First Test Charge (created for API docs)',
         },
-        headers: { "Authorization": "Bearer sk_test_hTiB60KCZawl3ppLv9eVUwGH00BoqQ0tsX" },
+        headers: { "Authorization": "Bearer sk_test_51HyrzRFlz3SmLkoJeaq3DcPC54pcHFOIwrfkP0z3TzcPjDCbp3LfRgWwMejlklJ0FORhPk64kd3YiKDSYOZFvlHN00YGM7OiN4" },
       };
       let payment = this.charge.amount;
       let email = this.usuario.email;
@@ -100,36 +108,26 @@ export default {
           }).then(() => {
             $("#stripe_pay_button").removeClass("d-none");
             $("#stripe_spinner").addClass("d-none");
+            this.show = true;
+            const self = this;
+            setTimeout(function(){
+              self.$router.push('/miperfil');
+            }, 2000);
           }).catch((error) => {
             console.log(error)
             $("#stripe_pay_button").removeClass("d-none");
             $("#stripe_spinner").addClass("d-none");
           })
         }
-      }).fail(function(data){
+      }.bind(this)).fail(function(data){
        $("#stripe_pay_button").removeClass("d-none");
       $("#stripe_spinner").addClass("d-none");
         alert("Try again !");
-      });
+      }.bind(this));
     }
   },
   mounted:async function () {
-/*   (this.imgurl3 = 'img/avatar-01.6b36b5f2.png'),
-    setTimeout(function () {
-      let user = firebase.auth().currentUser;
-      if (user) {
-        let fecha2 = new Date();
 
-        var imgurl2 =
-          "https://firebasestorage.googleapis.com/v0/b/autofeed2020.appspot.com/o/avatares%2F" +
-          encodeURIComponent(user.email) +
-          ".jpg?alt=media&time=" +
-          fecha2.getTime();
-        document.getElementById("imgmenu").src = imgurl2;
-        //this.imgurl3 = imgurl2;
-        //this.cambiarimagen(imgurl2) //method1 will execute at pageload
-      }
-    }, 400); */
   },
   computed: {
     ...mapGetters(["existeUsuario"]),

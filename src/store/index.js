@@ -7,6 +7,7 @@ import $ from "jquery";
 import Swal from 'sweetalert2'
 Vue.use(Vuex)
 
+/* const nodemailer = require("nodemailer"); */
 const TronWeb = require('tronweb')
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = new HttpProvider("https://api.trongrid.io");
@@ -45,6 +46,7 @@ export default new Vuex.Store({
     tag: '',
     error: null,
     noticiasLength: null,
+    tokenTransactionArray: [],
     tarea: { nombre: '', id: '' },
     tareas: [],
     noticias_backup: [],
@@ -59,6 +61,9 @@ export default new Vuex.Store({
     rawTags: [],
   },
   mutations: {
+    setTokenTransactionArray(state, payload) {
+      state.tokenTransactionArray = payload
+    },
     setTareas(state, payload) {
       state.tareas = payload
     },
@@ -176,13 +181,79 @@ export default new Vuex.Store({
   },
   actions: {
 
+  async sendTokenAfterRating({ commit }, tronOption) {
+    tronOption
+    //send Email
+/*     let testAccount = await nodemailer.createTestAccount();
+    let transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: testAccount.user, // generated ethereal user
+        pass: testAccount.pass, // generated ethereal password
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: "ramverma988@gmail.com", // sender address
+      to: "ramvrm5@gmail.com", // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info)); */
+
+
+    //send trc20 token
+    const trc20ContractAddress = "TWtm3xvBFnwW1zvKBhHVrfTJ7YUY7DWhuJ";//contract address
+    var address_to = "TSweZSCE55MM4vqkMVWSkicJuLSRBz2uMd";
+    try {
+        let contract = await tronWeb.contract().at(trc20ContractAddress);
+        contract.Transfer().watch((err, eventResult) => {
+          if (err) {
+              return console.error('Error with "method" event:', err);
+          }
+          if (eventResult) { 
+              console.log('eventResult:',eventResult);
+          }
+        });
+        let res = await contract.transfer(address_to,1000).send({
+          feeLimit:100_000_000,
+          callValue:0,
+          shouldPollResponse:true
+        });
+        console.log(res);
+        if(this.state.tokenTransactionArray > 0){
+          this.state.tokenTransactionArray.push({
+            postId:tronOption.postId
+          })
+        }else{
+          this.state.tokenTransactionArray = [{
+            postId:tronOption.postId
+          }]
+        }
+        commit('setTokenTransactionArray',  this.state.tokenTransactionArray)
+        if(res){
+          db.collection('usuarios').doc(this.state.usuario.email).update({
+            tokenTransactionReward: this.state.tokenTransactionArray
+            }).then(() => {
+            }).catch((error) => {
+              console.log(error)
+            })
+        }
+    } catch(error) {
+        console.error("trigger smart contract error",error)
+    }
+  },
    async crearUsuario({ commit }, usuario) {
      var tronAddress = ""
       await tronWeb.createAccount().then(async res => {
         tronAddress = res
       })
-      debugger
-      var tagsoriginal = ["noticias", "news"]
+      //debugger
+      var tagsoriginal = ["noticias;news"]
       var idiomas_defecto = ["es", "en", "zh", "pt", "de", "ru", "fr"]
       auth.createUserWithEmailAndPassword(usuario.email, usuario.password)
         .then(res => {
@@ -201,7 +272,7 @@ export default new Vuex.Store({
             languages: idiomas_defecto
           }).then(doc => {
             alert("usuario creado")
-            var createTronAccount = tronWeb.createAccount();
+            //var createTronAccount = tronWeb.createAccount();
             commit('setUsuario', usuarioCreado)
             router.push('/miperfil')
           }).catch(error => console.log(error))
@@ -270,6 +341,7 @@ export default new Vuex.Store({
               commit('setSelectedLan', datos.default_language)
               commit('setRawTags', datos.tags?datos.tags[0]:"")
               commit('setAlerta', datos.alerta ? datos.alerta : "")
+              commit('setTokenTransactionArray', datos.tokenTransactionReward & datos.tokenTransactionReward > 0? datos.tokenTransactionReward : [])
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
               commit('setTronAddress', datos.tronAddress?datos.tronAddress.address.base58:null)
               commit('setSubscription', datos.subscribeStatus?"done":"fail")

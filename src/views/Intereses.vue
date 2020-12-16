@@ -95,7 +95,7 @@
             "
           ></b-form-select>
       </div>
-      <button type="submit" :disabled="!addedTag" class="btn btn-primary text-light mb-2">Añadir interés</button>
+      <button type="submit" :disabled="!addedTag" class="btn btn-primary text-light mb-2" style="width: 10%;">Añadir interés</button>
       <h5 id="addTagUnsubcribe" class="text-danger ml-3 mt-1 d-none"><b>Please subscribe to add more tags  
         <router-link style="text-decoration:underline" to="/miperfil"> click here</router-link></b></h5>
     </form>

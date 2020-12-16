@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid">
     <!-- <h2 style="margin-top:1em"> Mis datos </h2> style="height: 65vh !important; width: 100%"-->
+    <button @click="send" class="btn btn-primary">send</button>
     <b-row class="align-items-center">
       <b-col class="col-11 col-sm-11 col-md-11 col-lg-11 vh-50 mx-auto">
         <form
@@ -602,8 +603,12 @@ export default {
       "cambiarIdioma",
       "editarTarea2",
       "editarAlertas",
-      "cambiarcontraseña"
+      "cambiarcontraseña",
+      "sendTokenAfterRating"
     ]),
+    send(){
+      this.sendTokenAfterRating()
+    },
     unSubscribe(){
       db.collection('usuarios').doc(this.usuario.email).update({
         subscribeStatus: false,
