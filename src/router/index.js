@@ -35,6 +35,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/buyToken',
+    name: 'BuyToken',
+    component: () => import(/* webpackChunkName: "Intereses" */ '../views/purchaseToken.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/subscription',
     name: 'Subscription',
     component: () => import(/* webpackChunkName: "Intereses" */ '../views/stripe.vue'),

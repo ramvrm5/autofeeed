@@ -1,20 +1,21 @@
  <template>
  <b-overlay 
+    id="overlay"
     :show="show"           
     variant="dark"
     opacity="0.64"
     rounded="lg">
   <b-row style="height: 93.56vh;background-color: rgb(223 226 243) !important;" class="align-items-center">
-    <b-col class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto">    
-<!--       <div class="ml-1">
-    <a style="color:white;text-decoration:underline;cursor:pointer" @click="$router.go(-1)">{{selectedLan == 'es'
-  ? $Back_es
-  : selectedLan == 'pt'
-  ? $Back_pt
-  : selectedLan == 'ar'
-  ? $Back_ar
-  : $Back_en}}</a>
-    </div> -->
+    <b-col class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto">  
+        <b-form-select
+            v-model="tokenNumber"
+            id="optionsForTokenNUmberid"
+            :options="options"
+            size="sm"
+            style="height: 37px !important"
+        ></b-form-select>
+        <p id="emptyPtag" class="mb-3"></p> 
+        <span id="tokenRequireError" class="d-none text-danger mb-3">Number of token is required</span> 
       <div class="wrapper ">
           <stripe-elements
             ref="elementsRef"
@@ -25,8 +26,11 @@
             @loading="loading = $event"
         >
         </stripe-elements>
-        <button class="paymentSubButton" @click="submit" id="stripe_pay_button"><span>Pay €{{amount / 100}}</span></button>
-        <button  disabled id="stripe_spinner" class="d-none paymentSubButton"><span><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
+        <button @click="submit" id="stripe_pay_button" class="purchaseToken"><span>Pay €{{amount / 100}}</span></button>
+        <button disabled id="stripe_spinner" class="d-none purchaseToken"><span><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
+        <button disabled id="doneButton" class="d-none purchaseToken">Done </button>
+        <p id="noteForWait" class="mt-2 d-none"><b>NOTE:-  Please wait it will take few minutes don't refresh or chnage url</b></p>
+        <p id="tokenBuyDone" class="mt-2 d-none"><b>Token buy successfully done</b> <i class="fa fa-check-circle text-success" aria-hidden="true"></i></p>
       </div>
     </b-col>
   </b-row>
@@ -48,9 +52,18 @@ export default {
   },
   data() {
     return {
+      options: [
+        { value: "500_tokens", text: "500" },
+        { value: "1000_tokens", text: "1000" },
+        { value: "2000_tokens", text: "2000" },
+        { value: "5000_tokens", text: "5000" },
+        { value: "10000_tokens", text: "10000" },
+        { value: "20000_tokens", text: "20000" },
+      ],
+    tokenNumber:"500_tokens",
     show: false,
     loading: false,
-    amount: 1000,
+    amount: 50,
     publishableKey: 'pk_test_51HyrzRFlz3SmLkoJ33hQ8bfmWYWnJwUWPSO6MMrNlT33fJunFmsZ29wsn0LvBIXqtN77SKS4DBgmwhz5n5yLOxwS00BhdG3IRP',
     token:null,
     charge:null,
@@ -59,14 +72,15 @@ export default {
   created() {},
   methods: {
     ...mapActions([
-/*       "cerrarSesion", */
+      "buyToken",
     ]),
-     submit () {
-      this.$refs.elementsRef.submit();
+    submit () {
+        this.$refs.elementsRef.submit();
     },
     tokenCreated (token) {
       $("#stripe_pay_button").addClass("d-none");
       $("#stripe_spinner").removeClass("d-none");
+      $("#noteForWait").removeClass("d-none");
       this.token = token;
       // for additional charge objects go to https://stripe.com/docs/api/charges/object
       this.charge = {
@@ -77,55 +91,36 @@ export default {
       //debugger
       this.sendTokenToServer(this.charge);
     },
-  async sendTokenToServer (charge) {
-      let settings = {
-        async: true,
-        crossDomain: true,
-        url:"https://api.stripe.com/v1/charges",
-        method: "POST",
-        dataType: "json",
-        data: {
-        amount: this.charge.amount,
-        currency: 'eur',
-        source: this.charge.source,
-        description: 'My First Test Charge (created for API docs)',
-        },
-        headers: { "Authorization": "Bearer sk_test_51HyrzRFlz3SmLkoJeaq3DcPC54pcHFOIwrfkP0z3TzcPjDCbp3LfRgWwMejlklJ0FORhPk64kd3YiKDSYOZFvlHN00YGM7OiN4" },
-      };
-      let payment = (this.charge.amount)/100;
-      let email = this.usuario.email;
-      await $.ajax(settings).done(function (response) {
-        if(response.status == "succeeded"){
-        store.commit("setSubscription", "done");
-         let subscribeObject ={
-            amount:payment,
-            balance_transaction:response.balance_transaction,
-            currency:response.currency,
-            date:(new Date()).toDateString()
-          }
-          db.collection('usuarios').doc(email).update({
-          subscribeStatus: true,
-          subscribeObject:subscribeObject,
-          date:(new Date()).toDateString()
-          }).then(() => {
-            $("#stripe_pay_button").removeClass("d-none");
-            $("#stripe_spinner").addClass("d-none");
-            this.show = true;
-            const self = this;
-            setTimeout(function(){
-              self.$router.push('/miperfil');
-            }, 2000);
-          }).catch((error) => {
-            console.log(error)
-            $("#stripe_pay_button").removeClass("d-none");
-            $("#stripe_spinner").addClass("d-none");
-          })
+    enterToken (){
+        switch (this.tokenNumber) {
+            case "500_tokens":
+                this.amount = 50;
+                break;
+            case "1000_tokens":
+                this.amount = 100;
+                break;
+            case "2000_tokens":
+                this.amount = 200;
+                break;
+            case "5000_tokens":
+                this.amount = 500;
+                break;
+            case "10000_tokens":
+                this.amount = 1000;
+                break;
+            case "20000_tokens":
+                this.amount = 2000;
+                break;
         }
-      }.bind(this)).fail(function(data){
-       $("#stripe_pay_button").removeClass("d-none");
-      $("#stripe_spinner").addClass("d-none");
-        alert("Try again !");
-      }.bind(this));
+        let amount = this.amount;
+    },
+    sendTokenToServer (charge) {
+        this.buyToken({charge:this.charge,tokenNumber:this.tokenNumber})
+    }
+  },
+ watch: {
+    tokenNumber: function() {
+      this.enterToken();
     }
   },
   mounted:async function () {
@@ -144,7 +139,7 @@ Vue.prototype.$Back_en = "Back";
 Vue.prototype.$Back_ar = "عودة";
 </script>
 <style>
-  button.paymentSubButton{
+  button.purchaseToken{
     border: none;
     outline: none;
     color: #878EAE;
@@ -161,5 +156,6 @@ Vue.prototype.$Back_ar = "عودة";
     align-items: center;
     justify-content: center;
     width: 100%;
+
   }
 </style>

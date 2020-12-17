@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <!-- <h2 style="margin-top:1em"> Mis datos </h2> style="height: 65vh !important; width: 100%"-->
-    <button @click="send" class="btn btn-primary">send</button>
+    <!-- <button @click="send" class="btn btn-primary">send</button> -->
     <b-row class="align-items-center">
       <b-col class="col-11 col-sm-11 col-md-11 col-lg-11 vh-50 mx-auto">
         <form
@@ -392,12 +392,11 @@
                         }}
                         </button>
                       </router-link>
-<!--                     <i  v-if="$store.state.subscribe == 'done'" class="fa fa-check-circle text-success" style="font-size:20px" aria-hidden="true"></i> -->
                     <button 
                     v-if="$store.state.subscribe == 'done'" 
                     style="color: white;" 
                     type="button" 
-                    class="btn btn-sm btn-primary ml-3 mt-n1"
+                    class="btn btn-sm btn-primary ml-3 mt-n1 w-100"
                     @click="unSubscribe">
                     {{
                       selectedLan == "es"
@@ -409,6 +408,23 @@
                         : $unSubscribe_en
                     }}
                     </button> 
+                </b-col>
+                <b-col  class="col-11 col-sm-11 col-md-4 col-lg-2">
+                      <router-link
+                      style="color: white"
+                      to="/buyToken">
+                        <button type="button" class="btn btn-sm btn-primary ml-3 mt-n1 w-100">
+                        {{
+                          selectedLan == "es"
+                            ? $buyToken_es
+                            : selectedLan == "pt"
+                            ? $buyToken_pt
+                            : selectedLan == "ar"
+                            ? $buyToken_ar
+                            : $buyToken_en
+                        }}
+                        </button>
+                      </router-link>
                 </b-col>
               </b-row>
 
@@ -503,6 +519,7 @@ import Vue from "vue";
 import QrcodeVue from 'qrcode.vue'
 import { mapActions, mapState, mapGetters } from "vuex";
 import store from "../store";
+import sweetAlert from 'sweetalert2';
 import VueTagsInput from "@johmun/vue-tags-input";
 import { db } from "../firebase";
 import { auth } from "../firebase";
@@ -610,14 +627,48 @@ export default {
       this.sendTokenAfterRating()
     },
     unSubscribe(){
-      db.collection('usuarios').doc(this.usuario.email).update({
-        subscribeStatus: false,
-        subscribeObject:{}
-      }).then(() => {
-        store.commit("setSubscription", "fail");
-      }).catch((error) => {
-        console.log(error)
-      })
+      sweetAlert.fire({
+      title: this.selectedLan == 'es' ? this.$Areyousure_es : this.selectedLan == 'pt'? this.$Areyousure_pt : this.selectedLan == 'ar'? this.$Areyousure_ar : this.$Areyousure_en,
+      text: this.selectedLan == 'es' ? this.$AbleToRevert_es : this.selectedLan == 'pt'? this.$AbleToRevert_pt : this.selectedLan == 'ar'? this.$AbleToRevert_ar : this.$AbleToRevert_en,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText:this.selectedLan == 'es' ? this.$cancel_es : this.selectedLan == 'pt'? this.$cancel_pt : this.selectedLan == 'ar'? this.$cancel_ar : this.$cancel_en,
+      confirmButtonText: this.selectedLan == 'es' ? this.$YouUnsubscribe_es : this.selectedLan == 'pt'? this.$YouUnsubscribe_pt : this.selectedLan == 'ar'? this.$YouUnsubscribe_ar : this.$YouUnsubscribe_en
+      }).then((result) => {
+      if (result.value) {
+        var alerta = this.alerta.split("//");
+        var tags = (this.tags_array_completo[0]).split(";");
+        let tagsArrayOfString = [];
+        var sliceTags = tags.slice(0,10);
+        var sliceAlerta = alerta.slice(0,11);
+        var tagsTemp = sliceTags.join(";");
+        tagsArrayOfString.push(tagsTemp);
+        var alertaTemp = sliceAlerta.join("//");
+        db.collection('usuarios').doc(this.usuario.email).update({
+          subscribeStatus: false,
+          subscribeObject:{},
+          tags:tagsArrayOfString,
+          alerta:alertaTemp
+        }).then(() => {
+          store.commit("setSubscription", "fail");
+          sweetAlert.fire(
+              "Unsubscribed",
+              "",
+              'success'
+            ).then((result) => {
+              if (result.value) {
+                window.location.reload()
+              }
+            })
+          //window.location.reload()
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
+    })
+
     },
     cambiarimagen(imagen) {
       setTimeout(() => {
@@ -752,6 +803,7 @@ export default {
       "tags",
       "alerta",
       "items2",
+      "tags_array_completo",
     ]),
     selectedLan: {
       get() {
@@ -932,4 +984,24 @@ Vue.prototype.$unSubscribe_es = "Darse de baja";
 Vue.prototype.$unSubscribe_pt = "Cancelar subscrição";
 Vue.prototype.$unSubscribe_en = "Unsubscribe";
 Vue.prototype.$unSubscribe_ar = "إلغاء الاشتراك";
+Vue.prototype.$buyToken_es = "Comprar Token";
+Vue.prototype.$buyToken_pt = "Comprar token";
+Vue.prototype.$buyToken_en = "Buy Token";
+Vue.prototype.$buyToken_ar = "شراء رمز";
+Vue.prototype.$cancel_es = "cancelar";
+Vue.prototype.$cancel_pt = "cancelar";
+Vue.prototype.$cancel_en = "cancel";
+Vue.prototype.$cancel_ar = "إلغاء";
+Vue.prototype.$YouUnsubscribe_es = "Sí, ¡Darse de baja!";
+Vue.prototype.$YouUnsubscribe_pt = "Sim, cancele a inscrição!";
+Vue.prototype.$YouUnsubscribe_en = "Yes, Unsubscribe it!";
+Vue.prototype.$YouUnsubscribe_ar = "نعم ، قم بإلغاء الاشتراك!";
+Vue.prototype.$Areyousure_es = "Estas seguro";
+Vue.prototype.$Areyousure_pt = "Você tem certeza?";
+Vue.prototype.$Areyousure_en = "Are you sure?";
+Vue.prototype.$Areyousure_ar = "هل أنت واثق؟";
+Vue.prototype.$AbleToRevert_es = "Si no rescatas, los Intereses superiores a 10 se eliminarán de forma permanente.";
+Vue.prototype.$AbleToRevert_pt = "Se você cancelar a ressuscitação, os interesses acima de 10 serão excluídos permanentemente";
+Vue.prototype.$AbleToRevert_en = "If you unsuscibe the Interests above than 10 will be deleted permanently";
+Vue.prototype.$AbleToRevert_ar = "إذا ألغيت الاشتراك في المصالح المذكورة أعلاه ، فسيتم حذفها نهائيًا";
 </script>

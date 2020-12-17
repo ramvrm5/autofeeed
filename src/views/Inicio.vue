@@ -500,6 +500,14 @@ export default {
           })
           .then(() => {
             console.log("updated");
+            let postFind = this.tokenTransactionArray.some(
+              (element) => item.id == element.postId
+            );
+            let emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+            let emailTestResult = item.fuenteId?item.fuenteId.match(emailRegex):false;
+            if(value >= 4 && !postFind && emailTestResult && (emailTestResult.input !== item.fuenteId)){
+              this.sendTokenAfterRating({tronddress : this.tronAddress,postId: item.id})
+            }
           });
       });
       Vue.set(item, item.ratingArray, item.ratingArray);
@@ -1043,7 +1051,7 @@ export default {
       "keywordactual",
       "changeRangeDate",
       "selectedTag",
-      "paginationCount",
+      "paginationCount","tronAddress","tokenTransactionArray"
     ]),
     ...mapState(["usuario", "keywordactual"]),
   },

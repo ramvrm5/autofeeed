@@ -418,6 +418,22 @@ export default {
           : this.selectedLan == "ar"
           ? this.$We_ar
           : this.$We_en;
+      }else if (routeNmae == "BuyToken") {
+        return this.selectedLan == "es"
+          ? this.$buyToken_es
+          : this.selectedLan == "pt"
+          ? this.$buyToken_pt
+          : this.selectedLan == "ar"
+          ? this.$buyToken_ar
+          : this.$buyToken_en;
+      }else if (routeNmae == "Subscription") {
+        return this.selectedLan == "es"
+          ? this.$toSubscribe_es
+          : this.selectedLan == "pt"
+          ? this.$toSubscribe_pt
+          : this.selectedLan == "ar"
+          ? this.$toSubscribe_ar
+          : this.$toSubscribe_en;
       }
     },
   },
@@ -517,6 +533,14 @@ Vue.prototype.$Sign_off_es = "Cerrar sesión";
 Vue.prototype.$Sign_off_pt = "Fechar Sessão";
 Vue.prototype.$Sign_off_en = "Sign off";
 Vue.prototype.$Sign_off_ar = "تسجيل خروج";
+Vue.prototype.$buyToken_es = "BuyToken";
+Vue.prototype.$buyToken_pt = "BuyToken";
+Vue.prototype.$buyToken_en = "BuyToken";
+Vue.prototype.$buyToken_ar = "BuyToken";
+Vue.prototype.$toSubscribe_es = "Suscribirse";
+Vue.prototype.$toSubscribe_pt = "Subscrever";
+Vue.prototype.$toSubscribe_en = "BuyToken";
+Vue.prototype.$toSubscribe_ar = "الاشتراك";
 </script>
 <style>
 .dropdown.b-dropdown.claseintereses.show.btn-group ul.dropdown-menu.show{

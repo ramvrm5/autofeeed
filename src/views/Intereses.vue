@@ -321,6 +321,7 @@ export default {
       }, 500);
     }, */
     deleteTag(array,index){
+    let tagsArrayOfString = []
     sweetAlert.fire({
       title: this.selectedLan == 'es' ? this.$Areyousure_es : this.selectedLan == 'pt'? this.$Areyousure_pt : this.selectedLan == 'ar'? this.$Areyousure_ar : this.$Areyousure_en,
       text: this.selectedLan == 'es' ? this.$AbleToRevert_es : this.selectedLan == 'pt'? this.$AbleToRevert_pt : this.selectedLan == 'ar'? this.$AbleToRevert_ar : this.$AbleToRevert_en,
@@ -357,11 +358,12 @@ export default {
         alerta = alerta.join("//");
         alertaObject
         tags = tags.length > 1?tags.join(";"):tags;
+        tagsArrayOfString.push(tags)
         store.commit("setAlerta", alerta);
         store.commit("setAlertaObject", alertaObject);
-        store.commit("setRawTags", tags);
+        store.commit("setRawTags", tagsArrayOfString);
       db.collection('usuarios').doc(this.usuario.email).update({
-        tags: tags,
+        tags: tagsArrayOfString,
         alerta:alerta,
         alertaObject:alertaObject
       }).then(() => {
@@ -377,9 +379,9 @@ export default {
       }
     })
     },
-    addTagsTemp(){ 
-      var aa = this.$store.state.subscribe
-      if(this.$store.state.subscribe == "fail" && this.$store.state.tags.length >= 10){
+    addTagsTemp(){
+      var totalTags = this.$store.state.tags.length + 1
+      if(this.$store.state.subscribe == "fail" && totalTags >= 11){
         $("#addTagUnsubcribe").removeClass("d-none")
         setTimeout(() => {
         $("#addTagUnsubcribe").addClass("d-none")

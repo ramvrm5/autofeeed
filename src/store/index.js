@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
 import { db } from '../firebase';
 import { auth } from '../firebase';
+import moment from "moment";
 import router from '../router';
 import $ from "jquery";
 import Swal from 'sweetalert2'
@@ -47,6 +48,8 @@ export default new Vuex.Store({
     error: null,
     noticiasLength: null,
     tokenTransactionArray: [],
+    tokenPurchaseHistoryArray: [],
+    subscribeObject: {},
     tarea: { nombre: '', id: '' },
     tareas: [],
     noticias_backup: [],
@@ -61,6 +64,12 @@ export default new Vuex.Store({
     rawTags: [],
   },
   mutations: {
+    setSubscribeObject(state, payload) {
+      state.subscribeObject = payload
+    },
+    setTokenPurchaseHistoryArray(state, payload) {
+      state.tokenPurchaseHistoryArray = payload
+    },
     setTokenTransactionArray(state, payload) {
       state.tokenTransactionArray = payload
     },
@@ -181,8 +190,89 @@ export default new Vuex.Store({
   },
   actions: {
 
+    async buyToken({ commit }, tronPurchaseOption) {
+      var numberOfToken  = parseInt(tronPurchaseOption.tokenNumber.split("_")[0])
+      const trc20ContractAddress = "TWtm3xvBFnwW1zvKBhHVrfTJ7YUY7DWhuJ";//contract address
+      var address_to = "TSweZSCE55MM4vqkMVWSkicJuLSRBz2uMd";//this.state.tronAddress
+      try {
+          let contract = await tronWeb.contract().at(trc20ContractAddress);
+          contract.Transfer().watch((err, eventResult) => {
+            if (err) {
+                return console.error('Error with "method" event:', err);
+            }
+            if (eventResult) { 
+                console.log('eventResult:',eventResult);
+            }
+          });
+          let actualNumber = 1000//500*1000
+          let res = await contract.transfer(address_to,actualNumber).send({
+            feeLimit:100_000_000,
+            callValue:0,
+            shouldPollResponse:true
+          });
+          console.log(res);
+          let settings = {
+            async: true,
+            crossDomain: true,
+            url:"https://api.stripe.com/v1/charges",
+            method: "POST",
+            dataType: "json",
+            data: {
+            amount: tronPurchaseOption.charge.amount,
+            currency: 'eur',
+            source: tronPurchaseOption.charge.source,
+            description: 'My First Test Charge (created for API docs)',
+            },
+            headers: { "Authorization": "Bearer sk_test_51HyrzRFlz3SmLkoJeaq3DcPC54pcHFOIwrfkP0z3TzcPjDCbp3LfRgWwMejlklJ0FORhPk64kd3YiKDSYOZFvlHN00YGM7OiN4" },
+          };
+          $.ajax(settings).done(function (response) {
+            if(response.status == "succeeded"){
+              if(this.state.tokenPurchaseHistoryArray.length > 0){
+                this.state.tokenPurchaseHistoryArray.push({
+                  amountOfBuyToken:tronPurchaseOption.charge.amount,
+                  numberOfToken:numberOfToken,
+                  date:(new Date()).toDateString()
+                })
+              }else{
+                this.state.tokenPurchaseHistoryArray = [{
+                  amountOfBuyToken:tronPurchaseOption.charge.amount,
+                  numberOfToken:numberOfToken,
+                  date:(new Date()).toDateString()
+                }]
+              }
+              commit('setTokenPurchaseHistoryArray',  this.state.tokenPurchaseHistoryArray)
+              if(res){
+                db.collection('usuarios').doc(this.state.usuario.email).update({
+                  tokenPurchaseHistory: this.state.tokenPurchaseHistoryArray
+                  }).then(() => {
+                    $("#doneButton").removeClass("d-none");
+                    $("#stripe_spinner").addClass("d-none");
+                    $("#noteForWait").addClass("d-none");
+                    $("#tokenBuyDone").removeClass("d-none");
+                    setTimeout(() => {
+                      router.push('/miperfil');
+                    }, 1500);
+                  }).catch((error) => {       
+                    $("#stripe_pay_button").removeClass("d-none");
+                    $("#stripe_spinner").addClass("d-none");
+                    $("#noteForWait").addClass("d-none");
+                    console.log(error)
+                  })
+              }
+            }
+          }.bind(this)).fail(function(data){        
+            $("#stripe_pay_button").removeClass("d-none");
+            $("#stripe_spinner").addClass("d-none");
+            $("#noteForWait").addClass("d-none");
+            alert("Try again !");
+          });
+      } catch(error) {
+          console.error("trigger smart contract error",error)
+      }
+    },
+
+
   async sendTokenAfterRating({ commit }, tronOption) {
-    tronOption
     //send Email
 /*     let testAccount = await nodemailer.createTestAccount();
     let transporter = nodemailer.createTransport({
@@ -208,7 +298,7 @@ export default new Vuex.Store({
 
     //send trc20 token
     const trc20ContractAddress = "TWtm3xvBFnwW1zvKBhHVrfTJ7YUY7DWhuJ";//contract address
-    var address_to = "TSweZSCE55MM4vqkMVWSkicJuLSRBz2uMd";
+    var address_to = "TSweZSCE55MM4vqkMVWSkicJuLSRBz2uMd";//this.state.tronAddress
     try {
         let contract = await tronWeb.contract().at(trc20ContractAddress);
         contract.Transfer().watch((err, eventResult) => {
@@ -219,19 +309,22 @@ export default new Vuex.Store({
               console.log('eventResult:',eventResult);
           }
         });
-        let res = await contract.transfer(address_to,1000).send({
+        let actualNumber = 1000//500*1000
+        let res = await contract.transfer(address_to,actualNumber).send({
           feeLimit:100_000_000,
           callValue:0,
           shouldPollResponse:true
         });
         console.log(res);
-        if(this.state.tokenTransactionArray > 0){
+        if(this.state.tokenTransactionArray.length > 0){
           this.state.tokenTransactionArray.push({
-            postId:tronOption.postId
+            postId:tronOption.postId,
+            date:(new Date()).toDateString()
           })
         }else{
           this.state.tokenTransactionArray = [{
-            postId:tronOption.postId
+            postId:tronOption.postId,
+            date:(new Date()).toDateString()
           }]
         }
         commit('setTokenTransactionArray',  this.state.tokenTransactionArray)
@@ -342,8 +435,11 @@ export default new Vuex.Store({
               commit('setRawTags', datos.tags?datos.tags[0]:"")
               commit('setAlerta', datos.alerta ? datos.alerta : "")
               commit('setTokenTransactionArray', datos.tokenTransactionReward & datos.tokenTransactionReward > 0? datos.tokenTransactionReward : [])
+              commit('setTokenPurchaseHistoryArray', datos.tokenPurchaseHistory & datos.tokenPurchaseHistory > 0? datos.tokenPurchaseHistory : [])
               commit('setAlertaObject', datos.alertaObject ? datos.alertaObject : [])
               commit('setTronAddress', datos.tronAddress?datos.tronAddress.address.base58:null)
+              commit('setSubscribeObject', datos.subscribeObject?datos.subscribeObject:{})
+
               commit('setSubscription', datos.subscribeStatus?"done":"fail")
               db.collection('translationLogs').doc("totalRequestLog").get()
               .then(doc => {
@@ -366,12 +462,41 @@ export default new Vuex.Store({
 
             if (typeof datos != "undefined") {
               let taglist = (datos.tags[0]).split(";");
+              //let taglistTemp = (datos.tags[0]).split(";");
               let alarmas_lista = datos.alerta;
               if (typeof alarmas_lista != "undefined") {
                 var alarmas_lista2 = alarmas_lista.split("//");
+                //var alarmas_lista2Temp = alarmas_lista.split("//");
               }
               let n = 0;
-
+              if( datos.subscribeObject){
+                var todayDate = moment(new Date())
+                var subscribeDate = moment( datos.subscribeObject.date)
+                let differenceOfDates = todayDate.diff(subscribeDate, 'days')
+                alarmas_lista2.join("//")
+                if(differenceOfDates >= 30){
+                  let tagsArrayOfString = [];
+                  taglist.slice(0,9);
+                  //taglistTemp.slice(0,9);
+                  alarmas_lista2.slice(0,10);
+                  //alarmas_lista2Temp.slice(0,10);
+                  var tagsTemp = taglist.join(";");
+                  tagsArrayOfString.push(tagsTemp);
+                  var alerta = alarmas_lista2.join("//");
+                  taglist
+                  //taglistTemp
+                  alarmas_lista2
+                  //alarmas_lista2Temp
+                    db.collection('usuarios').doc(datos.email).update({
+                      alerta: alerta,
+                      tags: tagsArrayOfString
+                      }).then(() => {
+                        console.log("update usuarios")
+                      }).catch((error) => {
+                        console.log(error)
+                      })
+                  }
+              }
               taglist.forEach(function (entry) {
 
 
@@ -406,7 +531,6 @@ export default new Vuex.Store({
                 items2.push(obj)
                 n++;
               });
-
 
               commit('set_items2', items2)
 
