@@ -4,32 +4,25 @@
     variant="dark"
     opacity="0.64"
     rounded="lg">
-  <b-row style="height: 93.56vh;background-color: rgb(223 226 243) !important;" class="align-items-center">
-    <b-col class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto">    
-<!--       <div class="ml-1">
-    <a style="color:white;text-decoration:underline;cursor:pointer" @click="$router.go(-1)">{{selectedLan == 'es'
-  ? $Back_es
-  : selectedLan == 'pt'
-  ? $Back_pt
-  : selectedLan == 'ar'
-  ? $Back_ar
-  : $Back_en}}</a>
-    </div> -->
-      <div class="wrapper ">
-          <stripe-elements
-            ref="elementsRef"
-            :pk="publishableKey"
-            :amount="amount"
-            locale="en"
-            @token="tokenCreated"
-            @loading="loading = $event"
-        >
-        </stripe-elements>
-        <button class="paymentSubButton" @click="submit" id="stripe_pay_button"><span>Pay €{{amount / 100}}</span></button>
-        <button  disabled id="stripe_spinner" class="d-none paymentSubButton"><span><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
+    <div class="Container-fluid" style="background-color: rgb(223, 226, 243) !important;">
+      <div class="row w-100 h-100 align-items-center m-0">
+        <div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto">
+          <div class="wrapper ">
+              <stripe-elements
+                ref="elementsRef"
+                :pk="publishableKey"
+                :amount="amount"
+                locale="en"
+                @token="tokenCreated"
+                @loading="loading = $event"
+            >
+            </stripe-elements>
+            <button class="paymentSubButton" @click="submit" id="stripe_pay_button"><span>Pay €{{amount / 100}}</span></button>
+            <button  disabled id="stripe_spinner" class="d-none paymentSubButton"><span><b-spinner  small label="Small Spinner" variant="primary"></b-spinner></span> </button>
+          </div>
+        </div>
       </div>
-    </b-col>
-  </b-row>
+    </div>
  </b-overlay>
 </template> 
 
@@ -56,12 +49,18 @@ export default {
     charge:null,
     };
   },
-  created() {},
+  created() {
+    $(document).ready(function() {
+    var divHeight = window.innerHeight - 58.88; 
+        $('.Container-fluid').css('height', divHeight+'px');
+    });
+  },
   methods: {
     ...mapActions([
 /*       "cerrarSesion", */
     ]),
      submit () {
+      alert(window.innerHeight - 58.88)
       this.$refs.elementsRef.submit();
     },
     tokenCreated (token) {
